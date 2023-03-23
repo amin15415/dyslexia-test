@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Decoding = () => {
 	const navigate = useNavigate();
 	const [wordIndex, setWordIndex] = useState(0);
-	const [levelIndex, setLevelIndex] = useState(0);
 	const [gradeIndex, setGradeIndex] = useState(0);
 	const [gradeLevel, setGradeLevel] = useState('K');
 	const [buttonActive, setButtonActive] = useState(true);
@@ -24,7 +23,7 @@ const Decoding = () => {
 		'9-12': { 'zealous': null, 'clique': null, 'atrocious': null, 'catastrophe': null, 'liquidate': null }
 	};
 	
-	const currentWord = Object.keys(desdWords[gradeLevel])[wordIndex];
+	const [currentWord, setCurrentWord] = useState(Object.keys(desdWords[gradeLevel])[wordIndex]);
 	const [correct, setCorrect] = useState(0);
 	const [wrong, setWrong] = useState(0);
 	const [totalWrong, setTotalWrong] = useState(0);
@@ -34,7 +33,7 @@ const Decoding = () => {
 		setButtonActive(false);
 		setCountdown(4);
 
-		if (currentWord == currentWord) {
+		if (currentWord === currentWord) {
 			setCorrect(correct + 1);
 			Object.keys(desdWords[gradeLevel])[currentWord] = true;
 		}
@@ -44,17 +43,26 @@ const Decoding = () => {
       Object.keys(desdWords[gradeLevel])[currentWord] = false;
     }
 
-		setLevelIndex(levelIndex + 1);
+		setWordIndex(wordIndex + 1);
 
 		if (correct >= 3) {
 			setGradeIndex(gradeIndex + 1);
 		}
 
-		if (wrong >= 3 && totalWrong >= 5 && levelIndex >= 5)  {
+		if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5)  {
 			setTimeout(() => {
 				navigate('/encoding'); // route to the Encoding page after 1 second
 			}, 1000);
 		}
+
+		if (wordIndex >= 5) {
+			setGradeLevel(Object.keys(desdWords)[gradeIndex]);
+			setWordIndex(0);
+			setCorrect(0);
+			setWrong(0);
+    }
+		console.log(wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong);
+		 setCurrentWord(Object.keys(desdWords[gradeLevel])[wordIndex]);
 	};
 
 	useEffect(() => {
