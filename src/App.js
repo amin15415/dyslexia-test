@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Welcome from './Welcome';
 import Decoding from './Decoding';
+import Encoding from './Encoding';
 import './App.css';
 import logo from './logo.svg';
 
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/decoding" element={<Decoding />} />
+            <Route path="/encoding" element={<Encoding />} />
           </Routes>
         </main>
       </div>
