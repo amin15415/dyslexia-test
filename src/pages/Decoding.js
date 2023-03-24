@@ -31,6 +31,8 @@ const Decoding = () => {
 	const [wrong, setWrong] = useState(0);
 	const [totalWrong, setTotalWrong] = useState(0);
 	const [isLastWord, setIsLastWord] = useState(false);
+	const [noSpeechDetected, setNoSpeechDetected] = useState(false);
+	const [retry, setRetry] = useState(false);
 
 	const recognizeSpeech = async () => {
 		return new Promise((resolve, reject) => {
@@ -61,8 +63,27 @@ const Decoding = () => {
 		
 		setButtonActive(false);
 		setCountdown(4);
+		setNoSpeechDetected(false);
 
-		const speechResult = await recognizeSpeech();
+		let speechResult;
+
+		try {
+		  // Run the countdown and the speech recognition simultaneously
+		  const speechRecognitionPromise = recognizeSpeech();
+		  const countdownPromise = new Promise((resolve) => setTimeout(resolve, 4000));
+	  
+		  // Wait for both the countdown and the speech recognition to complete
+		  [speechResult] = await Promise.all([
+			speechRecognitionPromise,
+			countdownPromise,
+		  ]);
+		} catch (error) {
+			console.error("Speech recognition error:", error);
+			setNoSpeechDetected(true);
+			setRetry(true);
+			return;
+		  }
+
   		console.log('Speech result:', speechResult);
 
   		if (speechResult.toLowerCase() === currentWord.toLowerCase()) {
@@ -75,13 +96,16 @@ const Decoding = () => {
       		words[currentWord] = false;
     	}
 
-		setWordIndex(wordIndex + 1);
+		setWordIndex((prevWordIndex) => {
+		const nextWordIndex = prevWordIndex + 1;
 
-		if (words[wordIndex] === "liquidate") {
+		if (words[nextWordIndex - 1] === "liquidate") {
 			setIsLastWord(true);
-		  }
+		}
 
-		setCurrentWord(words[wordIndex]);
+		setCurrentWord(words[nextWordIndex]); // Update the currentWord with the next value of wordIndex
+		return nextWordIndex;
+		});
 	};
 
 	const handleLogic = () => {
@@ -141,24 +165,30 @@ const Decoding = () => {
 
 	return (
 		<div>
-			<h1>Online DESD</h1>
-			{isStarted ? (
-				buttonActive ? (
-					<button onClick={handleNextWord}>Next Word</button>
-				) : (
-					<p>Next Word will be available in {countdown} seconds</p>
-				)
+		  <h1>Online DESD</h1>
+		  {isStarted ? (
+			buttonActive ? (
+			  <button onClick={handleNextWord}>Next Word</button>
 			) : (
-				<button onClick={startDecoding}>Start</button>
-			)}
-			{!buttonActive && isStarted && (
-				<>
-					<p>Say this word: </p>
-					<h2>{currentWord}</h2>
-				</>
-			)}
+			  <p>Next Word will be available in {countdown} seconds</p>
+			)
+		  ) : (
+			<button onClick={startDecoding}>Start</button>
+		  )}
+		  {!buttonActive && isStarted && (
+			<>
+			  <p>Say this word: </p>
+			  <h2>{currentWord}</h2>
+			</>
+		  )}
+		  {noSpeechDetected && (
+			<>
+			  <p>No speech input detected. Try again...</p>
+			  <button onClick={handleNextWord}>Retry</button>
+			</>
+		  )}
 		</div>
-	);
+	  );
 };
 
 
