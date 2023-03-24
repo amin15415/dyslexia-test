@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Welcome from './pages/Welcome';
-import Decoding from './pages/Decoding';
-import Encoding from './pages/Encoding';
+import Welcome from './components/Welcome';
+import Decoding from './components/Decoding/Decoding';
+import Encoding from './components/Encoding';
 import './App.css';
 import logo from './logo.svg';
 
