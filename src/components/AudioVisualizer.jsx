@@ -15,7 +15,7 @@ const AudioVisualizer = ({ isStarted, buttonActive }) => {
     }
   }, [isStarted, buttonActive, startVisualization, stopVisualization]);
   
-  return <canvas ref={canvasRef} width="800" height="800"></canvas>;
+  return <canvas ref={canvasRef} width="300" height="300"></canvas>;
 };
 
 export default AudioVisualizer;
