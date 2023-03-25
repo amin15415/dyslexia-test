@@ -1,173 +1,156 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { desdWords } from './data';
+import { useSpeechRecognition } from './useSpeechRecognition';
+import { useCountdown } from './useCountdown.js';
 
 const Decoding = () => {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [state, setState] = useState({
+    wordIndex: 0,
+    gradeIndex: 9,
+    gradeLevel: desdWords[9].grade,
+    readingLevel: null,
+    buttonActive: false,
+    isStarted: false,
+    correct: 0,
+    wrong: 0,
+    totalWrong: 0,
+    isLastWord: false,
+    noSpeechDetected: false,
+    retry: false,
+  });
 
-	const desdWords = [
-		{ grade: 'K', words: { 'baby': null, 'one': null, 'boat': null, 'do': null, 'car': null } },
-		{ grade: '1L', words: { 'was': null, 'daddy': null, 'book': null, 'good': null, 'doll': null } },
-		{ grade: '1U', words: { 'girl': null, 'apple': null, 'they': null, 'story': null, 'some': null } },
-		{ grade: '2', words: { 'above': null, 'what': null, 'any': null, 'busy': null, 'night': null } },
-		{ grade: '3', words: { 'done': null, 'huge': null, 'ocean': null, 'station': null, 'could': null } },
-		{ grade: '4', words: { 'because': null, 'echo': null, 'couple': null, 'eager': null, 'together': null } },
-		{ grade: '5', words: { 'bought': null, 'delicious': null, 'neighbor': null, 'achieve': null, 'region': null } },
-		{ grade: '6', words: { 'malicious': null, 'bureau': null, 'similar': null, 'campaign': null, 'waltz': null } },
-		{ grade: '7-8', words: { 'prairie': null, 'gadget': null, 'facsimile': null, 'emphasize': null, 'prescription': null } },
-		{ grade: '9-12', words: { 'zealous': null, 'clique': null, 'atrocious': null, 'catastrophe': null, 'liquidate': null } },
-	  ];
-	
-	const [wordIndex, setWordIndex] = useState(0);
-	const [gradeIndex, setGradeIndex] = useState(0);
-	const [gradeLevel, setGradeLevel] = useState(desdWords[gradeIndex].grade);
-	const [readingLevel, setReadingLevel] = useState(null);
-	const [buttonActive, setButtonActive] = useState(false);
-	const [countdown, setCountdown] = useState(0);
-	const [isStarted, setIsStarted] = useState(false);
-	const [words, setWords] = useState(Object.keys(desdWords[gradeIndex].words));
-	const [currentWord, setCurrentWord] = useState(words[wordIndex]);
-	const [correct, setCorrect] = useState(0);
-	const [wrong, setWrong] = useState(0);
-	const [totalWrong, setTotalWrong] = useState(0);
-	const [isLastWord, setIsLastWord] = useState(false);
-	const [noSpeechDetected, setNoSpeechDetected] = useState(false);
-	const [retry, setRetry] = useState(false);
+  const { wordIndex, gradeIndex, gradeLevel, readingLevel, buttonActive, isStarted, correct, wrong, totalWrong, isLastWord, noSpeechDetected, retry } = state;
+  const words = Object.keys(desdWords[gradeIndex].words);
+  const currentWord = words[wordIndex];
+  const recognizeSpeech = useSpeechRecognition();
+  const { countdown, setCountdown } = useCountdown({ initialCountdown: 4 });
 
-	const recognizeSpeech = async () => {
-		return new Promise((resolve, reject) => {
-			const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
-		  	recognition.lang = 'en-US';
-		  	recognition.interimResults = false;
-		  	recognition.maxAlternatives = 1;
-	  
-		  	recognition.start();
-	  
-		  	recognition.onresult = (event) => {
-				const speechResult = event.results[0][0].transcript;
-				resolve(speechResult);
-		  };
-	  
-		  recognition.onerror = (event) => {
-				reject(event.error);
-		  };
-		});
-	};
+  const startDecoding = () => {
+    setState((prevState) => ({ ...prevState, isStarted: true }));
+	setCountdown(4);
+    handleNextWord();
+  };
 
-	const startDecoding = () => {
-		setIsStarted(true);
-		handleNextWord();
-	};
+  const handleNextWord = async () => {
+    setState((prevState) => ({
+      ...prevState,
+      buttonActive: false,
+      noSpeechDetected: false,
+    }));
 
-	const handleNextWord = async() => {
-		
-		setButtonActive(false);
-		setCountdown(4);
-		setNoSpeechDetected(false);
+	setCountdown(4);
+    let speechResult;
 
-		let speechResult;
-
-		try {
-		  // Run the countdown and the speech recognition simultaneously
-		  const speechRecognitionPromise = recognizeSpeech();
-		  const countdownPromise = new Promise((resolve) => setTimeout(resolve, 4000));
-	  
-		  // Wait for both the countdown and the speech recognition to complete
-		  [speechResult] = await Promise.all([
-			speechRecognitionPromise,
-			countdownPromise,
-		  ]);
-		} catch (error) {
-			console.error("Speech recognition error:", error);
-			setNoSpeechDetected(true);
-			setRetry(true);
-			return;
-		  }
-
-  		console.log('Speech result:', speechResult);
-
-  		if (speechResult.toLowerCase() === currentWord.toLowerCase()) {
-    		setCorrect(correct + 1);
-    		words[currentWord] = true;
-		}
-		else {
-      		setWrong(wrong + 1);
-			setTotalWrong(totalWrong + 1);
-      		words[currentWord] = false;
-    	}
-
-		setWordIndex((prevWordIndex) => {
-		const nextWordIndex = prevWordIndex + 1;
-
-		if (words[nextWordIndex - 1] === "liquidate") {
-			setIsLastWord(true);
-		}
-
-		setCurrentWord(words[nextWordIndex]); // Update the currentWord with the next value of wordIndex
-		return nextWordIndex;
-		});
-	};
-
-	const handleLogic = () => {
-		if (desdWords[gradeIndex] && correct >= 3) {
-		  setReadingLevel(desdWords[gradeIndex].grade);
-		}
-	
-		if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
-		  setTimeout(() => {
-			navigate('/encoding'); 
+    try {
+		// Run the countdown and the speech recognition simultaneously
+		const speechRecognitionPromise = recognizeSpeech();
+		const countdownPromise = new Promise((resolve) => {
+		  const timer = setInterval(() => {
+			setCountdown((count) => {
+			  if (count === 1) {
+				clearInterval(timer);
+				resolve();
+			  }
+			  return count - 1;
+			});
 		  }, 1000);
-		}
+		});
+  
+		// Wait for both the countdown and the speech recognition to complete
+		[speechResult] = await Promise.all([speechRecognitionPromise, countdownPromise]);
+	  } catch (error) {
+      console.error('Speech recognition error:', error);
+      setState((prevState) => ({ ...prevState, noSpeechDetected: true, retry: true }));
+      return;
+    }
 
-		if (isLastWord) {
-			setTimeout(() => {
-			  navigate("/encoding"); 
-			}, 4000);
-		  }
-	  };
-	
-	  useEffect(() => {
-		handleLogic();
-	  }, [correct, wrong, wordIndex, totalWrong, isLastWord]); 
-	
-	useEffect(() => {
-		if (wordIndex >= 5) {
-		  if (gradeIndex < desdWords.length - 1) {
-			setGradeIndex(gradeIndex + 1);
-			}
-		  setWordIndex(0);
-		  setCorrect(0);
-		  setWrong(0);
-		}
-	  }, [wordIndex]);
-	
-	useEffect(() => {
-		setGradeLevel(desdWords[gradeIndex].grade);
-		setWords(Object.keys(desdWords[gradeIndex].words));
-	  }, [gradeIndex]);
+    console.log('Speech result:', speechResult);
 
-	useEffect(() => {
-		console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${gradeIndex}, 
-					grade level: ${gradeLevel}, correct: ${correct}, wrong: ${wrong}, 
-					total wrong: ${totalWrong}, reading level: ${readingLevel}`);
-	  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel]);
+    const isCorrect = speechResult.toLowerCase() === currentWord.toLowerCase();
+    const updatedCorrect = isCorrect ? correct + 1 : correct;
+    const updatedWrong = !isCorrect ? wrong + 1 : wrong;
+    const updatedTotalWrong = !isCorrect ? totalWrong + 1 : totalWrong;
 
-	useEffect(() => {
-		if (countdown > 0) {
-			const timer = setTimeout(() => {
-				setCountdown(countdown - 1);
-			}, 1000);
-			return () => clearTimeout(timer);
-		} else {
-			setButtonActive(true);
-		}
-	}, [countdown]);
+    setState((prevState) => ({
+      ...prevState,
+      correct: updatedCorrect,
+      wrong: updatedWrong,
+      totalWrong: updatedTotalWrong,
+    }));
 
-	return (
+    setState((prevState) => {
+      const nextWordIndex = prevState.wordIndex + 1;
+      const lastWordReached = words[nextWordIndex - 1] === 'liquidate';
+
+      return {
+        ...prevState,
+        wordIndex: nextWordIndex,
+        isLastWord: lastWordReached,
+      };
+    });
+  };
+
+  const handleLogic = useCallback(() => {
+    if (desdWords[gradeIndex] && correct >= 3) {
+      setState((prevState) => ({ ...prevState, readingLevel: desdWords[gradeIndex].grade }));
+    }
+
+    if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
+      setTimeout(() => {
+        navigate('/encoding');
+      }, 1000);
+    }
+
+    if (isLastWord) {
+        navigate('/encoding');
+    }
+  }, [correct, desdWords, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong]);
+
+  useEffect(() => {
+    handleLogic();
+  }, [handleLogic]);
+
+  useEffect(() => {
+    if (wordIndex >= 5) {
+      if (gradeIndex < desdWords.length - 1) {
+        setState((prevState) => ({ ...prevState, gradeIndex: gradeIndex + 1 }));
+      }
+      setState((prevState) => ({ ...prevState, wordIndex: 0, correct: 0, wrong: 0 }));
+    }
+  }, [wordIndex]);
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      gradeLevel: desdWords[gradeIndex].grade,
+      words: Object.keys(desdWords[gradeIndex].words),
+    }));
+  }, [gradeIndex]);
+
+  useEffect(() => {
+    console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${gradeIndex}, 
+                grade level: ${gradeLevel}, correct: ${correct}, wrong: ${wrong}, 
+                total wrong: ${totalWrong}, reading level: ${readingLevel}`);
+  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel]);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setState((prevState) => ({ ...prevState, buttonActive: true }));
+    }
+  }, [countdown, setCountdown]);
+
+  return (
 		<div>
 		  <h1>Online DESD</h1>
 		  {isStarted ? (
-			buttonActive ? (
+			!isLastWord && buttonActive ? (
 			  <button onClick={handleNextWord}>Next Word</button>
 			) : (
 			  <p>Next Word will be available in {countdown} seconds</p>
@@ -181,15 +164,8 @@ const Decoding = () => {
 			  <h2>{currentWord}</h2>
 			</>
 		  )}
-		  {noSpeechDetected && (
-			<>
-			  <p>No speech input detected. Try again...</p>
-			  <button onClick={handleNextWord}>Retry</button>
-			</>
-		  )}
 		</div>
 	  );
 };
-
 
 export default Decoding;

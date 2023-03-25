@@ -12,5 +12,5 @@ export const useCountdown = ({ initialCountdown }) => {
     }
   }, [countdown]);
 
-  return countdown;
+  return { countdown, setCountdown };
 };

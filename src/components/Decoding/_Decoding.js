@@ -139,10 +139,25 @@ const Decoding = () => {
   }, [countdown]);
 
   return (
-    <div>
-      {/* The JSX content */}
-    </div>
-  );
+		<div>
+		  <h1>Online DESD</h1>
+		  {isStarted ? (
+			buttonActive ? (
+			  <button onClick={handleNextWord}>Next Word</button>
+			) : (
+			  <p>Next Word will be available in {countdown} seconds</p>
+			)
+		  ) : (
+			<button onClick={startDecoding}>Start</button>
+		  )}
+		  {!buttonActive && isStarted && (
+			<>
+			  <p>Say this word: </p>
+			  <h2>{currentWord}</h2>
+			</>
+		  )}
+		</div>
+	  );
 };
 
 export default Decoding;
