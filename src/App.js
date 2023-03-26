@@ -4,7 +4,7 @@ import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
 import Encoding from './pages/Encoding';
 import './App.css';
-import logo from './assets/logo.svg';
+import logo from './assets/images/logo.png';
 import Navigation from './utils/Navigation';
 
 function App() {

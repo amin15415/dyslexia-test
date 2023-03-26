@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import bannerImage from '../../assets/reading-sunset.jpeg';
+import bannerImage from '../../assets/images/reading-sunset.jpeg';
 import './Welcome.css';
 
 function Welcome() {
