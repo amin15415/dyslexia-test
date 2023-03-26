@@ -11,15 +11,15 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <div className="top-bar">
-          <div className="logo-container">
-            <img src={logo} alt="Logo" className="logo" />
-            <h1>Your App Name</h1>
-          </div>
-          <Navigation />
-        </div>
         <div className="container">
-          <header></header>
+          <header>
+            <div className="gryfn">
+              <div>
+                <p>gryfn</p>
+              </div>
+            </div>
+            <Navigation />
+          </header>
           <main>
             <Routes>
               <Route path="/" element={<Welcome />} />
