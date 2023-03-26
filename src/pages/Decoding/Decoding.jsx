@@ -127,28 +127,30 @@ const Decoding = () => {
   }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel]);
 
   useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } 
-    else {
-      if (!speechResultReceived) {
-        setIsPaused(true);
-        setTimeout(() => {
-          setIsPaused(false);
+    if (isStarted) {
+      if (countdown > 0) {
+        const timer = setTimeout(() => {
+          setCountdown(countdown - 1);
         }, 1000);
-      }
-      if (speechResultReceived) {
-        setButtonActive(true);
-        setRetryMessage(''); // Reset the retry message when the speech result is received
-      }
+        return () => clearTimeout(timer);
+      } 
       else {
-        setRetryMessage("We didn't quite catch that. Please try again.");
-        setButtonActive(true);
-        } 
-      speechRecognition.stopSpeechRecognition();
+        if (!speechResultReceived) {
+          setIsPaused(true);
+          setTimeout(() => {
+            setIsPaused(false);
+          }, 1000);
+        }
+        if (speechResultReceived) {
+          setButtonActive(true);
+          setRetryMessage(''); // Reset the retry message when the speech result is received
+        }
+        else {
+          setRetryMessage("We didn't quite catch that. Please try again.");
+          setButtonActive(true);
+          } 
+        speechRecognition.stopSpeechRecognition();
+      }
     }
   }, [countdown, setCountdown, speechResultReceived]);
 
@@ -160,24 +162,24 @@ const Decoding = () => {
           {retryMessage && <p>{retryMessage}</p>}
           {isStarted ? (
             !isLastWord && buttonActive ? (
-              <button onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+              <button className="custom-button" onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
             ) : (
               <p>Next Word will be available in {countdown} seconds</p>
             )
           ) : (
-            <button onClick={startDecoding}>Start</button>
+            <button className="custom-button" onClick={startDecoding}>Start</button>
           )}
           {!buttonActive && isStarted && (
             <>
               <p>Say this word: </p>
               <h2>{currentWord}</h2>
-              <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown}/>
+              <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} />
             </>
           )}
         </>
       )}
     </div>
-  );
+  );  
 };
 
 export default Decoding;

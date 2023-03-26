@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { useCountdown } from './useCountdown';
 
 export const useAudioVisualizer = (canvasRef, countdownValue) => {
   const [analyser, setAnalyser] = useState(null);
@@ -35,9 +34,16 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
     const numBars = dataArray.length;
     const angleBetweenBars = (2 * Math.PI) / numBars;
   
-    for (let i = 0; i < numBars; i++) {
-      const barHeight = dataArray[i] / 2;
-      const barWidth = 2;
+    for (let i = 0; i < numBars; i+=5) {
+      // let barHeight;
+      // if (Math.random() < 0.8) { // 80% of the time, use correct index
+      //   barHeight = dataArray[i] * 1;
+      // } else { // 20% of the time, use random index
+      //   const randomIndex = Math.floor(Math.random() * dataArray.length);
+      //   barHeight = dataArray[randomIndex]/2;
+      // }
+      const barHeight = dataArray[i] / 1.5;
+      const barWidth = 4;
       const angle = i * angleBetweenBars;
       const x1 = centerX + Math.cos(angle) * (radius - barHeight);
       const y1 = centerY + Math.sin(angle) * (radius - barHeight);
@@ -46,14 +52,18 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
   
       canvasContext.beginPath();
       canvasContext.lineWidth = barWidth;
-      canvasContext.strokeStyle = `rgb(${dataArray[i]}, 50, 50)`;
+      const colorValue = dataArray[i] / 255;
+      const r = 255;
+      const g = 255;
+      const b = Math.max(0, 255 * (1 - colorValue) - 100);
+      canvasContext.strokeStyle = `rgb(${r}, ${g}, ${b})`;
       canvasContext.moveTo(x1, y1);
       canvasContext.lineTo(x2, y2);
       canvasContext.stroke();
     }
 
     // Draw countdown value in the center
-    canvasContext.font = '48px sans-serif';
+    canvasContext.font = '256px "Delicious Handrawn"';
     canvasContext.fillStyle = 'white';
     canvasContext.textAlign = 'center';
     canvasContext.textBaseline = 'middle';
@@ -61,6 +71,19 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
   
     animationFrameRef.current = requestAnimationFrame(draw);
   };
+
+  useEffect(() => {
+    if (!animationFrameRef.current) {
+      animationFrameRef.current = requestAnimationFrame(draw);
+    }
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [draw, countdownValue]);
 
   const startVisualization = () => {
     if (!animationFrameRef.current) {

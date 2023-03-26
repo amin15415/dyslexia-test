@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'Delicious Handrawn';
+    src: url('./DeliciousHandrawn-Regular.ttf') format('truetype'); /* Update the file format if using a different file type */
+    font-display: swap;
+  }
+  
