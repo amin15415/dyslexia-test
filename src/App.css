@@ -7,7 +7,7 @@
 
 body {
   background-color: #303030;
-  color: #333;
+  color: #ffffff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.5;
 }
@@ -28,16 +28,14 @@ body {
 
 /* Container */
 .container {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 20px;
 }
 
 /* For tablets */
 @media (max-width: 768px) {
   .container {
     max-width: 720px;
-    padding: 10px;
   }
 
   header h1 {
@@ -57,7 +55,6 @@ body {
 @media (max-width: 576px) {
   .container {
     max-width: 540px;
-    padding: 5px;
   }
 
   header h1 {
@@ -109,7 +106,7 @@ header::before {
 }
 
 header h1 {
-  color: #333;
+  color: #faf7f7;
   font-size: 28px;
   text-align: center;
 }
@@ -144,25 +141,27 @@ nav a:hover {
 
 /* Main content */
 main {
-  padding: 20px;
+  padding: 20px 0;
   text-align: center;
 }
 
 h2 {
   font-size: 24px;
   margin-bottom: 20px;
+  color: #eee;
 }
 
 p {
   margin-bottom: 10px;
+  color: #fdfdfd;
 }
 
 /* Buttons */
 button {
-  background: #333;
+  background: #fff82c;
   border: none;
   border-radius: 5px;
-  color: #fff;
+  color: #3c3c3c;
   cursor: pointer;
   font-size: 16px;
   padding: 10px 20px;

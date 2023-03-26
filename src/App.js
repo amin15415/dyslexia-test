@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Welcome from './pages/Welcome';
+import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
 import Encoding from './pages/Encoding';
 import './App.css';
