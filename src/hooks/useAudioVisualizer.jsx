@@ -61,7 +61,7 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
 
     // Draw countdown value in the center
     canvasContext.font = '256px "Delicious Handrawn"';
-    canvasContext.fillStyle = 'white';
+    canvasContext.fillStyle = 'black';
     canvasContext.textAlign = 'center';
     canvasContext.textBaseline = 'middle';
     canvasContext.fillText(countdownValue, centerX, centerY);

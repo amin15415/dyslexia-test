@@ -1,15 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
 import Encoding from './pages/Encoding';
 import './App.css';
-import Navigation from './components/Navigation';
 import logo from './assets/images/gryfn_logo.png';
 
 function App() {
+  const location = useLocation();
+  const [isHome, setIsHome] = useState(location.pathname === '/');
+  
+  useEffect(() => {
+    setIsHome(location.pathname === '/');
+  }, [location]);
+
   return (
-    <Router>
       <div className="App">
         <div className="container">
           <header>
@@ -19,9 +24,9 @@ function App() {
                 <p>gryfn</p>
               </div>
             </div>
-            <Navigation />
+            {isHome && <nav><a href="/">About</a></nav>}
           </header>
-          <main>
+          <main style={{background: isHome ? '#3d3d3d' : 'white'}}>
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/decoding" element={<Decoding />} />
@@ -30,8 +35,15 @@ function App() {
           </main>
         </div>
       </div>
+  );
+}
+
+function AppWrapper() {
+  return (
+    <Router>
+      <App />
     </Router>
   );
 }
 
-export default App;
+export default AppWrapper;

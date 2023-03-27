@@ -4,3 +4,8 @@
     font-display: swap;
   }
   
+@font-face {
+  font-family: 'GT-Alpina';
+  src: url('../fonts/GT-Alpina-Standard-Medium-Trial.otf') format('opentype');
+  font-display: swap;
+}

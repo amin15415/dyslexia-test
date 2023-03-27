@@ -2,59 +2,50 @@ import React from 'react';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   overflow: hidden;
-  margin: 1rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 6;
+  max-width: 500px;
+  margin: 0 auto;
+  justify-self: center;
+
+  @media (min-width: 1200px) {
+    margin: 2rem; // Increase margin for larger screens
+  }
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 200px;
+  height: 100%; // Adjust the height to fill the container
   object-fit: cover;
 `;
 
-const CardContent = styled.div`
-  padding: 1rem;
-`;
-
 const CardTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: calc(2vw + 2rem); /* Adjust the font size */
+  position: absolute;
+  top: 10%; /* Adjust the position from the top */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  z-index: 2;
+  text-align: center;
+  text-shadow: 2px 2px 4px #000000;
 `;
 
-const CardText = styled.p`
-  font-size: 1rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-`;
-
-const CardButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0069d9;
-  }
-`;
-
-const Card = ({ title, text, buttonText, imageSrc, imageAlt }) => {
+const Card = ({ title, imageSrc, imageAlt }) => {
   return (
     <CardContainer>
       <CardImage src={imageSrc} alt={imageAlt} />
-      <CardContent>
-        <CardTitle>{title}</CardTitle>
-        <CardText>{text}</CardText>
-        <CardButton>{buttonText}</CardButton>
-      </CardContent>
+      <CardTitle>{title}</CardTitle>
     </CardContainer>
   );
 };

@@ -158,7 +158,7 @@ const Decoding = () => {
   return (
     <div className="centered-content">
       <div className="decoding-content">
-        <h1 className='custom-h1'>Online DESD</h1>
+        {/* <h1 className='custom-h1'>Online DESD</h1> */}
         {!isPaused && (
           <>
             {retryMessage && <p>{retryMessage}</p>}
@@ -171,7 +171,7 @@ const Decoding = () => {
             )}
             {!buttonActive && isStarted && (
               <>
-                <p>Say this word: </p>
+                <p className='custom-p'>Say this word: </p>
                 <h2 className='custom-h2'>{currentWord}</h2>
                 <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} />
               </>

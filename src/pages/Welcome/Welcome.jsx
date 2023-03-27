@@ -2,7 +2,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/Card';
 import './Welcome.css';
-import logo from '../../assets/images/gryfn_logo.png'
+import reading from '../../assets/images/reading-silhouette.jpg';
+import dyslexia from '../../assets/images/dyslexia-silhouette.jpg';
+import path from '../../assets/images/path-silhouette.png';
 
 function Welcome() {
   const navigate = useNavigate();
@@ -26,9 +28,10 @@ function Welcome() {
         <div className="banner-section"></div>
       </div>
       <div className="test-info">
-        <Card imageSrc={logo} />
-        <Card imageSrc={logo} />
-        <Card imageSrc={logo} />
+        <div className="test-info-header">What You Will Get</div> 
+        <Card imageSrc={reading} title="Reading Level" />
+        <Card imageSrc={dyslexia} title="Dyslexia Subtype" />
+        <Card imageSrc={path} title="Pathway Forward" />
       </div>
     </div>
   );
