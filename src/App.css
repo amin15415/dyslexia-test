@@ -12,6 +12,24 @@ body {
   line-height: 1.5;
 }
 
+button {
+  background-color: #FFC107; /* Yellow */
+  border: none;
+  border-radius: calc(1vw + 25px); /* Pill shape, updated to use calc() */
+  color: #000; /* Text color */
+  cursor: pointer;
+  font-size: calc(1vw + 20px); /* Font size updated to use calc() */
+  padding: 1vw calc(2vw + 10px); /* Adjust the padding for medium size, updated to use calc() */
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #FFD54F; /* Lighter yellow on hover */
+}
+
+
 /* Container */
 .container {
   max-width: 100%;
@@ -36,13 +54,14 @@ body {
   z-index: 100;
 }
 
-.logo-container {
-  align-items: center;
+.logo-text-container {
   display: flex;
+  align-items: center;
+  gap: 10px; /* Add a gap between the logo and text */
 }
 
 .logo {
-  height: 40px;
+  height: 100px;
   width: auto;
 }
 
@@ -51,7 +70,7 @@ nav {
   gap: 10px;
   justify-content: right;
   align-items: center;
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 0;
   right: 10px;

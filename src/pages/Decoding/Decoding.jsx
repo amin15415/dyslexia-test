@@ -5,6 +5,7 @@ import { useSpeechRecognition } from './useSpeechRecognition';
 import { useCountdown } from '../../hooks/useCountdown';
 import convertNumberToWords from './numToWord';
 import AudioVisualizer from '../../components/AudioVisualizer';
+import './Decoding.css';
 
 const Decoding = () => {
   const navigate = useNavigate();
@@ -157,23 +158,21 @@ const Decoding = () => {
   return (
     <div className="centered-content">
       <div className="decoding-content">
-        <h1>Online DESD</h1>
+        <h1 className='custom-h1'>Online DESD</h1>
         {!isPaused && (
           <>
             {retryMessage && <p>{retryMessage}</p>}
             {isStarted ? (
               !isLastWord && buttonActive ? (
-                <button className="custom-button" onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
-              ) : (
-                <p>Next Word will be available in {countdown} seconds</p>
-              )
+                <button onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+              ) : null
             ) : (
               <button onClick={startDecoding}>Start</button>
             )}
             {!buttonActive && isStarted && (
               <>
                 <p>Say this word: </p>
-                <h2>{currentWord}</h2>
+                <h2 className='custom-h2'>{currentWord}</h2>
                 <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} />
               </>
             )}

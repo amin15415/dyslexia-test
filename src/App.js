@@ -4,8 +4,8 @@ import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
 import Encoding from './pages/Encoding';
 import './App.css';
-import logo from './assets/images/logo.png';
-import Navigation from './utils/Navigation';
+import Navigation from './components/Navigation';
+import logo from './assets/images/gryfn_logo.png';
 
 function App() {
   return (
@@ -14,7 +14,8 @@ function App() {
         <div className="container">
           <header>
             <div className="gryfn">
-              <div>
+              <div className="logo-text-container">
+                <img src={logo} alt="Logo" className="logo"/>
                 <p>gryfn</p>
               </div>
             </div>

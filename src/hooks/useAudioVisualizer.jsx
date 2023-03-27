@@ -53,10 +53,7 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
       canvasContext.beginPath();
       canvasContext.lineWidth = barWidth;
       const colorValue = dataArray[i] / 255;
-      const r = 255;
-      const g = 255;
-      const b = Math.max(0, 255 * (1 - colorValue) - 100);
-      canvasContext.strokeStyle = `rgb(${r}, ${g}, ${b})`;
+      canvasContext.strokeStyle = '#FFC107';
       canvasContext.moveTo(x1, y1);
       canvasContext.lineTo(x2, y2);
       canvasContext.stroke();

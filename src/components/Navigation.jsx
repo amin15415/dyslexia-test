@@ -5,9 +5,9 @@ function Navigation() {
     const location = useLocation();
   
     return (
-      <nav>
-        {location.pathname === '/' && <a href="/">About</a>}
-      </nav>
+      <>
+        {location.pathname === '/' && <nav><a href="/">About</a></nav>}
+      </>
     );
   }
   
