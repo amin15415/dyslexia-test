@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/Card';
 import './Welcome.css';
-import reading from '../../assets/images/reading-silhouette.jpg';
+import reading from '../../assets/images/reading-silhouette.png';
 import dyslexia from '../../assets/images/dyslexia-silhouette.jpg';
 import path from '../../assets/images/path-silhouette.png';
 

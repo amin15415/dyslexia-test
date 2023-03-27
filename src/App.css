@@ -44,7 +44,8 @@ button:hover {
 .logo-text-container {
   display: flex;
   align-items: center;
-  gap: 10px; /* Add a gap between the logo and text */
+  gap: 10px;
+  color: #fff;
 }
 
 .logo {
