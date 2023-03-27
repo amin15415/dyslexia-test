@@ -19,7 +19,7 @@ function App() {
         <div className="container">
           <header>
             <div className="gryfn">
-              <div className="logo-text-container">
+              <div className="logo-text-container " style={{color: isHome ? 'white' : 'black'}}>
                 <img src={logo} alt="Logo" className="logo"/>
                 <p>gryfn</p>
               </div>
