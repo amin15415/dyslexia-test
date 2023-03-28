@@ -42,7 +42,7 @@ body {
 .banner-h1 {
   font-size: calc(2vw + 2rem);
   font-family: 'Nunito', sans-serif;
-  padding-bottom: 3vh;
+  padding-bottom: 1vh;
 }
 
 .banner-p {

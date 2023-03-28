@@ -4,7 +4,7 @@
     align-items: center;
     background-color: #fff;
     min-height: 600px;
-    margin-top: 150px;
+    margin-top: 75px;
   }
 
 .button-container {
@@ -15,11 +15,11 @@
 } 
 
 .custom-h2 {
-  margin: 5vh;
+  margin: 3vh;
   font-size: 10vh;
 }
 
 .custom-p {
-  margin: 4vh;
+  margin: 2vh;
   font-size: 5vh;
 }
