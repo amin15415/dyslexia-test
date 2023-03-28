@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { desdWords } from '../../data/data';
-import { useSpeechRecognition } from './useSpeechRecognition'; 
+import { useSpeechRecognition } from '../../hooks/useSpeechRecognition'; 
 import { useCountdown } from '../../hooks/useCountdown';
-import convertNumberToWords from './numToWord';
+import convertNumberToWords from '../../utils/numToWord';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import './Decoding.css';
 
@@ -79,6 +79,8 @@ const Decoding = () => {
     setWrong(updatedWrong);
     setTotalWrong(updatedTotalWrong);
     setWordIndex((prevState) => prevState + 1);
+    desdWords[gradeIndex].words[currentWord] = isCorrect;
+
   };
 
   useEffect(() => {
@@ -97,12 +99,12 @@ const Decoding = () => {
 
     if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
       setTimeout(() => {
-        navigate('/encoding');
+        navigate('/encoding', { state: { desdWords: desdWords } });
       }, 500);
     }
 
     if (isLastWord) {
-        navigate('/encoding');
+        navigate('/encoding', { state: { desdWords: desdWords } });
     }
   }, [correct, desdWords, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong]);
 
@@ -141,17 +143,17 @@ const Decoding = () => {
           setTimeout(() => {
             setIsPaused(false);
           }, 1000);
-        }
-        if (speechResultReceived) {
-          setButtonActive(true);
-          setRetryMessage(''); // Reset the retry message when the speech result is received
-        }
-        else {
-          setRetryMessage("We didn't quite catch that. Please try again.");
-          setButtonActive(true);
-          } 
-        speechRecognition.stopSpeechRecognition();
+    }
+      if (speechResultReceived) {
+        setButtonActive(true);
+        setRetryMessage(''); 
       }
+      else {
+        setRetryMessage("We didn't quite catch that. Please try again.");
+        setButtonActive(true);
+        } 
+        speechRecognition.stopSpeechRecognition();
+    }
     }
   }, [countdown, setCountdown, speechResultReceived]);
 

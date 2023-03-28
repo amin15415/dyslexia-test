@@ -9,7 +9,7 @@ html, body {
   align-items: center;
   width: 100%;
   height: 75vh;
-  min-height: 500px;
+  min-height: 700px;
   overflow: hidden;
   position: relative; /* Added this to establish a new stacking context */
 }
