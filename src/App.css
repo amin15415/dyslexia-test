@@ -16,15 +16,13 @@ button:hover {
   background-color: #FFD54F; /* Lighter yellow on hover */
 }
 
-
-/* Container */
 .container {
   max-width: 100%;
+  min-width: 350px;
   margin: 0 auto;
   position: relative;
 }
 
-/*Text in Top bar */
 .gryfn {
   background-color: transparent;
   font-family: "Montserrat";
@@ -41,6 +39,12 @@ button:hover {
   z-index: 100;
 }
 
+@media screen and (max-width: 350px) {
+  .gryfn{
+    top: 0;
+  }
+}
+
 .logo-text-container {
   display: flex;
   align-items: center;
@@ -51,7 +55,7 @@ button:hover {
 }
 
 .logo {
-  height: 100px;
+  height: 75px;
   width: auto;
 }
 

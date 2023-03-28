@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { desdWords } from '../../data/data';
 import { useSpeechRecognition } from '../../hooks/useSpeechRecognition'; 
-import { useCountdown } from '../../hooks/useCountdown';
 import convertNumberToWords from '../../utils/numToWord';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import './Decoding.css';
@@ -24,7 +23,7 @@ const Decoding = () => {
   const lastGradeIndex = desdWords.length - 1;
   const lastWordIndex = Object.keys(desdWords[lastGradeIndex].words).length - 1;
 
-  const { countdown, setCountdown } = useCountdown({ initialCountdown: 3 });
+  const [countdown, setCountdown] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   const speechRecognition = useSpeechRecognition();
@@ -44,8 +43,6 @@ const Decoding = () => {
 	  setCountdown(3);
 
     try {
-      // Stop any ongoing speech recognition before starting a new one
-		  // Run the countdown and the speech recognition simultaneously
 		  const speechRecognitionPromise = speechRecognition.recognizeSpeech();
 		  const countdownPromise = new Promise((resolve) => {
 		  const timer = setInterval(() => {
@@ -59,10 +56,10 @@ const Decoding = () => {
 		    }, 1000);
 		  });
   
-		// Wait for both the countdown and the speech recognition to complete
 		  [speechResult] = await Promise.all([speechRecognitionPromise, countdownPromise]);
       setSpeechResultReceived(true);
       console.log('Speech result:', speechResult);
+      speechRecognition.stopSpeechRecognition();
 	  } catch (error) {
       console.error('Speech recognition error:', error);
       return;
@@ -80,7 +77,6 @@ const Decoding = () => {
     setTotalWrong(updatedTotalWrong);
     setWordIndex((prevState) => prevState + 1);
     desdWords[gradeIndex].words[currentWord] = isCorrect;
-
   };
 
   useEffect(() => {
@@ -106,7 +102,7 @@ const Decoding = () => {
     if (isLastWord) {
         navigate('/encoding', { state: { desdWords: desdWords } });
     }
-  }, [correct, desdWords, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong]);
+  }, [correct, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong]);
 
   useEffect(() => {
     handleLogic();
@@ -121,13 +117,14 @@ const Decoding = () => {
       setWrong(0);
       setWordIndex(0)
     }
-  }, [wordIndex]);
+  }, [wordIndex, gradeIndex]);
 
   useEffect(() => {
     console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${gradeIndex}, 
                 grade level: ${gradeLevel}, correct: ${correct}, wrong: ${wrong}, 
-                total wrong: ${totalWrong}, reading level: ${readingLevel}`);
-  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel]);
+                total wrong: ${totalWrong}, reading level: ${readingLevel}
+                is_paused: ${isPaused}`);
+  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel, isPaused]);
 
   useEffect(() => {
     if (isStarted) {
@@ -143,51 +140,44 @@ const Decoding = () => {
           setTimeout(() => {
             setIsPaused(false);
           }, 1000);
-    }
-      if (speechResultReceived) {
-        setButtonActive(true);
-        setRetryMessage(''); 
-      }
-      else {
+        }
+        if (speechResultReceived) {
+          setButtonActive(true);
+          setRetryMessage(''); 
+        }
+        else {
         setRetryMessage("We didn't quite catch that. Please try again.");
         setButtonActive(true);
         } 
-        speechRecognition.stopSpeechRecognition();
+      }
     }
-    }
-  }, [countdown, setCountdown, speechResultReceived]);
+  }, [countdown, setCountdown, isStarted, speechResultReceived]);
 
   return (
     <div className="centered-content">
       <div className="decoding-content">
-        {/* <h1 className='custom-h1'>Online DESD</h1> */}
-        {!isPaused && (
-          <>
-            {isStarted ? (
-              !isLastWord && buttonActive ? (
+        {!isPaused && isStarted && !isLastWord && buttonActive ? (
                 <div className="button-container">
                   <div>
                     {retryMessage && <p>{retryMessage}</p>}
                     <button onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
                   </div>
                 </div>
-              ) : null
-            ) : (
+              ) : null }
+        {!isStarted && (
               <div className="button-container">
                 <div>
                 <button onClick={startDecoding}>Start</button>
                 </div>
               </div>
             )}
-            {!buttonActive && isStarted && (
+        {!buttonActive && isStarted && (
               <>
                 <p className='custom-p'>Say this word: </p>
                 <h2 className='custom-h2'>{currentWord}</h2>
                 <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} size="300"/>
               </>
             )}
-          </>
-        )}
       </div>
     </div>
   );
