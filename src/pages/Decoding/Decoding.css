@@ -4,18 +4,22 @@
     align-items: center;
     background-color: #fff;
     min-height: 600px;
-    margin-top: 100px;
+    margin-top: 150px;
   }
 
-.custom-h1 {
-  padding-bottom: 20px;
-}
+.button-container {
+  display: flex;
+  height: 65vh;
+  justify-content: center;
+  align-items: center;
+} 
 
 .custom-h2 {
-  padding-bottom: 20px;
-  font-size: 6rem;
+  margin: 5vh;
+  font-size: 10vh;
 }
 
 .custom-p {
-  font-size: 3rem;
+  margin: 4vh;
+  font-size: 5vh;
 }

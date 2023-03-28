@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
 import { useAudioVisualizer } from '../hooks/useAudioVisualizer';
-import { useCountdown } from '../hooks/useCountdown'; // Import the useCountdown hook
 
-const AudioVisualizer = ({ isStarted, buttonActive, countdownValue }) => {
+const AudioVisualizer = ({ isStarted, buttonActive, countdownValue, size }) => {
   const canvasRef = useRef(null);
   const isActive = isStarted && !buttonActive;
   const { startVisualization, stopVisualization } = useAudioVisualizer(canvasRef, countdownValue);
@@ -15,7 +14,7 @@ const AudioVisualizer = ({ isStarted, buttonActive, countdownValue }) => {
     }
   }, [isActive, startVisualization, stopVisualization]);
 
-  return <canvas ref={canvasRef} width="300" height="300"></canvas>;
+  return <canvas ref={canvasRef} width={size} height={size}></canvas>;
 };
 
 export default AudioVisualizer;

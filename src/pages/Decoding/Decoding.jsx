@@ -161,19 +161,27 @@ const Decoding = () => {
         {/* <h1 className='custom-h1'>Online DESD</h1> */}
         {!isPaused && (
           <>
-            {retryMessage && <p>{retryMessage}</p>}
             {isStarted ? (
               !isLastWord && buttonActive ? (
-                <button onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+                <div className="button-container">
+                  <div>
+                    {retryMessage && <p>{retryMessage}</p>}
+                    <button onClick={handleNextWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+                  </div>
+                </div>
               ) : null
             ) : (
-              <button onClick={startDecoding}>Start</button>
+              <div className="button-container">
+                <div>
+                <button onClick={startDecoding}>Start</button>
+                </div>
+              </div>
             )}
             {!buttonActive && isStarted && (
               <>
                 <p className='custom-p'>Say this word: </p>
                 <h2 className='custom-h2'>{currentWord}</h2>
-                <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} />
+                <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} size="300"/>
               </>
             )}
           </>
