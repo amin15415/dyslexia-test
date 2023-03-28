@@ -10,6 +10,7 @@ export const useSpeechRecognition = () => {
         window.mozSpeechRecognition ||
         window.msSpeechRecognition)();
 
+      recognition.current.continuous = false;
       recognition.current.lang = 'en-US';
       recognition.current.interimResults = false;
       recognition.current.maxAlternatives = 1;

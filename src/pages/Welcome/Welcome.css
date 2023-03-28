@@ -9,7 +9,7 @@ html, body {
   align-items: center;
   width: 100%;
   height: 75vh;
-  min-height: 1012px;
+  min-height: 500px;
   overflow: hidden;
   position: relative; /* Added this to establish a new stacking context */
 }
@@ -27,7 +27,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 80%;
   min-height: auto;
   z-index: 2;
 }
@@ -35,7 +35,8 @@ body {
 .text-content {
   color: white;
   text-align: center;
-  max-width: 70%; /* Adjust this value to control the wrapping behavior */
+  max-width: 80%;
+  margin-top: 175px;
 }
 
 .banner-h1 {
@@ -65,11 +66,8 @@ body {
 }
 
 @media screen and (min-width: 1785px) {
-  .banner-section {
-    background-position: center top -350px; /* Adjust this value as desired */
-  }
   .welcome-container {
-    height: 100vh; /* Adjust this value as desired */
+    height: 88vh; /* Adjust this value as desired */
   }
 }
 
