@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
-import Encoding from './pages/Encoding';
+import Encoding from './pages/Encoding/Encoding';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
 
