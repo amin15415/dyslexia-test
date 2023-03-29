@@ -34,12 +34,12 @@ const Encoding = () => {
   );
 
   return (
+
     <div>
-      {lessThanFiveWordsCorrect && gradeIndex !== 0 ? (
+      {lessThanFiveWordsCorrect ? (
         <div>
           <p>
-            You got fewer than 5 words correct, so you are reading at a
-            Kindergarten level.
+            You got fewer than 5 words correct.
           </p>
           <p>
             You did not get enough words correct to proceed with the encoding
