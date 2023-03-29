@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const useSpeechRecognition = () => {
   const recognition = useRef(null);
+  const [isRecognitionInProgress, setIsRecognitionInProgress] = useState(false);
 
   useEffect(() => {
     if (!recognition.current) {
@@ -24,6 +25,13 @@ export const useSpeechRecognition = () => {
         return;
       }
 
+      recognition.onstart = () => {
+        setIsRecognitionInProgress(true);
+      };
+      recognition.onend = () => {
+        setIsRecognitionInProgress(false);
+      };
+
       recognition.current.onresult = (event) => {
         const speechResult = event.results[0][0].transcript;
         resolve(speechResult);
@@ -32,7 +40,7 @@ export const useSpeechRecognition = () => {
       recognition.current.onerror = (event) => {
         reject(event.error);
       };
-
+      
       recognition.current.start();
     });
   };
@@ -44,6 +52,7 @@ export const useSpeechRecognition = () => {
   };
 
   return {
+    isRecognitionInProgress,
     recognizeSpeech,
     stopSpeechRecognition,
   };

@@ -42,6 +42,11 @@ const Decoding = () => {
     setRetryMessage('');
 	  setCountdown(3);
 
+    if (speechRecognition.isRecognitionInProgress) {
+      console.log("Speech recognition is already in progress.");
+      return;
+    }
+
     try {
 		  const speechRecognitionPromise = speechRecognition.recognizeSpeech();
 		  const countdownPromise = new Promise((resolve) => {
@@ -59,7 +64,6 @@ const Decoding = () => {
 		  [speechResult] = await Promise.all([speechRecognitionPromise, countdownPromise]);
       setSpeechResultReceived(true);
       console.log('Speech result:', speechResult);
-      speechRecognition.stopSpeechRecognition();
 	  } catch (error) {
       console.error('Speech recognition error:', error);
       return;
@@ -136,7 +140,6 @@ const Decoding = () => {
       } 
       else {
         if (!speechResultReceived) {
-          speechRecognition.stopSpeechRecognition()
           setIsPaused(true);
           setTimeout(() => {
             setIsPaused(false);
@@ -152,7 +155,7 @@ const Decoding = () => {
         } 
       }
     }
-  }, [countdown, setCountdown, isStarted, speechResultReceived, speechRecognition]);
+  }, [countdown, setCountdown, isStarted, speechResultReceived]);
 
   return (
     <div className="centered-content">
