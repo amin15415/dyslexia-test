@@ -95,7 +95,7 @@ const Decoding = () => {
 
     if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
       setTimeout(() => {
-        navigate('/encoding', { state: { desdWords: desdWords } });
+        navigate('/encoding', { state: { desdWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
       }, 500);
     }
 
