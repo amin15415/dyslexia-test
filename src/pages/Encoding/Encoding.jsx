@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getCorrectWords } from '../../utils/getWords';
+import ReactAudioPlayer from 'react-audio-player';
 
 const Encoding = () => {
   const location = useLocation();
@@ -12,7 +13,8 @@ const Encoding = () => {
     desdWords
   );
 
-  const audioPaths = correctWords.map((word) => `../../assets/audio/${word}.mp3`);
+  const audioPaths = correctWords.map((word) => require(`../../assets/audio/${word}.mp3`));
+
 
   useEffect(() => {
     console.log(audioPaths);

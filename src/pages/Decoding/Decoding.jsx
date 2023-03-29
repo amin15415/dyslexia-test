@@ -136,6 +136,7 @@ const Decoding = () => {
       } 
       else {
         if (!speechResultReceived) {
+          speechRecognition.stopSpeechRecognition()
           setIsPaused(true);
           setTimeout(() => {
             setIsPaused(false);
@@ -151,7 +152,7 @@ const Decoding = () => {
         } 
       }
     }
-  }, [countdown, setCountdown, isStarted, speechResultReceived]);
+  }, [countdown, setCountdown, isStarted, speechResultReceived, speechRecognition]);
 
   return (
     <div className="centered-content">
