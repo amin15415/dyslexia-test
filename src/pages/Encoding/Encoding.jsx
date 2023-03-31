@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getCorrectWords } from '../../utils/getWords';
 import "./Encoding.css";
@@ -7,7 +7,7 @@ const Encoding = () => {
   const location = useLocation();
   const desdWords = location.state.desdWords;
   const gradeIndex = location.state.gradeIndex;
-
+  console.log(desdWords);
   const { correctWords, lessThanFiveWordsCorrect } = getCorrectWords(
     gradeIndex,
     desdWords
@@ -37,20 +37,20 @@ const Encoding = () => {
         ) : (
           <div>
             {audioPaths.map((audioPath, index) => (
-              <>
-                <div key={index}>
+              <React.Fragment key={index}>
+                <div>
                   <audio src={audioPath} controls />
                 </div>
                 <div>
                   <input type="text" placeholder="Enter spelling" />
                 </div>
-              </>
+              </React.Fragment>
             ))}
           </div>
         )}
       </div>
     </div>
-  );
+  );  
   
 }
 
