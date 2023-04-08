@@ -42,11 +42,6 @@ const Decoding = () => {
     setRetryMessage('');
 	  setCountdown(3);
 
-    if (speechRecognition.isRecognitionInProgress) {
-      console.log("Speech recognition is already in progress.");
-      return;
-    }
-
     try {
 		  const speechRecognitionPromise = speechRecognition.recognizeSpeech();
 		  const countdownPromise = new Promise((resolve) => {

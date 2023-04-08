@@ -3,22 +3,40 @@ import { useState, useEffect, useRef } from 'react';
 export const useAudioVisualizer = (canvasRef, countdownValue) => {
   const [analyser, setAnalyser] = useState(null);
   const animationFrameRef = useRef(null);
+  const [stream, setStream] = useState(null);
 
   useEffect(() => {
     const getAudioContext = async () => {
+      console.log('Getting audio context...');
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const newAnalyser = audioContext.createAnalyser();
       setAnalyser(newAnalyser);
 
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const source = audioContext.createMediaStreamSource(stream);
-      source.connect(newAnalyser);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log('Got audio stream:', stream);
+        setStream(stream);
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(newAnalyser);
+      } catch (error) {
+        console.error('Error getting audio stream:', error);
+      }
     };
 
     if (!analyser) {
       getAudioContext();
     }
   }, [analyser]);
+
+  useEffect(() => {
+    return () => {
+      console.log('Cleaning up audio stream...');
+      if (stream) {
+        const audioTracks = stream.getAudioTracks();
+        audioTracks.forEach((track) => track.stop());
+      }
+    };
+  }, [stream]);
 
   const draw = () => {
     if (!canvasRef.current || !analyser) return;
@@ -97,6 +115,6 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
 
   return {
     startVisualization,
-    stopVisualization,
+    stopVisualization
   };
 };
