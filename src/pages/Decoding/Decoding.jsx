@@ -174,7 +174,7 @@ const Decoding = () => {
               <>
                 <p className='custom-p'>Say this word: </p>
                 <h2 className='custom-h2'>{currentWord}</h2>
-                <AudioVisualizer isStarted={isStarted} buttonActive={buttonActive} countdownValue={countdown} size="300"/>
+                <AudioVisualizer isActive={(isStarted && !buttonActive)} countdownValue={countdown} size="300"/>
               </>
             )}
       </div>
