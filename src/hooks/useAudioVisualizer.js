@@ -39,6 +39,7 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
   }, [stream]);
 
   const draw = () => {
+    console.log('Drawing...');
     if (!canvasRef.current || !analyser) return;
     const canvasContext = canvasRef.current.getContext('2d');
     const dataArray = new Uint8Array(analyser.frequencyBinCount);

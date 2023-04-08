@@ -1,38 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getCorrectWords } from '../../utils/getWords';
-import "./Encoding.css";
+import { useNavigate } from 'react-router-dom';
+import "./Eidetic.css";
 
 const Encoding = () => {
-  const location = useLocation();
-  const desdWords = location.state.desdWords;
-  const gradeIndex = location.state.gradeIndex;
-  console.log(desdWords);
-  const { correctWords, lessThanFiveWordsCorrect } = getCorrectWords(
+    const navigate = useNavigate();
+    const location = useLocation();
+    const desdWords = location.state.desdWords;
+    const gradeIndex = location.state.gradeIndex;
+    console.log(desdWords);
+    const { correctWords, lessThanFiveWordsCorrect } = getCorrectWords(
     gradeIndex,
     desdWords
-  );
-  const audioPaths = correctWords.map((word) => require(`../../assets/audio/${word}.mp3`));
-  const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
+    );
+    const audioPaths = correctWords.map((word) => require(`../../assets/audio/${word}.mp3`));
+    const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
+    const [incompleteSubmit, setIncompleteSubmit] = useState(false);
+    const [numCorrect, setNumCorrect] = useState(0);
 
 
-  useEffect(() => {
-    console.log(audioPaths);
-  }, [audioPaths]);
+    useEffect(() => {
+        console.log(audioPaths);
+    }, [audioPaths]);
 
   const handleSubmit = () => {
+    let correct = 0;
     const incorrectWords = [];
+    userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
   
     for (let i = 0; i < audioPaths.length; i++) {
       if (userInputs[i] !== correctWords[i]) {
         incorrectWords.push(correctWords[i]);
-      }
+        correct++
+      } 
     }
-  
-    if (incorrectWords.length > 0) {
-      alert(`The following words were spelled incorrectly: ${incorrectWords.join(', ')}`);
+    setNumCorrect(correct);
+
+    if (!userInputs.some((input) => input === '')) {
+        setTimeout(() => {
+            navigate('/phonetic', { state: { 
+                desdWords: desdWords, 
+                gradeIndex: gradeIndex, 
+                readingLevel: location.state.readingLevel,
+                eideticCorrect: numCorrect
+            } });
+          }, 500);
     } else {
-      alert('All words spelled correctly!');
+        setIncompleteSubmit(true);
+        setTimeout (() => {
+            setIncompleteSubmit(false);
+        }, 3000);
     }
   };
 
@@ -75,8 +93,9 @@ const Encoding = () => {
         )}
       </div>
       <div className='button-container'>
+          {incompleteSubmit && <p>Please answer all items.</p>}
         <button
-            disabled={userInputs.some((input) => input === '')}
+            // disabled={userInputs.some((input) => input === '')}
             onClick={handleSubmit}
           >
             Submit

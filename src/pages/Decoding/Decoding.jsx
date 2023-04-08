@@ -101,7 +101,7 @@ const Decoding = () => {
     if (isLastWord) {
         navigate('/encoding', { state: { desdWords: desdWords } });
     }
-  }, [correct, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong]);
+  }, [correct, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong, readingLevel]);
 
   useEffect(() => {
     handleLogic();
@@ -174,7 +174,7 @@ const Decoding = () => {
               <>
                 <p className='custom-p'>Say this word: </p>
                 <h2 className='custom-h2'>{currentWord}</h2>
-                <AudioVisualizer isActive={(isStarted && !buttonActive)} countdownValue={countdown} size="300"/>
+                <AudioVisualizer isActive={(true)} countdownValue={countdown} size="300"/>
               </>
             )}
       </div>

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Welcome from './pages/Welcome/Welcome';
 import Decoding from './pages/Decoding/Decoding';
-import Encoding from './pages/Encoding/Encoding';
+import Eidetic from './pages/Eidetic/Eidetic';
+import Phonetic from './pages/Phonetic/Phonetic';
+import Results from './pages/Results/Results';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
 
@@ -30,7 +32,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Welcome />} />
               <Route path="/decoding" element={<Decoding />} />
-              <Route path="/encoding" element={<Encoding />} />
+              <Route path="/eidetic" element={<Eidetic />} />
+              <Route path="/phonetic" element={<Phonetic />} />
+              <Route path="/results" element={<Results />} />
             </Routes>
           </main>
         </div>

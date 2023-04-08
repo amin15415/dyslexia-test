@@ -1,0 +1,30 @@
+.encoding-container {
+    padding-top: 100px;
+    height: 100vh;
+    min-height: 750px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    height: 15vh;
+    justify-content: center;
+    align-items: center;
+  } 
+  
+  input[type="text"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    height: 1.5vh;
+    width: 130px; 
+  }
+  
+  input[type="text"]:focus {
+    border-color: #FFC107;
+    outline: none;
+  }
+  
