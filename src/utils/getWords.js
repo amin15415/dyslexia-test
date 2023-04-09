@@ -1,42 +1,41 @@
-export function getCorrectWords(gradeIndex, desdWords) {
+export function getEideticWords(gradeIndex, desdWords) {
     const gradeObj = desdWords[gradeIndex];
     const words = gradeObj.words;
-    let correctWords = Object.keys(words).filter((word) => words[word] === true);
+    let eideticWords = Object.keys(words).filter((word) => words[word] === true);
   
-    while (correctWords.length < 5 && gradeIndex > 0) {
+    while (eideticWords.length < 5 && gradeIndex > 0) {
       gradeIndex--;
       const prevGradeObj = desdWords[gradeIndex];
       const prevGradeWords = prevGradeObj.words;
       const prevTrueWords = Object.keys(prevGradeWords).filter(
         (word) => prevGradeWords[word] === true
       );
-      correctWords = [...correctWords, ...prevTrueWords];
+      eideticWords = [...eideticWords, ...prevTrueWords];
     }
   
-    correctWords = correctWords.slice(0, 5);
-    const lessThanFiveWordsCorrect = correctWords.length < 5;
+    eideticWords = eideticWords.slice(0, 5);
+    const lessThanFiveWordsCorrect = eideticWords.length < 5;
   
-    return { correctWords, lessThanFiveWordsCorrect };
+    return { eideticWords, lessThanFiveWordsCorrect };
   };
 
 
-export function getWrongWords(gradeIndex, desdWords) {
+export function getPhoneticWords(gradeIndex, desdWords) {
     const gradeObj = desdWords[gradeIndex];
     const words = gradeObj.words;
-    let correctWords = Object.keys(words).filter((word) => words[word] === true);
+    let phoneticWords = Object.keys(words).filter((word) => words[word] === false);
   
-    while (correctWords.length < 5 && gradeIndex > 0) {
+    while (phoneticWords.length < 5 && gradeIndex > 0) {
       gradeIndex--;
       const prevGradeObj = desdWords[gradeIndex];
       const prevGradeWords = prevGradeObj.words;
-      const prevTrueWords = Object.keys(prevGradeWords).filter(
-        (word) => prevGradeWords[word] === true
+      const prevFalseWords = Object.keys(prevGradeWords).filter(
+        (word) => prevGradeWords[word] === false
       );
-      correctWords = [...correctWords, ...prevTrueWords];
+      phoneticWords = [...phoneticWords, ...prevFalseWords];
     }
   
-    correctWords = correctWords.slice(0, 5);
-    const lessThanFiveWordsCorrect = correctWords.length < 5;
+    phoneticWords = phoneticWords.slice(0, 5);
   
-    return { correctWords, lessThanFiveWordsCorrect };
+    return { phoneticWords };
   };

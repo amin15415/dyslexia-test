@@ -1,58 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getCorrectWords } from '../../utils/getWords';
+import { getEideticWords } from '../../utils/getWords';
 import { useNavigate } from 'react-router-dom';
 import "./Eidetic.css";
 
-const Encoding = () => {
+const Eidetic = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const desdWords = location.state.desdWords;
     const gradeIndex = location.state.gradeIndex;
     console.log(desdWords);
-    const { correctWords, lessThanFiveWordsCorrect } = getCorrectWords(
+    const { eideticWords, lessThanFiveWordsCorrect } = getEideticWords(
     gradeIndex,
     desdWords
     );
-    const audioPaths = correctWords.map((word) => require(`../../assets/audio/${word}.mp3`));
+    const audioPaths = eideticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
-    const [numCorrect, setNumCorrect] = useState(0);
-
 
     useEffect(() => {
         console.log(audioPaths);
     }, [audioPaths]);
 
-  const handleSubmit = () => {
-    let correct = 0;
-    const incorrectWords = [];
-    userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
-  
-    for (let i = 0; i < audioPaths.length; i++) {
-      if (userInputs[i] !== correctWords[i]) {
-        incorrectWords.push(correctWords[i]);
-        correct++
-      } 
-    }
-    setNumCorrect(correct);
+    const handleSubmit = () => {
+        let correct = 0;
+        const ineideticWords = [];
+        userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
-    if (!userInputs.some((input) => input === '')) {
-        setTimeout(() => {
-            navigate('/phonetic', { state: { 
-                desdWords: desdWords, 
-                gradeIndex: gradeIndex, 
-                readingLevel: location.state.readingLevel,
-                eideticCorrect: numCorrect
-            } });
-          }, 500);
-    } else {
-        setIncompleteSubmit(true);
-        setTimeout (() => {
-            setIncompleteSubmit(false);
-        }, 3000);
-    }
-  };
+        if (!userInputs.some((input) => input === '')) {
+
+            for (let i = 0; i < audioPaths.length; i++) {
+                if (userInputs[i] !== eideticWords[i]) {
+                    ineideticWords.push(eideticWords[i]);
+                } else {
+                    correct++;
+                }
+            }
+
+            setTimeout(() => {
+                navigate('/phonetic', { state: { 
+                    desdWords: desdWords, 
+                    gradeIndex: gradeIndex, 
+                    readingLevel: location.state.readingLevel,
+                    eideticCorrect: correct
+                } });
+            }, 100);
+        } else {
+            setIncompleteSubmit(true);
+            setTimeout (() => {
+                setIncompleteSubmit(false);
+            }, 3000);
+        }
+    };
 
   return (
     <div className='encoding-container'>
@@ -106,4 +105,4 @@ const Encoding = () => {
   
 }
 
-export default Encoding;
+export default Eidetic;
