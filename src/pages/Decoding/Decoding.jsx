@@ -135,6 +135,7 @@ const Decoding = () => {
       } 
       else {
         if (!speechResultReceived) {
+          speechRecognition.stopSpeechRecognition();
           setIsPaused(true);
           setTimeout(() => {
             setIsPaused(false);
