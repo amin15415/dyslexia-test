@@ -94,12 +94,12 @@ const Decoding = () => {
 
     if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
       setTimeout(() => {
-        navigate('/encoding', { state: { desdWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
+        navigate('/eidetic', { state: { desdWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
       }, 500);
     }
 
     if (isLastWord) {
-        navigate('/encoding', { state: { desdWords: desdWords } });
+        navigate('/eidetic', { state: { desdWords: desdWords } });
     }
   }, [correct, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong, readingLevel]);
 
