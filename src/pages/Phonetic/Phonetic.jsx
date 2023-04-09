@@ -56,6 +56,10 @@ const Phonetic = () => {
   return (
     <div className='encoding-container'>
       <div>
+          <h1>Spell these words exactly like they sound</h1>
+          <p>For instance, laugh should be spelled 'laf'.</p>
+      </div>
+      <div>
         {audioPaths.map((audioPath, index) => (
           <React.Fragment key={index}>
             <div>

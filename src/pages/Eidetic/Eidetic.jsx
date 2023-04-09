@@ -68,27 +68,31 @@ const Eidetic = () => {
             </p>
           </div>
         ) : (
+          <>
           <div>
-            {audioPaths.map((audioPath, index) => (
-              <React.Fragment key={index}>
-                <div>
-                  <audio src={audioPath} controls />
-                </div>
-                <div>
-                  <input 
-                    type="text" 
-                    placeholder="Enter spelling" 
-                    value={userInputs[index]} 
-                    onChange={(e) => {
-                      const newInputs = [...userInputs];
-                      newInputs[index] = e.target.value;
-                      setUserInputs(newInputs);
-                    }}
-                  />
-                </div>
-              </React.Fragment>
-            ))}
+            <h1>Spell these words exactly as they should be spelled</h1>
+            <p>For instance, laugh should be spelled 'laugh'.</p>
           </div>
+          <div>
+              {audioPaths.map((audioPath, index) => (
+                <React.Fragment key={index}>
+                  <div>
+                    <audio src={audioPath} controls />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Enter spelling"
+                      value={userInputs[index]}
+                      onChange={(e) => {
+                        const newInputs = [...userInputs];
+                        newInputs[index] = e.target.value;
+                        setUserInputs(newInputs);
+                      } } />
+                  </div>
+                </React.Fragment>
+              ))}
+            </div></>
         )}
       </div>
       <div className='button-container'>
