@@ -28,9 +28,8 @@ const Eidetic = () => {
         userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
         if (!userInputs.some((input) => input === '')) {
-            
             for (let i = 0; i < audioPaths.length; i++) {
-                const userInput = userInputs[i].lowerCase().trim();
+                const userInput = userInputs[i].toLowerCase().trim();
                 if (userInput !== eideticWords[i]) {
                     ineideticWords.push(eideticWords[i]);
                 } else {

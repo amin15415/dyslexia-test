@@ -30,7 +30,7 @@ const Phonetic = () => {
         if (!userInputs.some((input) => input === '')) {
 
             for (let i = 0; i < audioPaths.length; i++) {
-                const userInput = userInputs[i].lowerCase().trim();
+                const userInput = userInputs[i].toLowerCase().trim();
                 if (phoneticCorrect(phoneticWords[i], userInput)) {
                     correct++;
                 } else {
