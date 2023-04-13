@@ -12,7 +12,8 @@ const Decoding = () => {
   const [gradeIndex, setGradeIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
-  const [totalWrong, setTotalWrong] = useState(0);
+  const [wrongAboveGradeLevel, setWrongAboveGradeLevel] = useState(0);
+  const [frozenWrongAboveGradeLevel, setFrozenWrongAboveGradeLevel] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isLastWord, setIsLastWord] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
@@ -67,13 +68,18 @@ const Decoding = () => {
     const isCorrect = convertNumberToWords(speechResult).toLowerCase() === currentWord.toLowerCase();
     const updatedCorrect = isCorrect ? correct + 1 : correct;
     const updatedWrong = !isCorrect ? wrong + 1 : wrong;
-    const updatedTotalWrong = !isCorrect ? totalWrong + 1 : totalWrong;
     const lastWordReached = gradeIndex === lastGradeIndex && wordIndex === lastWordIndex;
 
     setIsLastWord(lastWordReached);
     setCorrect(updatedCorrect);
     setWrong(updatedWrong);
-    setTotalWrong(updatedTotalWrong);
+    setWrongAboveGradeLevel((prevWrongAboveGradeLevel) => {
+        if (!frozenWrongAboveGradeLevel && !isCorrect) {
+          return prevWrongAboveGradeLevel + 1;
+        } else {
+          return prevWrongAboveGradeLevel;
+        }
+    });
     setWordIndex((prevState) => prevState + 1);
     desdWords[gradeIndex].words[currentWord] = isCorrect;
   };
@@ -90,9 +96,11 @@ const Decoding = () => {
   const handleLogic = useCallback(() => {
     if (desdWords[gradeIndex] && correct >= 3) {
       setReadingLevel(desdWords[gradeIndex].grade);
+      setWrongAboveGradeLevel(0);
+      setFrozenWrongAboveGradeLevel(true);
     }
 
-    if (wrong >= 3 && totalWrong >= 5 && wordIndex >= 5) {
+    if (wrong >= 3 && wrongAboveGradeLevel >= 5 && wordIndex >= 5) {
       setTimeout(() => {
         navigate('/eidetic', { state: { desdWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
       }, 500);
@@ -101,7 +109,7 @@ const Decoding = () => {
     if (isLastWord) {
         navigate('/eidetic', { state: { desdWords: desdWords } });
     }
-  }, [correct, gradeIndex, isLastWord, navigate, totalWrong, wordIndex, wrong, readingLevel]);
+  }, [correct, gradeIndex, isLastWord, navigate, wrongAboveGradeLevel, wordIndex, wrong, readingLevel]);
 
   useEffect(() => {
     handleLogic();
@@ -111,6 +119,8 @@ const Decoding = () => {
     if (wordIndex >= 5) {
       if (gradeIndex < desdWords.length - 1) {
         setGradeIndex((prevState) => (prevState + 1 ));
+        setFrozenWrongAboveGradeLevel(false);
+        setWrongAboveGradeLevel(0);
       }
       setCorrect(0)
       setWrong(0);
@@ -121,9 +131,9 @@ const Decoding = () => {
   useEffect(() => {
     console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${gradeIndex}, 
                 grade level: ${gradeLevel}, correct: ${correct}, wrong: ${wrong}, 
-                total wrong: ${totalWrong}, reading level: ${readingLevel}
+                wrong above grade level: ${wrongAboveGradeLevel}, reading level: ${readingLevel}
                 is_paused: ${isPaused}`);
-  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, totalWrong, readingLevel, isPaused]);
+  }, [words, wordIndex, gradeIndex, gradeLevel, correct, wrong, wrongAboveGradeLevel, readingLevel, isPaused]);
 
   useEffect(() => {
     if (isStarted) {
