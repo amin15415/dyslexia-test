@@ -8,6 +8,7 @@ import './Decoding.css';
 
 const Decoding = () => {
   const navigate = useNavigate();
+  const [hasMicPermission, setHasMicPermission] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
   const [gradeIndex, setGradeIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
@@ -32,9 +33,31 @@ const Decoding = () => {
   const [retryMessage, setRetryMessage] = useState('');
   let speechResult;
 
-  const startDecoding = () => {
-    setIsStarted(true);
-    handleNextWord();
+  const requestMicPermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (stream) {
+        setHasMicPermission(true);
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    } catch (err) {
+      console.error('Error getting microphone access:', err);
+    }
+  };
+
+  useEffect(() => {
+    requestMicPermission();
+  }, []);
+
+  const startDecoding = async () => {
+    if (!hasMicPermission) {
+      await requestMicPermission();
+    }
+
+    if (hasMicPermission) {
+      setIsStarted(true);
+      handleNextWord();
+    }
   };
 
   const handleNextWord = async () => {
