@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getPhoneticWords } from '../../utils/getWords';
-import phoneticCorrect from '../../utils/phoneticCorrect';
+import correctPhoneticWords from '../../utils/phoneticCorrect';
 import { useNavigate } from 'react-router-dom';
 import "./Phonetic.css";
 
@@ -14,13 +14,18 @@ const Phonetic = () => {
       gradeIndex,
       desdWords
       );
-      const audioPaths = phoneticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
-      const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
-      const [incompleteSubmit, setIncompleteSubmit] = useState(false);
+    const audioPaths = phoneticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
+    const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
+    const [incompleteSubmit, setIncompleteSubmit] = useState(false);
+    const [phoneticCorrect, setPhoneticCorrect] = useState();
 
     useEffect(() => {
         console.log(audioPaths);
     }, [audioPaths]);
+
+    function goToExternalSite() {
+      window.location.href = `https://worgcu1jmds.typeform.com/to/pIek20LV#rl=${location.state.readingLevel}&es=${location.state.eideticCorrect}&ps=${phoneticCorrect}&test=DESD`;
+    }
 
     const handleSubmit = () => {
         let correct = 0;
@@ -31,21 +36,15 @@ const Phonetic = () => {
 
             for (let i = 0; i < audioPaths.length; i++) {
                 const userInput = userInputs[i].toLowerCase().trim();
-                if (phoneticCorrect(phoneticWords[i], userInput)) {
+                if (correctPhoneticWords(phoneticWords[i], userInput)) {
                     correct++;
                 } else {
                     incorrectPhoneticWords.push(phoneticWords[i]);
                 }
             }
-            setTimeout(() => {
-                navigate('/results', { state: { 
-                    desdWords: desdWords, 
-                    readingLevel: location.state.readingLevel,
-                    phoneticCorrect: correct,
-                    eideticCorrect: location.state.eideticCorrect
-                } });
-                }, 100);
-
+              // Navigate to External Survey togather Scoring/Demographic Data
+              setPhoneticCorrect(correct);
+              goToExternalSite()
         } else {
             setIncompleteSubmit(true);
             setTimeout (() => {
