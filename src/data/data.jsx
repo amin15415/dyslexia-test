@@ -1,5 +1,5 @@
 export const desdWords = [
-    { grade: 'K', words: { 'baby': null, 'on': null, 'boat': null, 'do': null, 'car': null } },
+    { grade: 'K', words: { 'baby': null, 'one': null, 'boat': null, 'do': null, 'car': null } },
     { grade: '1L', words: { 'was': null, 'daddy': null, 'book': null, 'good': null, 'doll': null } },
     { grade: '1U', words: { 'girl': null, 'apple': null, 'they': null, 'story': null, 'some': null } },
     { grade: '2', words: { 'above': null, 'what': null, 'any': null, 'busy': null, 'night': null } },
