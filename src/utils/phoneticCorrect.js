@@ -42,7 +42,7 @@ const phoneticDesdWords = {
     'zealous': [['z','ɛ','l','ə','s']], 'clique': [['k','l','i','k']], 'atrocious': [['ə','t','r','oʊ','ʃ','ə','s']], 'catastrophe': [['k','ə','t','æ','s','t','r','ə','f','i']], 'liquidate': [['l','ɪ','k','w','ɪ','d','eɪ','t']]
 };
 
-function phoneticCorrect(testWord, testAnswer) {
+function correctPhoneticWords(testWord, testAnswer) {
     const correctAnswers = [];
 
     for (const pronounciation of phoneticDesdWords[testWord]) {
@@ -98,4 +98,4 @@ function cartesianProduct(...arrays) {
     );
 }
 
-export default phoneticCorrect;
+export default correctPhoneticWords;
