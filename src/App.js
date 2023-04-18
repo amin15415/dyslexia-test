@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Welcome from './pages/Welcome/Welcome';
+import SelectTest from './pages/Test Selection/SelectTest';
 import Decoding from './pages/Decoding/Decoding';
 import Eidetic from './pages/Eidetic/Eidetic';
 import Phonetic from './pages/Phonetic/Phonetic';
@@ -31,6 +32,7 @@ function App() {
           <main style={{background: isHome ? '#3d3d3d' : 'white'}}>
             <Routes>
               <Route path="/" element={<Welcome />} />
+              <Route path="/test-selection" element={<SelectTest />} />
               <Route path="/decoding" element={<Decoding />} />
               <Route path="/eidetic" element={<Eidetic />} />
               <Route path="/phonetic" element={<Phonetic />} />

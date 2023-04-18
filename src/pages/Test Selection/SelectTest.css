@@ -1,0 +1,14 @@
+.test-selection-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    min-height: 600px;
+}
+
+.button-container {
+   padding: 20px;
+} 
+  

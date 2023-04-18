@@ -10,7 +10,7 @@ function Welcome() {
   const navigate = useNavigate();
 
   const beginTest = () => {
-    navigate('/decoding');
+    navigate('/test-selection');
   };
 
   return (
