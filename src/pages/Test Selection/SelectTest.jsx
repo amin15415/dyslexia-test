@@ -7,11 +7,15 @@ const SelectTest = () => {
   const navigate = useNavigate();
 
   const startDESD = () => {
-    navigate('/decoding');
+    navigate('/decoding', { state: { 
+      test: 'DESD', 
+    } });
   };
 
   const startADT = () => {
-    
+    navigate('/decoding', { state: { 
+      test: 'ADT', 
+    } }); 
   };
 
   return (
