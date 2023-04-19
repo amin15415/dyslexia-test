@@ -132,7 +132,7 @@ const ADT = () => {
     if (isLastWord) {
         navigate('/eidetic', { state: { adtWords: adtWords } });
     }
-  }, [correct, gradeIndex, isLastWord, navigate, wrongAboveGradeLevel, wordIndex, wrong, readingLevel]);
+  }, [correct, gradeIndex, isLastWord, navigate, wrongAboveGradeLevel, wordIndex, wrong, words, readingLevel]);
 
   useEffect(() => {
     handleLogic();
@@ -149,7 +149,7 @@ const ADT = () => {
       setWrong(0);
       setWordIndex(0)
     }
-  }, [wordIndex, gradeIndex]);
+  }, [wordIndex, gradeIndex, lastWordIndex]);
 
   useEffect(() => {
     console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${gradeIndex}, 
