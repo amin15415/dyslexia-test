@@ -79,8 +79,9 @@ const ADT = () => {
 			  });
 		    }, 1000);
 		  });
-  
-		  [speechResult] = await Promise.all([speechRecognitionPromise, countdownPromise]);
+      
+		  const [speechReturn] = await Promise.all([speechRecognitionPromise, countdownPromise]);
+      speechResult = convertNumberToWords(speechReturn).toLowerCase();
       setSpeechResultReceived(true);
       console.log('Speech result:', speechResult);
 	  } catch (error) {
@@ -88,7 +89,16 @@ const ADT = () => {
       return;
     }
 
-    const isCorrect = convertNumberToWords(speechResult).toLowerCase() === currentWord.toLowerCase();
+    let isCorrect;
+    if (currentWord === 'know') {
+      isCorrect = speechResult === 'no' || speechResult === 'know'
+    } else if (currentWord === 'meadow') {
+      isCorrect = speechResult === 'metal' || speechResult === 'meadow'
+    } else if (currentWord === 'islet') {
+      isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
+    } else {
+      isCorrect = speechResult === currentWord;
+    }
     const updatedCorrect = isCorrect ? correct + 1 : correct;
     const updatedWrong = !isCorrect ? wrong + 1 : wrong;
     const lastWordReached = gradeIndex === lastGradeIndex && wordIndex === lastWordIndex;
@@ -125,7 +135,7 @@ const ADT = () => {
 
     if (wrong >= words.length / 2 && wrongAboveGradeLevel >= words.length && wordIndex >= words.length) {
       setTimeout(() => {
-        navigate('/eidetic', { state: { adtWords: adtWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
+        navigate('/eidetic', { state: { testWords: adtWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
       }, 500);
     }
 
@@ -139,7 +149,7 @@ const ADT = () => {
   }, [handleLogic]);
 
   useEffect(() => {
-    if (wordIndex >= lastWordIndex) {
+    if (wordIndex >= lastWordIndex + 1) {
       if (gradeIndex < adtWords.length - 1) {
         setGradeIndex((prevState) => (prevState + 1 ));
         setFrozenWrongAboveGradeLevel(false);

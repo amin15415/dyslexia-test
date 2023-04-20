@@ -125,7 +125,7 @@ const DESD = () => {
 
     if (wrong >= 3 && wrongAboveGradeLevel >= 5 && wordIndex >= 5) {
       setTimeout(() => {
-        navigate('/eidetic', { state: { desdWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
+        navigate('/eidetic', { state: { testWords: desdWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
       }, 500);
     }
 

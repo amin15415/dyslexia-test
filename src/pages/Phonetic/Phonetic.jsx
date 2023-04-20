@@ -8,11 +8,11 @@ import "./Phonetic.css";
 const Phonetic = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const desdWords = location.state.desdWords;
+    const testWords = location.state.testWords;
     const gradeIndex = location.state.gradeIndex;
     const { phoneticWords } = getPhoneticWords(
       gradeIndex,
-      desdWords
+      testWords
       );
     const audioPaths = phoneticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));

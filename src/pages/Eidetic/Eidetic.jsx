@@ -7,12 +7,11 @@ import "./Eidetic.css";
 const Eidetic = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const desdWords = location.state.desdWords;
+    const testWords = location.state.testWords;
     const gradeIndex = location.state.gradeIndex;
-    console.log(desdWords);
-    const { eideticWords, lessThanFiveWordsCorrect } = getEideticWords(
+    const { eideticWords, tooFewCorrect } = getEideticWords(
     gradeIndex,
-    desdWords
+    testWords
     );
     const audioPaths = eideticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
@@ -39,7 +38,7 @@ const Eidetic = () => {
 
             setTimeout(() => {
                 navigate('/phonetic', { state: { 
-                    desdWords: desdWords, 
+                    testWords: testWords, 
                     gradeIndex: gradeIndex, 
                     readingLevel: location.state.readingLevel,
                     eideticCorrect: correct
@@ -56,7 +55,7 @@ const Eidetic = () => {
   return (
     <div className='encoding-container'>
       <div>
-        {lessThanFiveWordsCorrect && gradeIndex !== 0 ? (
+        {tooFewCorrect && gradeIndex !== 0 ? (
           <div>
             <p>
               You got fewer than 5 words correct, so you are reading at a

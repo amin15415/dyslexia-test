@@ -1,11 +1,12 @@
-export function getEideticWords(gradeIndex, desdWords) {
-    const gradeObj = desdWords[gradeIndex];
+export function getEideticWords(gradeIndex, testWords) {
+    const gradeObj = testWords[gradeIndex];
     const words = gradeObj.words;
     let eideticWords = Object.keys(words).filter((word) => words[word] === true);
-  
-    while (eideticWords.length < 5 && gradeIndex > 0) {
+    const testLevelLength = Object.keys(words).length;
+
+    while (eideticWords.length < testLevelLength && gradeIndex >= 0) {
       gradeIndex--;
-      const prevGradeObj = desdWords[gradeIndex];
+      const prevGradeObj = testWords[gradeIndex];
       const prevGradeWords = prevGradeObj.words;
       const prevTrueWords = Object.keys(prevGradeWords).filter(
         (word) => prevGradeWords[word] === true
@@ -13,21 +14,23 @@ export function getEideticWords(gradeIndex, desdWords) {
       eideticWords = [...eideticWords, ...prevTrueWords];
     }
   
-    eideticWords = eideticWords.slice(0, 5);
-    const lessThanFiveWordsCorrect = eideticWords.length < 5;
+    eideticWords = eideticWords.slice(0, testLevelLength);
+    const tooFewWordsCorrect = eideticWords.length < testLevelLength;
   
-    return { eideticWords, lessThanFiveWordsCorrect };
+    return { eideticWords, tooFewWordsCorrect };
   };
 
 
-export function getPhoneticWords(gradeIndex, desdWords) {
-    const gradeObj = desdWords[gradeIndex];
+export function getPhoneticWords(gradeIndex, testWords) {
+    const gradeObj = testWords[gradeIndex];
     const words = gradeObj.words;
     let phoneticWords = Object.keys(words).filter((word) => words[word] === false);
+    const testLevelLength = Object.keys(words).length;
+
   
-    while (phoneticWords.length < 5 && gradeIndex > 0) {
+    while (phoneticWords.length < testLevelLength && gradeIndex > 0) {
       gradeIndex--;
-      const prevGradeObj = desdWords[gradeIndex];
+      const prevGradeObj = testWords[gradeIndex];
       const prevGradeWords = prevGradeObj.words;
       const prevFalseWords = Object.keys(prevGradeWords).filter(
         (word) => prevGradeWords[word] === false
@@ -35,7 +38,7 @@ export function getPhoneticWords(gradeIndex, desdWords) {
       phoneticWords = [...phoneticWords, ...prevFalseWords];
     }
   
-    phoneticWords = phoneticWords.slice(0, 5);
+    phoneticWords = phoneticWords.slice(0, testLevelLength);
   
     return { phoneticWords };
   };
