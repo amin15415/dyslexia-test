@@ -84,6 +84,8 @@ const Eidetic = () => {
                       type="text"
                       placeholder="Enter spelling"
                       value={userInputs[index]}
+                      spellCheck={false}
+                      autoCorrect="off"
                       onChange={(e) => {
                         const newInputs = [...userInputs];
                         newInputs[index] = e.target.value;

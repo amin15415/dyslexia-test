@@ -79,15 +79,18 @@ const Phonetic = () => {
               <audio src={audioPath} controls />
             </div>
             <div>
-              <input
-                type="text"
-                placeholder="Enter spelling"
-                value={userInputs[index]}
-                onChange={(e) => {
-                  const newInputs = [...userInputs];
-                  newInputs[index] = e.target.value;
-                  setUserInputs(newInputs);
-                } } />
+            <input
+              type="text"
+              placeholder="Enter spelling"
+              value={userInputs[index]}
+              spellCheck={false}
+              autoCorrect="off"
+              onChange={(e) => {
+                const newInputs = [...userInputs];
+                newInputs[index] = e.target.value;
+                setUserInputs(newInputs);
+              }}
+            />
             </div>
           </React.Fragment>
         ))}
