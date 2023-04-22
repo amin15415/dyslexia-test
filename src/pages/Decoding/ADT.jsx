@@ -135,7 +135,7 @@ const ADT = () => {
 
     if (wrong >= words.length / 2 && wrongAboveGradeLevel >= words.length && wordIndex >= words.length) {
       setTimeout(() => {
-        navigate('/eidetic', { state: { testWords: adtWords, gradeIndex: gradeIndex, readingLevel: readingLevel } });
+        navigate('/eidetic', { state: { testWords: adtWords, gradeIndex: gradeIndex, readingLevel: readingLevel, test: 'ADT' } });
       }, 500);
     }
 

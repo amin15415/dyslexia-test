@@ -41,7 +41,8 @@ const Eidetic = () => {
                     testWords: testWords, 
                     gradeIndex: gradeIndex, 
                     readingLevel: location.state.readingLevel,
-                    eideticCorrect: correct
+                    eideticCorrect: correct,
+                    test: location.state.test
                 } });
             }, 100);
         } else {

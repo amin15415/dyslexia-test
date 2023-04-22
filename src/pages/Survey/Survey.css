@@ -1,0 +1,41 @@
+.survey {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+  }
+  
+  .question {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .survey .input {
+    text-align: center;
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid #555;
+    outline: none;
+    background-color: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+.buttons-container {
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+} 
+.button-container {
+    border: 100px;
+} 

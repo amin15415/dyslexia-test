@@ -5,7 +5,7 @@ import SelectTest from './pages/Test Selection/SelectTest';
 import Decoding from './pages/Decoding/Decoding';
 import Eidetic from './pages/Eidetic/Eidetic';
 import Phonetic from './pages/Phonetic/Phonetic';
-import Results from './pages/Results/Results';
+import Survey from './pages/Survey/Survey';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
 
@@ -36,7 +36,7 @@ function App() {
               <Route path="/decoding" element={<Decoding />} />
               <Route path="/eidetic" element={<Eidetic />} />
               <Route path="/phonetic" element={<Phonetic />} />
-              <Route path="/results" element={<Results />} />
+              <Route path="/survey" element={<Survey />} />
             </Routes>
           </main>
         </div>

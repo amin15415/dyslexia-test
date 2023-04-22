@@ -44,7 +44,20 @@ const Phonetic = () => {
             }
               // Navigate to External Survey togather Scoring/Demographic Data
               setPhoneticCorrect(correct);
-              goToExternalSite()
+
+              setTimeout(() => {
+                navigate('/survey', { state: { 
+                    readingLevel: location.state.readingLevel,
+                    eideticCorrect: location.state.eideticCorrect,
+                    phoneticCorrect: phoneticCorrect,
+                    test: location.state.test
+                } });
+              }, 100);
+
+
+              // goToExternalSite()
+
+
         } else {
             setIncompleteSubmit(true);
             setTimeout (() => {
