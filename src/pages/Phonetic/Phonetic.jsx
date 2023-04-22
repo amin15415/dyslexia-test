@@ -17,18 +17,17 @@ const Phonetic = () => {
     const audioPaths = phoneticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
-    const [phoneticCorrect, setPhoneticCorrect] = useState();
 
     useEffect(() => {
         console.log(audioPaths);
     }, [audioPaths]);
 
-    function goToExternalSite() {
-      window.location.href = `https://worgcu1jmds.typeform.com/to/pIek20LV#rl=${location.state.readingLevel}&es=${location.state.eideticCorrect}&ps=${phoneticCorrect}&test=DESD`;
-    }
+    // function goToExternalSite() {
+    //   window.location.href = `https://worgcu1jmds.typeform.com/to/pIek20LV#rl=${location.state.readingLevel}&es=${location.state.eideticCorrect}&ps=${phoneticCorrect}&test=DESD`;
+    // }
 
     const handleSubmit = () => {
-        let correct = 0;
+        let phoneticCorrect = 0;
         const phoneticResults = {};
         userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
@@ -37,19 +36,18 @@ const Phonetic = () => {
             for (let i = 0; i < audioPaths.length; i++) {
                 const userInput = userInputs[i].toLowerCase().trim();
                 if (correctPhoneticWords(phoneticWords[i], userInput)) {
-                    correct++;
+                    phoneticCorrect++;
                     phoneticResults[userInput] = true;
                 } else {
                     phoneticResults[userInput] = false;
                 }
             }
-              // Navigate to External Survey togather Scoring/Demographic Data
-              setPhoneticCorrect(correct);
-
               setTimeout(() => {
                 navigate('/survey', { state: { 
+                    testWords: testWords,
                     readingLevel: location.state.readingLevel,
                     eideticCorrect: location.state.eideticCorrect,
+                    eideticResults: location.state.eideticResults,
                     phoneticCorrect: phoneticCorrect,
                     phoneticResults: phoneticResults,
                     test: location.state.test

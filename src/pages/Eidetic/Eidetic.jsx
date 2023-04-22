@@ -22,7 +22,7 @@ const Eidetic = () => {
     }, [audioPaths]);
 
     const handleSubmit = () => {
-        let correct = 0;
+        let eideticCorrect = 0;
         const eideticResults = {};
         userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
@@ -30,7 +30,7 @@ const Eidetic = () => {
             for (let i = 0; i < audioPaths.length; i++) {
                 const userInput = userInputs[i].toLowerCase().trim();
                 if (userInput === eideticWords[i]) {
-                  correct++;
+                  eideticCorrect++;
                   eideticResults[userInput] = true;
                 } else {
                   eideticResults[userInput] = false;
@@ -42,7 +42,7 @@ const Eidetic = () => {
                     testWords: testWords, 
                     gradeIndex: gradeIndex, 
                     readingLevel: location.state.readingLevel,
-                    eideticCorrect: correct,
+                    eideticCorrect: eideticCorrect,
                     eideticResults: eideticResults,
                     test: location.state.test
                 } });

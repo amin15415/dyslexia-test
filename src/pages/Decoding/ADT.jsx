@@ -93,7 +93,9 @@ const ADT = () => {
     let isCorrect;
     if (currentWord === 'know') {
       isCorrect = speechResult === 'no' || speechResult === 'know'
-    } else if (currentWord === 'meadow') {
+    } else if (currentWord === 'could') {
+      isCorrect = speechResult === 'could' || speechResult === "couldn't"
+    }else if (currentWord === 'meadow') {
       isCorrect = speechResult === 'metal' || speechResult === 'meadow'
     } else if (currentWord === 'islet') {
       isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
@@ -129,7 +131,7 @@ const ADT = () => {
   
   const handleLogic = useCallback(() => {
     if (adtWords[gradeIndex] && correct >= words.length / 2) {
-      setReadingLevel(adtWords[gradeIndex].grade);
+      setReadingLevel(adtWords[gradeIndex].level);
       setWrongAboveGradeLevel(0);
       setFrozenWrongAboveGradeLevel(true);
     }

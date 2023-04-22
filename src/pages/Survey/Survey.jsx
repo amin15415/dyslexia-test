@@ -77,9 +77,11 @@ function Survey() {
   const submitAnswers = () => {
     console.log('Submitted answers:', answers);
     console.log(location.state.testWords);
-    console.log('Eidetic Results:', location.state.eideticResults);
-    console.log('Phonetic Results:', location.state.phoneticResults);
-    console.log('Reading Level:', location.state.readingLevel);
+    console.log('Eidetic Correct: ', location.state.eideticCorrect);
+    console.log('Phonetic Correct: ', location.state.phoneticCorrect);
+    console.log('Eidetic Results: ', location.state.eideticResults);
+    console.log('Phonetic Results: ', location.state.phoneticResults);
+    console.log('Reading Level: ', location.state.readingLevel);
   };
 
   const goForward = () => {
