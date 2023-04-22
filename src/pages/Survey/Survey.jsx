@@ -8,17 +8,17 @@ function Survey() {
 
     const questions = [
       {
-        id: 1,
+        id: 'q1',
         question: "Hello, what's your name?",
         type: 'text',
       },
       {
-        id: 2,
-        question: () => `Nice to meet you, ${answers[1] || ''}, where can we send your results/get in touch?`,
+        id: 'q2',
+        question: () => `Nice to meet you, ${answers['q1'] || ''}, where can we send your results/get in touch?`,
         type: 'email',
       },
       {
-        id: 3,
+        id: 'q3',
         question: 'What is the highest level of education that you have reached?',
         type: 'select',
         options: [
@@ -39,17 +39,17 @@ function Survey() {
         ],
       },
       {
-        id: 4,
+        id: 'q4',
         question: "Have you ever been diagnosed with a learning disability?",
         type: 'yesNo',
       },
       {
-        id: 5,
+        id: 'q5',
         question: "When was your last eye examination?",
         type: 'dateOrNever',
       },
       {
-        id: 6,
+        id: 'q6',
         question: "What is your birth sex?",
         type: 'multipleChoice',
         options: ['Male', 'Female'],
@@ -116,101 +116,101 @@ function Survey() {
             </div>
           ) : (
             questions.map((q, index) => (
-              <div key={q.id} style={{ display: index === activeQuestion ? 'block' : 'none' }}>
-                <div className="question">
-                  {typeof q.question === 'function' ? q.question() : q.question}
-                </div>
-      
-                {q.type === 'select' && (
-                    <select
-                        className="input"
-                        value={answers[q.id] || ''}
-                        autoFocus={index === activeQuestion}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => handleChange(e, q.id)}
-                    >
-                        {q.options.map((option, i) => (
-                        <option
-                            key={`${q.id}-${i}`}
-                            value={option}
-                            hidden={i === 0}
-                            selected={i === 0 && !answers[q.id]}
-                        >
-                        {option}
-                      </option>
-                        ))}
-                    </select>
-                )}
-      
-                {q.type === 'yesNo' && (
-                  <div className='buttons-container'>
-                      <div className='button-container'>
-                          <button onClick={() => { 
-                              handleChange({ target: { value: 'Yes' } }, q.id);
-                              goForward();}}
-                          >Yes</button>
-                      </div>
-                      <div className='button-container'>
-                          <button onClick={() => { 
-                                  handleChange({ target: { value: 'No' } }, q.id);
-                                  goForward();}}
-                          >No</button>
-                      </div>
+                <div key={q.id} style={{ display: index === activeQuestion ? 'block' : 'none' }}>
+                  <div className="question">
+                    {typeof q.question === 'function' ? q.question() : q.question}
                   </div>
-                )}
-      
-                {q.type === 'dateOrNever' && (
-                  <div className='buttons-container'>
-                      <div className='button-container'>
-                          <input
+              
+                  {q.type === 'select' && (
+                    <select
+                      className="input"
+                      value={answers[q.id] || ''}
+                      autoFocus={index === activeQuestion}
+                      onKeyDown={handleKeyDown}
+                      onChange={(e) => handleChange(e, q.id)}
+                    >
+                      {q.options.map((option, i) => (
+                        <option
+                          key={`${q.id}-${i}`}
+                          value={option}
+                          hidden={i === 0}
+                        >
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+              
+                  {q.type === 'yesNo' && (
+                    <div className='buttons-container' key={`${q.id}-buttons`}>
+                      <div className='button-container' key={`${q.id}-yes-button`}>
+                        <button onClick={() => { 
+                          handleChange({ target: { value: 'Yes' } }, q.id);
+                          goForward();
+                        }}>Yes</button>
+                      </div>
+                      <div className='button-container' key={`${q.id}-no-button`}>
+                        <button onClick={() => { 
+                          handleChange({ target: { value: 'No' } }, q.id);
+                          goForward();
+                        }}>No</button>
+                      </div>
+                    </div>
+                  )}
+              
+                  {q.type === 'dateOrNever' && (
+                    <div className='buttons-container' key={`${q.id}-buttons`}>
+                      <div className='button-container' key={`${q.id}-date-input`}>
+                        <input
                           className="input"
                           type="date"
                           value={answers[q.id] || ''}
                           autoFocus={index === activeQuestion}
                           onKeyDown={handleKeyDown}
                           onChange={(e) => handleChange(e, q.id)}
-                          />
+                        />
                       </div>
-                      <div className='button-container'>
-                          <button onClick={() => { 
-                                  handleChange({ target: { value: 'Never' } }, q.id);
-                                  goForward();}}
-                          >Never</button>
+                      <div className='button-container' key={`${q.id}-never-button`}>
+                        <button onClick={() => { 
+                          handleChange({ target: { value: 'Never' } }, q.id);
+                          goForward();
+                        }}>Never</button>
                       </div>
-                  </div>
-                )}
-      
-                {q.type === 'multipleChoice' && (
-                  <div className='buttons-container'>
-                    {q.options.map((option, i) => (
-                      <div className='button-container'>
-                          <button key={i} onClick={() => {
-                              handleChange({ target: { value: option } }, q.id);
-                              goForward();}}
-                          >{option}</button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-      
-                {['text', 'email'].includes(q.type) && (
-                  <input
-                    className="input"
-                    type={q.type}
-                    value={answers[q.id] || ''}
-                    autoFocus={index === activeQuestion}
-                    onKeyDown={handleKeyDown}
-                    onChange={(e) => handleChange(e, q.id)}
-                  />
-                )}
-      
-                <div className="buttons-container">
-                  <div className="button-container">
-                    <button onClick={goBackward} disabled={activeQuestion === 0}>
+                    </div>
+                  )}
+              
+                  {q.type === 'multipleChoice' && (
+                    <div className='buttons-container' key={`${q.id}-buttons`}>
+                      {q.options.map((option, i) => (
+                        <div className='button-container' key={`${q.id}-option-${i}`}>
+                          <button onClick={() => {
+                            handleChange({ target: { value: option } }, q.id);
+                            goForward();
+                          }}>{option}</button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+              
+                  {['text', 'email'].includes(q.type) && (
+                    <input
+                      className="input"
+                      type={q.type}
+                      value={answers[q.id] || ''}
+                      autoFocus={index === activeQuestion}
+                      onKeyDown={handleKeyDown}
+                      onChange={(e) => handleChange(e, q.id)}
+                      key={`${q.id}-input`}
+                    />
+                  )}
+              
+                  <div className="buttons-container" key={`${q.id}-nav-buttons`}>
+                    <div className="button-container" key={`${q.id}-back-button`}>
+                      <button onClick={goBackward} disabled={activeQuestion === 0}>
                       &larr; Back
                     </button>
                   </div>
-                  <div className="button-container">
+                  <div className="button-container" key={`${q.id}-forward-button`}>
                       <button onClick={goForward} disabled={!isValidInput(q.id)}>
                         Next &rarr;
                       </button>
