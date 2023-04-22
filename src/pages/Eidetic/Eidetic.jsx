@@ -23,16 +23,17 @@ const Eidetic = () => {
 
     const handleSubmit = () => {
         let correct = 0;
-        const ineideticWords = [];
+        const eideticResults = {};
         userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
         if (!userInputs.some((input) => input === '')) {
             for (let i = 0; i < audioPaths.length; i++) {
                 const userInput = userInputs[i].toLowerCase().trim();
-                if (userInput !== eideticWords[i]) {
-                    ineideticWords.push(eideticWords[i]);
+                if (userInput === eideticWords[i]) {
+                  correct++;
+                  eideticResults[userInput] = true;
                 } else {
-                    correct++;
+                  eideticResults[userInput] = false;
                 }
             }
 
@@ -42,6 +43,7 @@ const Eidetic = () => {
                     gradeIndex: gradeIndex, 
                     readingLevel: location.state.readingLevel,
                     eideticCorrect: correct,
+                    eideticResults: eideticResults,
                     test: location.state.test
                 } });
             }, 100);
@@ -58,10 +60,6 @@ const Eidetic = () => {
       <div>
         {tooFewCorrect && gradeIndex !== 0 ? (
           <div>
-            <p>
-              You got fewer than 5 words correct, so you are reading at a
-              Kindergarten level.
-            </p>
             <p>
               You did not get enough words correct to proceed with the encoding
               portion of the test.

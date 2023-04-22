@@ -29,7 +29,7 @@ const Phonetic = () => {
 
     const handleSubmit = () => {
         let correct = 0;
-        const incorrectPhoneticWords = [];
+        const phoneticResults = {};
         userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
 
         if (!userInputs.some((input) => input === '')) {
@@ -38,8 +38,9 @@ const Phonetic = () => {
                 const userInput = userInputs[i].toLowerCase().trim();
                 if (correctPhoneticWords(phoneticWords[i], userInput)) {
                     correct++;
+                    phoneticResults[userInput] = true;
                 } else {
-                    incorrectPhoneticWords.push(phoneticWords[i]);
+                    phoneticResults[userInput] = false;
                 }
             }
               // Navigate to External Survey togather Scoring/Demographic Data
@@ -50,6 +51,7 @@ const Phonetic = () => {
                     readingLevel: location.state.readingLevel,
                     eideticCorrect: location.state.eideticCorrect,
                     phoneticCorrect: phoneticCorrect,
+                    phoneticResults: phoneticResults,
                     test: location.state.test
                 } });
               }, 100);

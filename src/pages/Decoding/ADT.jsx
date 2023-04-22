@@ -42,6 +42,7 @@ const ADT = () => {
       }
     } catch (err) {
       console.error('Error getting microphone access:', err);
+      alert('No microphone detected. Please connect a microphone to use this app.');
     }
   };
 
@@ -194,7 +195,7 @@ const ADT = () => {
         } 
       }
     }
-  }, [countdown, setCountdown, isStarted, speechResultReceived]);
+  }, [countdown, setCountdown, isStarted, speechResultReceived, speechRecognition]);
 
   return (
     <div className="centered-content">

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 
 export const useSpeechRecognition = () => {
   const recognition = useRef(null);
@@ -43,8 +43,10 @@ export const useSpeechRecognition = () => {
     }
   };
 
-  return {
+  const speechRecognition = useMemo(() => ({
     recognizeSpeech,
     stopSpeechRecognition,
-  };
+  }), []);
+
+  return speechRecognition;
 };
