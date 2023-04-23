@@ -17,52 +17,47 @@ const Phonetic = () => {
     const audioPaths = phoneticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
+    const [currentItem, setCurrentItem] = useState(0);
 
     useEffect(() => {
         console.log(audioPaths);
     }, [audioPaths]);
-
-    // function goToExternalSite() {
-    //   window.location.href = `https://worgcu1jmds.typeform.com/to/pIek20LV#rl=${location.state.readingLevel}&es=${location.state.eideticCorrect}&ps=${phoneticCorrect}&test=DESD`;
-    // }
-
+    
     const handleSubmit = () => {
-        let phoneticCorrect = 0;
-        const phoneticResults = {};
-        userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
-
-        if (!userInputs.some((input) => input === '')) {
-
-            for (let i = 0; i < audioPaths.length; i++) {
-                const userInput = userInputs[i].toLowerCase().trim();
-                if (correctPhoneticWords(phoneticWords[i], userInput)) {
-                    phoneticCorrect++;
-                    phoneticResults[userInput] = true;
-                } else {
-                    phoneticResults[userInput] = false;
-                }
-            }
-              setTimeout(() => {
-                navigate('/survey', { state: { 
-                    testWords: testWords,
-                    readingLevel: location.state.readingLevel,
-                    eideticCorrect: location.state.eideticCorrect,
-                    eideticResults: location.state.eideticResults,
-                    phoneticCorrect: phoneticCorrect,
-                    phoneticResults: phoneticResults,
-                    test: location.state.test
-                } });
-              }, 100);
-
-
-              // goToExternalSite()
-
-
-        } else {
+        if (userInputs[currentItem] === '') {
             setIncompleteSubmit(true);
-            setTimeout (() => {
+            setTimeout(() => {
                 setIncompleteSubmit(false);
             }, 3000);
+        } else {
+            if (currentItem < audioPaths.length - 1) {
+                setCurrentItem(currentItem + 1);
+            } else {
+                let phoneticCorrect = 0;
+                const phoneticResults = {};
+
+                for (let i = 0; i < audioPaths.length; i++) {
+                    const userInput = userInputs[i].toLowerCase().trim();
+                    if (correctPhoneticWords(phoneticWords[i], userInput)) {
+                        phoneticCorrect++;
+                        phoneticResults[userInput] = true;
+                    } else {
+                        phoneticResults[userInput] = false;
+                    }
+                }
+
+                setTimeout(() => {
+                    navigate('/survey', { state: { 
+                        testWords: testWords,
+                        readingLevel: location.state.readingLevel,
+                        eideticCorrect: location.state.eideticCorrect,
+                        eideticResults: location.state.eideticResults,
+                        phoneticCorrect: phoneticCorrect,
+                        phoneticResults: phoneticResults,
+                        test: location.state.test
+                    } });
+                }, 100);
+            }
         }
     };
 
@@ -73,40 +68,30 @@ const Phonetic = () => {
           <p>For instance, laugh should be spelled 'laf'.</p>
       </div>
       <div>
-        {audioPaths.map((audioPath, index) => (
-          <React.Fragment key={index}>
-            <div>
-              <audio src={audioPath} controls />
-            </div>
-            <div>
-            <input
-              type="text"
-              placeholder="Enter spelling"
-              value={userInputs[index]}
-              spellCheck={false}
-              autoCorrect="off"
-              onChange={(e) => {
-                const newInputs = [...userInputs];
-                newInputs[index] = e.target.value;
-                setUserInputs(newInputs);
-              }}
-            />
-            </div>
-          </React.Fragment>
-        ))}
+        <audio src={audioPaths[currentItem]} controls autoPlay />
+        <div>
+          <input
+            type="text"
+            placeholder="Enter spelling"
+            value={userInputs[currentItem]}
+            spellCheck={false}
+            autoCorrect="off"
+            onChange={(e) => {
+              const newInputs = [...userInputs];
+              newInputs[currentItem] = e.target.value;
+              setUserInputs(newInputs);
+            }}
+          />
+        </div>
       </div>
       <div className='button-container'>
-            {incompleteSubmit && <p>Please answer all items.</p>}
-            <button
-            // disabled={userInputs.some((input) => input === '')}
-            onClick={handleSubmit}
-            >
-            Submit
-            </button>
-        </div>
+        {incompleteSubmit && <p>Please answer this item.</p>}
+        <button onClick={handleSubmit}>
+            {currentItem < audioPaths.length - 1 ? 'Next' : 'Submit'}
+        </button>
+      </div>
     </div>
-  );  
-  
+  );
 }
 
 export default Phonetic;

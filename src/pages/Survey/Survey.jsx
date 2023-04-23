@@ -7,6 +7,7 @@ function Survey() {
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const questions = [
     {
@@ -82,6 +83,7 @@ function Survey() {
     console.log('Eidetic Results: ', location.state.eideticResults);
     console.log('Phonetic Results: ', location.state.phoneticResults);
     console.log('Reading Level: ', location.state.readingLevel);
+    setSubmitted(true);
   };
 
   const goForward = () => {
@@ -116,7 +118,12 @@ function Survey() {
   return true;
   };
   
-  return (
+  return submitted ? (
+    <div className="survey">
+      <h1>Thank You!</h1>
+      <p>We will follow up with your results shortly.</p>
+    </div>
+    ) : (
       <div className="survey">
         {showSubmitButton ? (
           <div className="submit-button-container">
@@ -124,7 +131,7 @@ function Survey() {
           </div>
         ) : (
           questions.map((q, index) => (
-              <div key={q.id} style={{ display: index === activeQuestion ? 'block' : 'none' }}>
+              <div className="question-container" key={q.id} style={{ display: index === activeQuestion ? 'flex' : 'none' }}>
                 <div className="question">
                   {typeof q.question === 'function' ? q.question() : q.question}
                 </div>
@@ -200,7 +207,7 @@ function Survey() {
                   </div>
                 )}
             
-                {['text', 'email'].includes(q.type) && (
+                {['text'].includes(q.type) && (
                   <input
                     className="input"
                     type={q.type}
@@ -209,9 +216,21 @@ function Survey() {
                     onKeyDown={handleKeyDown}
                     onChange={(e) => handleChange(e, q.id)}
                     key={`${q.id}-input`}
+                    placeholder='Name'
                   />
                 )}
-            
+                {['email'].includes(q.type) && (
+                  <input
+                    className="input"
+                    type={q.type}
+                    value={answers[q.id] || ''}
+                    autoFocus={index === activeQuestion}
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => handleChange(e, q.id)}
+                    key={`${q.id}-input`}
+                    placeholder='Email Address'
+                  />
+                )}
                 <div className="buttons-container" key={`${q.id}-nav-buttons`}>
                   <div className="button-container" key={`${q.id}-back-button`}>
                     <button onClick={goBackward} disabled={activeQuestion === 0}>
@@ -228,7 +247,7 @@ function Survey() {
           ))
         )}
       </div>
-    );
+  );
     
     
   }

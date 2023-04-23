@@ -16,97 +16,99 @@ const Eidetic = () => {
     const audioPaths = eideticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
+    const [currentItem, setCurrentItem] = useState(0);
 
     useEffect(() => {
         console.log(audioPaths);
     }, [audioPaths]);
 
     const handleSubmit = () => {
-        let eideticCorrect = 0;
-        const eideticResults = {};
-        userInputs.some((input) => input === '') ? setIncompleteSubmit(true) : setIncompleteSubmit(false);
-
-        if (!userInputs.some((input) => input === '')) {
-            for (let i = 0; i < audioPaths.length; i++) {
-                const userInput = userInputs[i].toLowerCase().trim();
-                if (userInput === eideticWords[i]) {
-                  eideticCorrect++;
-                  eideticResults[userInput] = true;
-                } else {
-                  eideticResults[userInput] = false;
-                }
-            }
-
-            setTimeout(() => {
-                navigate('/phonetic', { state: { 
-                    testWords: testWords, 
-                    gradeIndex: gradeIndex, 
-                    readingLevel: location.state.readingLevel,
-                    eideticCorrect: eideticCorrect,
-                    eideticResults: eideticResults,
-                    test: location.state.test
-                } });
-            }, 100);
-        } else {
+        if (userInputs[currentItem] === '') {
             setIncompleteSubmit(true);
-            setTimeout (() => {
+            setTimeout(() => {
                 setIncompleteSubmit(false);
             }, 3000);
+        } else {
+            if (currentItem < audioPaths.length - 1) {
+                setCurrentItem(currentItem + 1);
+            } else {
+                let eideticCorrect = 0;
+                const eideticResults = {};
+
+                for (let i = 0; i < audioPaths.length; i++) {
+                    const userInput = userInputs[i].toLowerCase().trim();
+                    if (userInput === eideticWords[i]) {
+                      eideticCorrect++;
+                      eideticResults[userInput] = true;
+                    } else {
+                      eideticResults[userInput] = false;
+                    }
+                }
+
+                setTimeout(() => {
+                    navigate('/phonetic', { state: { 
+                        testWords: testWords, 
+                        gradeIndex: gradeIndex, 
+                        readingLevel: location.state.readingLevel,
+                        eideticCorrect: eideticCorrect,
+                        eideticResults: eideticResults,
+                        test: location.state.test
+                    } });
+                }, 100);
+            }
         }
     };
 
-  return (
-    <div className='encoding-container'>
-      <div>
-        {tooFewCorrect && gradeIndex !== 0 ? (
-          <div>
-            <p>
-              You did not get enough words correct to proceed with the encoding
-              portion of the test.
-            </p>
-          </div>
-        ) : (
-          <>
-          <div>
-            <h1>Spell these words exactly as they should be spelled</h1>
-            <p>For instance, laugh should be spelled 'laugh'.</p>
-          </div>
-          <div>
-              {audioPaths.map((audioPath, index) => (
-                <React.Fragment key={index}>
-                  <div>
-                    <audio src={audioPath} controls />
-                  </div>
-                  <div>
+    return (
+        <div className='encoding-container'>
+            <div>
+                {tooFewCorrect && gradeIndex !== 0 ? (
+                <div>
+                    <p>
+                    You did not get enough words correct to proceed with the encoding
+                    portion of the test.
+                    </p>
+                </div>
+                ) : (
+                <>
+                <div>
+                    <h1>Spell these words exactly as they should be spelled</h1>
+                    <p>For instance, laugh should be spelled 'laugh'.</p>
+                </div>
+                <div>
+                  <audio src={audioPaths[currentItem]} controls autoPlay />
+                    <div>
                     <input
-                      type="text"
-                      placeholder="Enter spelling"
-                      value={userInputs[index]}
-                      spellCheck={false}
-                      autoCorrect="off"
-                      onChange={(e) => {
+                    type="text"
+                    placeholder="Enter spelling"
+                    value={userInputs[currentItem]}
+                    spellCheck={false}
+                    autoCorrect="off"
+                    onChange={(e) => {
                         const newInputs = [...userInputs];
-                        newInputs[index] = e.target.value;
+                        newInputs[currentItem] = e.target.value;
                         setUserInputs(newInputs);
-                      } } />
-                  </div>
-                </React.Fragment>
-              ))}
-            </div></>
-        )}
-      </div>
-      <div className='button-container'>
-          {incompleteSubmit && <p>Please answer all items.</p>}
-        <button
-            // disabled={userInputs.some((input) => input === '')}
-            onClick={handleSubmit}
-          >
-            Submit
-        </button>
-      </div>
-    </div>
-  );  
-  
+                    } } />
+                    </div>
+                </div></>
+                )}
+            </div>
+            <div className='button-container'>
+                {incompleteSubmit && <p>Please answer this item.</p>}
+                <button onClick={handleSubmit}>
+                    {currentItem < audioPaths.length - 1 ? 'Next' : 'Submit'}
+    </button>
+</div>
+</div>
+);
 }
 
 export default Eidetic;
+
+
+
+
+
+
+
+
