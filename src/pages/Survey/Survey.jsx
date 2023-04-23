@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Survey.css';
+import PocketBase from 'pocketbase';
+
 
 function Survey() {
+  const pb = new PocketBase('http://127.0.0.1:8090');
   const location = useLocation();
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -75,7 +78,7 @@ function Survey() {
   setAnswers({ ...answers, [questionId]: e.target.value });
   };
 
-  const submitAnswers = () => {
+  const submitAnswers = async () => {
     console.log('Submitted answers:', answers);
     console.log(location.state.testWords);
     console.log('Eidetic Correct: ', location.state.eideticCorrect);
@@ -83,8 +86,30 @@ function Survey() {
     console.log('Eidetic Results: ', location.state.eideticResults);
     console.log('Phonetic Results: ', location.state.phoneticResults);
     console.log('Reading Level: ', location.state.readingLevel);
+
+    // Prepare the data for submission
+    const data = {
+        name: answers['q1'],
+        email: answers['q2'],
+        education: answers['q3'],
+        learning_disability: answers['q4'] === 'Yes',
+        last_eye_exam: answers['q5'] === 'Never' ? null : answers['q5'],
+        birth_sex: answers['q6'],
+        eidetic_correct: location.state.eideticCorrect,
+        phonetic_correct: location.state.phoneticCorrect,
+        reading_level: location.state.readingLevel,
+    };
+
+    // Upload data to Pocketbase
+    try {
+        const record = await pb.collection('results').create(data);
+        console.log('Data uploaded successfully:', record);
+    } catch (error) {
+        console.error('Error uploading data:', error);
+    }
+
     setSubmitted(true);
-  };
+};
 
   const goForward = () => {
   if (activeQuestion < questions.length - 1) {
