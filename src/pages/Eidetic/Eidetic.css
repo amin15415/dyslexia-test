@@ -1,4 +1,6 @@
 .encoding-container {
+    display: flex;
+    flex-direction: column;
     padding-top: 100px;
     height: auto;
     min-height: 750px;
