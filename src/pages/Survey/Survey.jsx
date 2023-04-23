@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Survey.css';
-import PocketBase from 'pocketbase';
+import { createClient } from '@supabase/supabase-js';
 
+const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
+const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
+const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
 
 function Survey() {
-  const pb = new PocketBase('http://127.0.0.1:8090');
   const location = useLocation();
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -88,28 +90,31 @@ function Survey() {
     console.log('Reading Level: ', location.state.readingLevel);
 
     // Prepare the data for submission
-    const data = {
-        name: answers['q1'],
-        email: answers['q2'],
-        education: answers['q3'],
-        learning_disability: answers['q4'] === 'Yes',
-        last_eye_exam: answers['q5'] === 'Never' ? null : answers['q5'],
-        birth_sex: answers['q6'],
-        eidetic_correct: location.state.eideticCorrect,
-        phonetic_correct: location.state.phoneticCorrect,
-        reading_level: location.state.readingLevel,
+    const submissionData = {
+        "name": answers['q1'],
+        "email": answers['q2'],
+        "education": answers['q3'],
+        "learning_disability": answers['q4'] === 'Yes',
+        "last_eye_exam": answers['q5'] === 'Never' ? null : answers['q5'],
+        "sex": answers['q6'],
+        "eidetic_correct": location.state.eideticCorrect,
+        "phonetic_correct": location.state.phoneticCorrect,
+        "reading_level": location.state.readingLevel,
+        "test": location.state.test
     };
 
-    // Upload data to Pocketbase
+    // Upload data to Supabase
     try {
-        const record = await pb.collection('results').create(data);
-        console.log('Data uploaded successfully:', record);
+      const { data, error } = await supabase.from('results').insert([submissionData]);
+      if (error) {
+          throw error;
+      }
+      console.log('Data uploaded successfully:', data);
     } catch (error) {
         console.error('Error uploading data:', error);
     }
-
-    setSubmitted(true);
-};
+      setSubmitted(true);
+  };
 
   const goForward = () => {
   if (activeQuestion < questions.length - 1) {

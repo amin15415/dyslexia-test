@@ -21,7 +21,7 @@ const Phonetic = () => {
 
     useEffect(() => {
         console.log(audioPaths);
-    }, [audioPaths]);
+    }, []);
     
     const handleSubmit = () => {
         if (userInputs[currentItem] === '') {
@@ -64,34 +64,36 @@ const Phonetic = () => {
   return (
     <div className='encoding-container'>
       <div>
-          <h1>Spell these words exactly like they sound</h1>
-          <p>For instance, laugh should be spelled 'laf'.</p>
+        <h1>Spell these words exactly like they sound</h1>
+        <p>For instance, laugh should be spelled 'laf'.</p>
       </div>
-      <div>
-        <audio src={audioPaths[currentItem]} controls autoPlay />
+      <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <div>
-          <input
-            type="text"
-            placeholder="Enter spelling"
-            value={userInputs[currentItem]}
-            spellCheck={false}
-            autoCorrect="off"
-            onChange={(e) => {
-              const newInputs = [...userInputs];
-              newInputs[currentItem] = e.target.value;
-              setUserInputs(newInputs);
-            }}
-          />
+          <audio src={audioPaths[currentItem]} controls />
+          <div>
+            <input
+              type="text"
+              placeholder="Enter spelling"
+              value={userInputs[currentItem]}
+              spellCheck={false}
+              autoCorrect="off"
+              onChange={(e) => {
+                const newInputs = [...userInputs];
+                newInputs[currentItem] = e.target.value;
+                setUserInputs(newInputs);
+              }}
+            />
+          </div>
         </div>
-      </div>
-      <div className='button-container'>
-        {incompleteSubmit && <p>Please answer this item.</p>}
-        <button onClick={handleSubmit}>
+        <div className='button-container'>
+          {incompleteSubmit && <p>Please answer this item.</p>}
+          <button type="submit">
             {currentItem < audioPaths.length - 1 ? 'Next' : 'Submit'}
-        </button>
-      </div>
+          </button>
+        </div>
+      </form>
     </div>
-  );
+  );   
 }
 
 export default Phonetic;

@@ -20,7 +20,7 @@ const Eidetic = () => {
 
     useEffect(() => {
         console.log(audioPaths);
-    }, [audioPaths]);
+    }, []);
 
     const handleSubmit = () => {
         if (userInputs[currentItem] === '') {
@@ -61,46 +61,51 @@ const Eidetic = () => {
 
     return (
         <div className='encoding-container'>
-            <div>
-                {tooFewCorrect && gradeIndex !== 0 ? (
+          <div>
+            {tooFewCorrect && gradeIndex !== 0 ? (
+              <div>
+                <p>
+                  You did not get enough words correct to proceed with the encoding
+                  portion of the test.
+                </p>
+              </div>
+            ) : (
+              <>
                 <div>
-                    <p>
-                    You did not get enough words correct to proceed with the encoding
-                    portion of the test.
-                    </p>
+                  <h1>Spell these words exactly as they should be spelled</h1>
+                  <p>For instance, laugh should be spelled 'laugh'.</p>
                 </div>
-                ) : (
-                <>
-                <div>
-                    <h1>Spell these words exactly as they should be spelled</h1>
-                    <p>For instance, laugh should be spelled 'laugh'.</p>
-                </div>
-                <div>
-                  <audio src={audioPaths[currentItem]} controls autoPlay />
+                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                  <div>
+                    <audio src={audioPaths[currentItem]} controls />
                     <div>
-                    <input
-                    type="text"
-                    placeholder="Enter spelling"
-                    value={userInputs[currentItem]}
-                    spellCheck={false}
-                    autoCorrect="off"
-                    onChange={(e) => {
-                        const newInputs = [...userInputs];
-                        newInputs[currentItem] = e.target.value;
-                        setUserInputs(newInputs);
-                    } } />
+                      <input
+                        type="text"
+                        placeholder="Enter spelling"
+                        value={userInputs[currentItem]}
+                        spellCheck={false}
+                        autoCorrect="off"
+                        onChange={(e) => {
+                          const newInputs = [...userInputs];
+                          newInputs[currentItem] = e.target.value;
+                          setUserInputs(newInputs);
+                        }}
+                      />
                     </div>
-                </div></>
-                )}
-            </div>
-            <div className='button-container'>
-                {incompleteSubmit && <p>Please answer this item.</p>}
-                <button onClick={handleSubmit}>
-                    {currentItem < audioPaths.length - 1 ? 'Next' : 'Submit'}
-    </button>
-</div>
-</div>
-);
+                  </div>
+                  <div className='button-container'>
+                    {incompleteSubmit && <p>Please answer this item.</p>}
+                    <button type="submit">
+                      {currentItem < audioPaths.length - 1 ? 'Next' : 'Submit'}
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+          </div>
+        </div>
+    );
+      
 }
 
 export default Eidetic;

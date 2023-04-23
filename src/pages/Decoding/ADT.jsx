@@ -99,6 +99,8 @@ const ADT = () => {
       isCorrect = speechResult === 'metal' || speechResult === 'meadow'
     } else if (currentWord === 'islet') {
       isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
+    } else if (currentWord === 'leitmotif') {
+      isCorrect = speechResult === 'leitmotiv' || speechResult === 'leitmotif'
     } else {
       isCorrect = speechResult === currentWord;
     }

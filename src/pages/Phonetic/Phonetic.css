@@ -1,9 +1,10 @@
 .encoding-container {
-    padding-top: 100px;
-    height: auto;
-    min-height: 750px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px;
+  height: 100vh;
+  min-height: 750px;
 }
-
 .button-container {
     display: flex;
     flex-direction: column;
