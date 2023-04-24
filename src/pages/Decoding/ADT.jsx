@@ -95,8 +95,10 @@ const ADT = () => {
       isCorrect = speechResult === 'no' || speechResult === 'know'
     } else if (currentWord === 'could') {
       isCorrect = speechResult === 'could' || speechResult === "couldn't"
-    }else if (currentWord === 'meadow') {
+    } else if (currentWord === 'meadow') {
       isCorrect = speechResult === 'metal' || speechResult === 'meadow'
+    } else if (currentWord === 'glisten') {
+      isCorrect = speechResult === 'listen' || speechResult === 'glisten'
     } else if (currentWord === 'islet') {
       isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
     } else if (currentWord === 'leitmotif') {
