@@ -19,13 +19,16 @@ const sounds = {
     'ʃ': ['sh', 'ch', 'ti', 'ss', 's'],
     'tʃ' : ['ch'],
     'ŋ' : ['ng'],
+    'ʒ' : ['si', 's', 'g', 'z', 'j', 'sh'],
     'k': ['k', 'c', 'ck'],
     'w': ['w', 'wh', 'u'],
     'x': ['x', 'xs', 'cs', 'ks', 'cks'],
     'y': ['y', 'i'],
     'z': ['z', 's'],
     'g': ['g'],
-    'l': ['l']
+    'l': ['l'],
+    's': ['s', 'c'],
+    'f': ['f', 'ff']
 };
   
 const phoneticTestWords = {
@@ -51,7 +54,7 @@ const phoneticTestWords = {
     'litigious': [['l','ɪ','t','ɪ','dʒ','ə','s']], 'tincture': [['t','ɪ','ŋ','k','tʃ','ə','r'], ['t','ɪ','n','k','tʃ','ə','r']], 'oligarchy': [['oʊ','l','ɪ','g','ɑ','r','k','i']], 'inefficacious': [['ɪ','n','ɛ','f','ɪ','k','eɪ','ʃ','ə','s']], 'demagogue': [['d','ɛ','m','ə','g','ɑ','g']], 'parturition': [['p','ɑ','r','t','ʊ','r','ɪ','ʃ','ə','n']], 'mimicry': [['m','ɪ','m','ɪ','k','r','i']],
     'homeopathy': [['h','oʊ','m','i','oʊ','p','æ','θ','i']], 'evanesce': [['ɪ','v','ə','n','ɛ','s']], 'geodesy': [['dʒ','i','oʊ','d','ɛ','s','i']], 'coulomb': [['k','u','l','ɑ','m']], 'zoophyte': [['z','oʊ','ə','f','ɑɪ','t']], 'execrable': [['ɛ','k','s','ɪ','k','r','ə','b','ə','l']], 'triptych': [['t','r','ɪ','p','t','ɪ','k']],
     'sobriquet': [['s','oʊ','b','r','ɪ','k','eɪ']], 'deliquesce': [['d','ɪ','l','ɪ','k', 'w','ɛ','s']], 'colloquy': [['k','ɑ','l','ə','k','w','i']], 'vitiate': [['v','ɪ','ʃ','i','eɪ','t']], 'sycophant': [['s','ɪ','k','ə','f','æ','n','t']], 'intermezzo': [['ɪ','n','t','ə','r','m','ɛ','t','s','oʊ']], 'dehiscence': [['d','ɪ','h','ɪ','s','ə','n','s']],
-    'exiguous': [['ɪ','g','z','ɪ','g','w','ə','s']], 'malapropos': [['m','æ','l','ə','p','r','oʊ']], 'ytterbium': [['ɪ','t','ər','b','i','ə','m']], 'monocotyledon': [['m','ɑ','n','ə','k','ɑ','t','ə','l','ɪ','d','ə','n']], 'leitmotif': [['l','eɪ','t','m','oʊ','t','i','f']], 'egregious': [['ɪ','g','r','i','dʒ','ə','s'], ['ɛ', 'g','r','i','dʒ','ə','s']], 'legerdemain': [['l','ɛ','dʒ','ər','d','ə','m','eɪ','n']]
+    'exiguous': [['ɪ','g','z','ɪ','g','j','ə','w', 'ə', 's']], 'malapropos': [['m','æ','l','æ','p','r','ə', 'p','oʊ']], 'ytterbium': [['ɪ','t','ər','b','i','ə','m']], 'monocotyledon': [['m','ɑ','n','ə','k','ɑ','t','ə','l','ɪ','d','ə','n']], 'leitmotif': [['l','eɪ','t','m','oʊ','t','i','f']], 'egregious': [['ɪ','g','r','i','dʒ','ə','s'], ['ɛ', 'g','r','i','dʒ','ə','s']], 'legerdemain': [['l','ɛ','dʒ','ər','d','ə','m','eɪ','n']]
 };
 
 function correctPhoneticWords(testWord, testAnswer) {
@@ -114,4 +117,4 @@ function cartesianProduct(...arrays) {
 
 export default correctPhoneticWords;
 
-// console.log(correctPhoneticWords('trudge', 'trudj'));
+// console.log(correctPhoneticWords('malapropos', 'malapropos'));
