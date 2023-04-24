@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import Welcome from './pages/Welcome/Welcome';
-import SelectTest from './pages/Test Selection/SelectTest';
-import Decoding from './pages/Decoding/Decoding';
-import Eidetic from './pages/Eidetic/Eidetic';
-import Phonetic from './pages/Phonetic/Phonetic';
-import Survey from './pages/Survey/Survey';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
+
+const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
+const SelectTest = lazy(() => import('./pages/Test Selection/SelectTest'));
+const Decoding = lazy(() => import('./pages/Decoding/Decoding'));
+const Eidetic = lazy(() => import('./pages/Eidetic/Eidetic'));
+const Phonetic = lazy(() => import('./pages/Phonetic/Phonetic'));
+const Survey = lazy(() => import('./pages/Survey/Survey'));
+const Completed = lazy(() => import('./pages/Completed/Completed'));
 
 function App() {
   const location = useLocation();
@@ -30,14 +32,17 @@ function App() {
             {isHome && <nav><a href="/">About</a></nav>}
           </header>
           <main style={{background: isHome ? '#3d3d3d' : 'white'}}>
-            <Routes>
-              <Route path="/" element={<Welcome />} />
-              <Route path="/test-selection" element={<SelectTest />} />
-              <Route path="/decoding" element={<Decoding />} />
-              <Route path="/eidetic" element={<Eidetic />} />
-              <Route path="/phonetic" element={<Phonetic />} />
-              <Route path="/survey" element={<Survey />} />
-            </Routes>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Routes>
+                <Route path="/" element={<Welcome />} />
+                <Route path="/test-selection" element={<SelectTest />} />
+                <Route path="/decoding" element={<Decoding />} />
+                <Route path="/eidetic" element={<Eidetic />} />
+                <Route path="/phonetic" element={<Phonetic />} />
+                <Route path="/survey" element={<Survey />} />
+                <Route path="/completed" element={<Completed />} />
+              </Routes>
+            </Suspense>
           </main>
         </div>
       </div>
