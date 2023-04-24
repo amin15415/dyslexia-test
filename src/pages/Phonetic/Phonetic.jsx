@@ -62,20 +62,25 @@ const Phonetic = () => {
     };
 
   return (
-    <div className='encoding-container'>
+    <div className='encoding-container' key={currentItem}>
       <div>
         <h1>Spell these words exactly like they sound</h1>
         <p>For instance, laugh should be spelled 'laf'.</p>
       </div>
       <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
         <div>
-          <audio src={audioPaths[currentItem]} controls />
+        {currentItem === 0 && (
+                    <div>
+                      <h3>Press Play</h3>
+                    </div> )}
+          <audio src={audioPaths[currentItem]} controls autoPlay={currentItem !== 0} />
           <div>
             <input
               type="text"
               placeholder="Enter spelling"
               value={userInputs[currentItem]}
               spellCheck={false}
+              autoFocus
               autoCorrect="off"
               onChange={(e) => {
                 const newInputs = [...userInputs];

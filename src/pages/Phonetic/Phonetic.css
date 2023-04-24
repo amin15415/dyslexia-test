@@ -3,9 +3,9 @@
   flex-direction: column;
   padding-top: 100px;
   height: 100vh;
-  min-height: 750px;
+  min-height: 550px;
 }
-.button-container {
+.encoding-container .button-container {
     display: flex;
     flex-direction: column;
     height: 15vh;

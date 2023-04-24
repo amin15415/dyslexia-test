@@ -6,13 +6,13 @@
     min-height: 750px;
 }
 
-.button-container {
+.encoding-container .button-container {
     display: flex;
     flex-direction: column;
     height: 15vh;
     justify-content: center;
     align-items: center;
-  } 
+} 
   
   input[type="text"] {
     padding: 10px;

@@ -131,7 +131,7 @@ const DESD = () => {
     }
 
     if (isLastWord) {
-        navigate('/eidetic', { state: { desdWords: desdWords } });
+        navigate('/completed', { state: { desdWords: desdWords } });
     }
   }, [correct, gradeIndex, isLastWord, navigate, wrongAboveGradeLevel, wordIndex, wrong, readingLevel]);
 

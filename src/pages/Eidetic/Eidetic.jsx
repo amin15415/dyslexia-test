@@ -60,7 +60,7 @@ const Eidetic = () => {
     };
 
     return (
-        <div className='encoding-container'>
+        <div className='encoding-container' key={currentItem}>
           <div>
             {tooFewCorrect && gradeIndex !== 0 ? (
               <div>
@@ -77,7 +77,11 @@ const Eidetic = () => {
                 </div>
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                   <div>
-                    <audio src={audioPaths[currentItem]} controls />
+                  {currentItem === 0 && (
+                    <div>
+                      <h3>Press Play</h3>
+                    </div> )}
+                    <audio src={audioPaths[currentItem]} controls autoPlay={currentItem !== 0} />
                     <div>
                       <input
                         type="text"
@@ -85,6 +89,7 @@ const Eidetic = () => {
                         value={userInputs[currentItem]}
                         spellCheck={false}
                         autoCorrect="off"
+                        autoFocus
                         onChange={(e) => {
                           const newInputs = [...userInputs];
                           newInputs[currentItem] = e.target.value;
@@ -109,11 +114,3 @@ const Eidetic = () => {
 }
 
 export default Eidetic;
-
-
-
-
-
-
-
-

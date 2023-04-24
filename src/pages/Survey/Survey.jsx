@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Survey.css';
 import { createClient } from '@supabase/supabase-js';
@@ -13,6 +13,8 @@ function Survey() {
   const [answers, setAnswers] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const emailInputRef = useRef(null);
 
   const questions = [
     {
@@ -63,6 +65,12 @@ function Survey() {
       options: ['Male', 'Female'],
     }
   ];
+
+  useEffect(() => {
+    if (emailInputRef.current && activeQuestion === questions.findIndex(q => q.type === 'email')) {
+      emailInputRef.current.focus();
+    }
+  }, [activeQuestion, questions]);
 
   const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
@@ -242,7 +250,7 @@ function Survey() {
                     className="input"
                     type={q.type}
                     value={answers[q.id] || ''}
-                    autoFocus={index === activeQuestion}
+                    autoFocus
                     onKeyDown={handleKeyDown}
                     onChange={(e) => handleChange(e, q.id)}
                     key={`${q.id}-input`}
@@ -254,7 +262,7 @@ function Survey() {
                     className="input"
                     type={q.type}
                     value={answers[q.id] || ''}
-                    autoFocus={index === activeQuestion}
+                    ref={emailInputRef}
                     onKeyDown={handleKeyDown}
                     onChange={(e) => handleChange(e, q.id)}
                     key={`${q.id}-input`}

@@ -99,6 +99,8 @@ const ADT = () => {
       isCorrect = speechResult === 'metal' || speechResult === 'meadow'
     } else if (currentWord === 'glisten') {
       isCorrect = speechResult === 'listen' || speechResult === 'glisten'
+    } else if (currentWord === 'toughen') {
+      isCorrect = speechResult === 'toughen' || speechResult === 'puffin'
     } else if (currentWord === 'islet') {
       isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
     } else if (currentWord === 'leitmotif') {
@@ -147,7 +149,7 @@ const ADT = () => {
     }
 
     if (isLastWord) {
-        navigate('/eidetic', { state: { adtWords: adtWords } });
+        navigate('/completed', { state: { adtWords: adtWords } });
     }
   }, [correct, gradeIndex, isLastWord, navigate, wrongAboveGradeLevel, wordIndex, wrong, words, readingLevel]);
 
