@@ -81,15 +81,22 @@ const DESD = () => {
 		    }, 1000);
 		  });
   
-		  [speechResult] = await Promise.all([speechRecognitionPromise, countdownPromise]);
+		  const [speechReturn] = await Promise.all([speechRecognitionPromise, countdownPromise]);
+      speechResult = convertNumberToWords(speechReturn).toLowerCase();
       setSpeechResultReceived(true);
       console.log('Speech result:', speechResult);
 	  } catch (error) {
       console.error('Speech recognition error:', error);
       return;
-    }
+    } 
 
-    const isCorrect = convertNumberToWords(speechResult).toLowerCase() === currentWord.toLowerCase();
+    let isCorrect;
+    if (currentWord === 'clique') {
+      isCorrect = speechResult === 'click' || speechResult === 'clique'
+    } else {
+      isCorrect = speechResult === currentWord;
+    }
+    
     const updatedCorrect = isCorrect ? correct + 1 : correct;
     const updatedWrong = !isCorrect ? wrong + 1 : wrong;
     const lastWordReached = gradeIndex === lastGradeIndex && wordIndex === lastWordIndex;
