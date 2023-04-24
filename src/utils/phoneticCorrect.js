@@ -39,19 +39,19 @@ const phoneticTestWords = {
     'malicious': [['m','ə','l','ɪ','ʃ','ə','s']], 'bureau': [['b','y','ʊ','ər','oʊ']], 'similar': [['s','ɪ','m','ə','l','ər']], 'campaign': [['k','æ','m','p','eɪ','n']], 'waltz': [['w','ɔ','l','t','s']],
     'prairie': [['p','r','ɛ','ər','i' ], ['p','r','eɪ','ər','i']], 'gadget': [['g','æ','dʒ','ɪ','t']], 'facsimile': [['f','æ','k','s','ɪ','m','ə','l','i'], ['f','æ','x','ɪ','m','ə','l','i']], 'emphasize': [['ɛ','m','f','ə','s','ɑɪ','z']], 'prescription': [['p','r','ɪ','s','k','r','ɪ','p','ʃ','ə','n']],
     'zealous': [['z','ɛ','l','ə','s']], 'clique': [['k','l','i','k'], ['k','l','ɪ','k']], 'atrocious': [['ə','t','r','oʊ','ʃ','ə','s']], 'catastrophe': [['k','ə','t','æ','s','t','r','ə','f','i']], 'liquidate': [['l','ɪ','k','w','ɪ','d','eɪ','t']],
-    'father': [['f','ɑ','ð','ər']], 'know': [['n','oʊ']], 'money': [['m','ʌ','n','i']], 'call': [['k','ɔ','l']], 'funny': [['f','ʌ','n','i']], 'there': [['ð','ɛ','r']],
+    'father': [['f','ɑ','ð','ər']], 'know': [['n','oʊ']], 'money': [['m','ʌ','n','i']], 'call': [['k','ɔ','l'], ['k', 'ɑ', 'l']], 'funny': [['f','ʌ','n','i']], 'there': [['ð','ɛ','r'], ['ð','eɪ','r']],
     'does': [['d','ʌ','z']], 'listen': [['l','ɪ','s','ə','n']], 'city': [['s','ɪ','t','i']], 'animal': [['æ','n','ɪ','m','ə','l']], 'light': [['l','ɑɪ','t']], 'uncle': [['ʌ','ŋ','k','ə','l']], 'rolled': [['r','oʊ','l','d']],
     'calf': [['k','æ','f'], ['k','ɑ','f']], 'enough': [['ɪ','n','ʌ','f']], 'meadow': [['m','ɛ','d','oʊ']], 'heavy': [['h','ɛ','v','i']], 'business': [['b','ɪ','z','n','ɪ','s']], 'believe': [['b','ɪ','l','i','v']], 'laugh': [['l','æ','f']],
     'delight': [['d','ɪ','l','ɑɪ','t']], 'familiar': [['f','ə','m','ɪ','l','i','ə','r']], 'rough': [['r','ʌ','f']], 'glisten': [['g','l','ɪ','s','ə','n']], 'league': [['l','i','g']], 'spectacles': [['s','p','ɛ','k','t','ə','k','ə','l','s']], 'decorate': [['d','ɛ','k','ə','r','eɪ','t']],
     'cautious': [['k','ɔ','ʃ','ə','s']], 'ancient': [['eɪ','n','ʃ','ə','n','t']], 'toughen': [['t','ʌ','f','ə','n']], 'height': [['h','ɑɪ','t']], 'doubt': [['d','aʊ','t']], 'position': [['p','ə','z','ɪ','ʃ','ə','n']], 'contagious': [['k','ə','n','t','eɪ','dʒ','ə','s']],
     'conceited': [['k','ə','n','s','i','t','ɪ','d']], 'foreign': [['f','ɔ','r','ɪ','n']], 'knapsack': [['n','æ','p','s','æ','k']], 'decisions': [['d','ɪ','s','ɪ','ʒ','ə','n','s']], 'allegiance': [['ə','l','i','dʒ','ə','n','s']], 'leisure': [['l','ɛ','ʒ','ə','r'], ['l','i','ʒ','ə','r']], 'deny': [['d','ɪ','n','ɑɪ']],
-    'dominion': [['d','ə','m','ɪ','n','i','ə','n']], 'intrigue': [['ɪ','n','t','r','i','g']], 'aeronautic': [['ɛ','r','ə','n','ɔ','t','ɪ','k']], 'trudge': [['t','r','ʌ','dʒ']], 'tomorrow': [['t','ə','m','ɔ','r','oʊ']], 'graciously': [['g','r','eɪ','ʃ','ə','s','l','i']], 'bridge': [['b','r','ɪ','dʒ']],
-    'pollute': [['p','ə','l','u','t']], 'exonerate': [['ɪ','g','z','ɒ','n','ə','r','eɪ','t']], 'risible': [['r','ɪ','z','ɪ','b','ə','l']], 'regime': [['r','eɪ','ʒ','i','m']], 'endeavor': [['ɪ','n','d','ɛ','v','ə','r']], 'islet': [['ɑɪ','l','ə','t']], 'heinous': [['h','eɪ','n','ə','s']],
-    'parliament': [['p','ɑ','r','l','ə','m','ə','n','t']], 'gnostic': [['n','ɒ','s','t','ɪ','k']], 'mannequin': [['m','æ','n','ɪ','k','ɪ','n']], 'homologous': [['h','ə','m','ɒ','l','ə','g','ə','s']], 'prerequisite': [['p','r','i','r','ɪ','k','w','ɪ','z','ɪ','t']], 'rhapsody': [['r','æ','p','s','ə','d','i']], 'euphony': [['y','u','f','ə','n','i']],
-    'litigious': [['l','ɪ','t','ɪ','dʒ','ə','s']], 'tincture': [['t','ɪ','ŋ','k','tʃ','ə','r']], 'oligarchy': [['oʊ','l','ɪ','g','ɑ','r','k','i']], 'inefficacious': [['ɪ','n','ɛ','f','ɪ','k','eɪ','ʃ','ə','s']], 'demagogue': [['d','ɛ','m','ə','g','ɒ','g']], 'parturition': [['p','ɑ','r','t','ʊ','r','ɪ','ʃ','ə','n']], 'mimicry': [['m','ɪ','m','ɪ','k','r','i']],
-    'homeopathy': [['h','oʊ','m','i','oʊ','p','æ','θ','i']], 'evanesce': [['ɪ','v','ə','n','ɛ','s']], 'geodesy': [['dʒ','i','oʊ','d','ɛ','s','i']], 'coulomb': [['k','u','l','ɒ','m']], 'zoophyte': [['z','oʊ','ə','f','ɑɪ','t']], 'execrable': [['ɛ','k','s','ɪ','k','r','ə','b','ə','l']], 'triptych': [['t','r','ɪ','p','t','ɪ','k']],
-    'sobriquet': [['s','oʊ','b','r','ɪ','k','eɪ']], 'deliquesce': [['d','ɪ','l','ɪ','k', 'w','ɛ','s']], 'colloquy': [['k','ɒ','l','ə','k','w','i']], 'vitiate': [['v','ɪ','ʃ','i','eɪ','t']], 'sycophant': [['s','ɪ','k','ə','f','æ','n','t']], 'intermezzo': [['ɪ','n','t','ə','r','m','ɛ','t','s','oʊ']], 'dehiscence': [['d','ɪ','h','ɪ','s','ə','n','s']],
-    'exiguous': [['ɪ','g','z','ɪ','g','w','ə','s']], 'malapropos': [['m','æ','l','ə','p','r','oʊ']], 'ytterbium': [['ɪ','t','ər','b','i','ə','m']], 'monocotyledon': [['m','ɒ','n','ə','k','ɒ','t','ə','l','ɪ','d','ə','n']], 'leitmotif': [['l','eɪ','t','m','oʊ','t','i','f']], 'egregious': [['ɪ','g','r','i','dʒ','ə','s'], ['ɛ', 'g','r','i','dʒ','ə','s']], 'legerdemain': [['l','ɛ','dʒ','ər','d','ə','m','eɪ','n']]
+    'dominion': [['d','ə','m','ɪ','n','i','ə','n']], 'intrigue': [['ɪ','n','t','r','i','g']], 'aeronautic': [['ɛ','r','ə','n','ɔ','t','ɪ','k']], 'trudge': [['t','r','ʌ','dʒ'], ['t','r','ʌ', 'd', 'dʒ']], 'tomorrow': [['t','ə','m','ɔ','r','oʊ']], 'graciously': [['g','r','eɪ','ʃ','ə','s','l','i']], 'bridge': [['b','r','ɪ','dʒ']],
+    'pollute': [['p','ə','l','u','t']], 'exonerate': [['ɪ','g','z','ɑ','n','ə','r','eɪ','t']], 'risible': [['r','ɪ','z','ɪ','b','ə','l']], 'regime': [['r','eɪ','ʒ','i','m']], 'endeavor': [['ɪ','n','d','ɛ','v','ə','r']], 'islet': [['ɑɪ','l','ə','t']], 'heinous': [['h','eɪ','n','ə','s']],
+    'parliament': [['p','ɑ','r','l','ə','m','ə','n','t']], 'gnostic': [['n','ɑ','s','t','ɪ','k']], 'mannequin': [['m','æ','n','ɪ','k','ɪ','n']], 'homologous': [['h','ə','m','ɑ','l','ə','g','ə','s']], 'prerequisite': [['p','r','i','r','ɪ','k','w','ɪ','z','ɪ','t']], 'rhapsody': [['r','æ','p','s','ə','d','i']], 'euphony': [['y','u','f','ə','n','i']],
+    'litigious': [['l','ɪ','t','ɪ','dʒ','ə','s']], 'tincture': [['t','ɪ','ŋ','k','tʃ','ə','r'], ['t','ɪ','n','k','tʃ','ə','r']], 'oligarchy': [['oʊ','l','ɪ','g','ɑ','r','k','i']], 'inefficacious': [['ɪ','n','ɛ','f','ɪ','k','eɪ','ʃ','ə','s']], 'demagogue': [['d','ɛ','m','ə','g','ɑ','g']], 'parturition': [['p','ɑ','r','t','ʊ','r','ɪ','ʃ','ə','n']], 'mimicry': [['m','ɪ','m','ɪ','k','r','i']],
+    'homeopathy': [['h','oʊ','m','i','oʊ','p','æ','θ','i']], 'evanesce': [['ɪ','v','ə','n','ɛ','s']], 'geodesy': [['dʒ','i','oʊ','d','ɛ','s','i']], 'coulomb': [['k','u','l','ɑ','m']], 'zoophyte': [['z','oʊ','ə','f','ɑɪ','t']], 'execrable': [['ɛ','k','s','ɪ','k','r','ə','b','ə','l']], 'triptych': [['t','r','ɪ','p','t','ɪ','k']],
+    'sobriquet': [['s','oʊ','b','r','ɪ','k','eɪ']], 'deliquesce': [['d','ɪ','l','ɪ','k', 'w','ɛ','s']], 'colloquy': [['k','ɑ','l','ə','k','w','i']], 'vitiate': [['v','ɪ','ʃ','i','eɪ','t']], 'sycophant': [['s','ɪ','k','ə','f','æ','n','t']], 'intermezzo': [['ɪ','n','t','ə','r','m','ɛ','t','s','oʊ']], 'dehiscence': [['d','ɪ','h','ɪ','s','ə','n','s']],
+    'exiguous': [['ɪ','g','z','ɪ','g','w','ə','s']], 'malapropos': [['m','æ','l','ə','p','r','oʊ']], 'ytterbium': [['ɪ','t','ər','b','i','ə','m']], 'monocotyledon': [['m','ɑ','n','ə','k','ɑ','t','ə','l','ɪ','d','ə','n']], 'leitmotif': [['l','eɪ','t','m','oʊ','t','i','f']], 'egregious': [['ɪ','g','r','i','dʒ','ə','s'], ['ɛ', 'g','r','i','dʒ','ə','s']], 'legerdemain': [['l','ɛ','dʒ','ər','d','ə','m','eɪ','n']]
 };
 
 function correctPhoneticWords(testWord, testAnswer) {
@@ -97,7 +97,9 @@ function correctPhoneticWords(testWord, testAnswer) {
         }
     }
 
-    console.log(correctAnswers);
+    correctAnswers.forEach((answer) => {
+      console.log(answer);
+    });
     return correctAnswers.includes(testAnswer);
 }
 
@@ -111,3 +113,5 @@ function cartesianProduct(...arrays) {
 }
 
 export default correctPhoneticWords;
+
+// console.log(correctPhoneticWords('trudge', 'trudj'));
