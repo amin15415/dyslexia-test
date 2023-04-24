@@ -4,7 +4,7 @@ import './Completed.css'
 const Completed = () => {
   return (
     <div className='centered-content'>
-        <div className='text-container'>
+        <div className='completed-text-container'>
             <h1>You have successfully completed the reading portion of the test!</h1>
             <p>Our results indicate that you are a competent reader. If you are
                 still experiencing difficulties with reading and/or spelling in your
