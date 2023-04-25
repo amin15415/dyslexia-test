@@ -3,11 +3,10 @@ import { useLocation } from 'react-router-dom';
 import './Survey.css';
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
-const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
-const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
-
 function Survey() {
+  const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
+  const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
   const location = useLocation();
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
