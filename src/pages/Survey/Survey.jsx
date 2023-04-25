@@ -117,7 +117,7 @@ function Survey() {
   };
 
   const goForward = () => {
-  if (activeQuestion < questions.length) {
+  if (activeQuestion < questions.length - 1) {
       setActiveQuestion(activeQuestion + 1);
   } else {
       setShowSubmitButton(true); // Add this line
