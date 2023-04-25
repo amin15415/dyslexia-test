@@ -112,6 +112,6 @@ function cartesianProduct(...arrays) {
     );
 }
 
-// export default correctPhoneticWords;
+export default correctPhoneticWords;
 
-console.log(correctPhoneticWords('risible', 'risibul'));
+// console.log(correctPhoneticWords('risible', 'risibul'));
