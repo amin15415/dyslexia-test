@@ -57,12 +57,6 @@ function Survey() {
       question: "When was your last eye examination?",
       type: 'dateOrNever',
     },
-    {
-      id: 'q6',
-      question: "What is your birth sex?",
-      type: 'multipleChoice',
-      options: ['Male', 'Female'],
-    }
   ];
 
   useEffect(() => {
@@ -103,7 +97,6 @@ function Survey() {
         "education": answers['q3'],
         "learning_disability": answers['q4'] === 'Yes',
         "last_eye_exam": answers['q5'] === 'Never' ? null : answers['q5'],
-        "sex": answers['q6'],
         "eidetic_correct": location.state.eideticCorrect,
         "phonetic_correct": location.state.phoneticCorrect,
         "reading_level": location.state.readingLevel,
@@ -230,20 +223,6 @@ function Survey() {
                     </div>
                   </div>
                 )}
-            
-                {q.type === 'multipleChoice' && (
-                  <div className='buttons-container' key={`${q.id}-buttons`}>
-                    {q.options.map((option, i) => (
-                      <div className='button-container' key={`${q.id}-option-${i}`}>
-                        <button onClick={() => {
-                          handleChange({ target: { value: option } }, q.id);
-                          goForward();
-                        }}>{option}</button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-            
                 {['text'].includes(q.type) && (
                   <input
                     className="input"
@@ -284,10 +263,8 @@ function Survey() {
           ))
         )}
       </div>
-  );
-    
-    
-  }
+  );   
+}
 
 export default Survey
 
