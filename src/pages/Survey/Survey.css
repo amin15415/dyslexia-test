@@ -49,6 +49,7 @@
 .survey .button-container {
     border: 100px;
     padding: 0px;
+    height:auto;
 } 
 
 .survey button {
