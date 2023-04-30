@@ -13,20 +13,13 @@ const Decoding = () => {
   const [isStarted, setIsStarted] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [speechResultReceived, setSpeechResultReceived] = useState(false);
   const [retryMessage, setRetryMessage] = useState('');
-  const [nextDecodingWord, currentWord, isLastWord] = useHandleNextDecodingWord({ startCountdown, countdownPromise, setRetryMessage, setSpeechResultReceived, testWords, isPaused, setButtonActive });
+  const [speechResultReceived, setSpeechResultReceived] = useState(false);
+  const [nextDecodingWord, currentWord, isLastWord] = useHandleNextDecodingWord({ startCountdown, countdownPromise, setSpeechResultReceived, setRetryMessage, testWords, isPaused, setButtonActive });
   
   useEffect(() => {
     requestMicPermission();
   }, [requestMicPermission]);
-
-  useEffect(() => {
-    if (speechResultReceived) {
-      setButtonActive(true);
-    }
-  }, [speechResultReceived]);
-
 
   useEffect(() => {
     if (!isStarted || count > 0) return 
@@ -46,6 +39,12 @@ const Decoding = () => {
     setButtonActive(true);
     } 
   }, [isStarted, speechResultReceived, count]);
+
+  useEffect(() => {
+    if (speechResultReceived) {
+      setButtonActive(true);   
+    }
+  }, [speechResultReceived]);
 
   const startDecoding = async () => {
     if (!hasMicPermission) {

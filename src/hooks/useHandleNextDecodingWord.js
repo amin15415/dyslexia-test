@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 export const useHandleNextDecodingWord = ({ startCountdown, 
                                             countdownPromise,
-                                            setRetryMessage,
                                             setSpeechResultReceived,
+                                            setRetryMessage,
                                             testWords,
                                             isPaused,
                                             setButtonActive  }) => {
@@ -28,6 +28,7 @@ export const useHandleNextDecodingWord = ({ startCountdown,
     let speechResult;
 
     const nextDecodingWord = async () => {
+        speechRecognition.stopSpeechRecognition();
         setButtonActive(false);
         setSpeechResultReceived(false);
         setRetryMessage('');
@@ -81,7 +82,7 @@ export const useHandleNextDecodingWord = ({ startCountdown,
         setWordIndex((prevState) => prevState + 1);
         testWords[levelIndex].words[currentWord] = isCorrect;
     };
-
+  
     useEffect(() => {
         setCurrentLevel(testWords[levelIndex].level);
         setWords((prevWords) => {
