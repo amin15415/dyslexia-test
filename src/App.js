@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { TestWordsProvider } from './contexts/TestWordContext';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
@@ -20,6 +21,7 @@ function App() {
   }, [location]);
 
   return (
+    <TestWordsProvider>
       <div className="App">
         <div className="container">
           <header>
@@ -46,6 +48,7 @@ function App() {
           </main>
         </div>
       </div>
+    </TestWordsProvider>
   );
 }
 

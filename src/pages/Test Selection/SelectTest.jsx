@@ -1,25 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SelectTest.css'
+import { TestWordsContext } from '../../contexts/TestWordContext';
+import { importWords } from '../../utils/importDecodingWords';
+import './SelectTest.css';
 
-const SelectTest = () => {
-
+export default function SelectTest() {
+  const { setTestWords } = useContext(TestWordsContext);
   const navigate = useNavigate();
 
-  const startDESD = () => {
-    navigate('/decoding', { state: { 
-      test: 'DESD', 
-    } });
+  const startDESD = async () => {
+    const testWords = await importWords('DESD');
+    setTestWords(testWords);
+    navigate('/decoding');
   };
 
-  const startADT = () => {
-    navigate('/decoding', { state: { 
-      test: 'ADT', 
-    } }); 
+  const startADT = async () => {
+    const testWords = await importWords('ADT');
+    setTestWords(testWords);
+    navigate('/decoding');
   };
 
   return (
-   <div className='test-selection-container'>
+    <div className='test-selection-container'>
       <div className="button-container">
         <div>
           <button onClick={startDESD}>Child</button>
@@ -27,11 +29,9 @@ const SelectTest = () => {
       </div>
       <div className="button-container">
         <div>
-         <button onClick={startADT}>Adult</button>
+          <button onClick={startADT}>Adult</button>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default SelectTest

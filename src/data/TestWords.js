@@ -13,3 +13,16 @@ export const adtWords = [
     { level: 'DOC', words: { 'sobriquet': null, 'deliquesce': null, 'colloquy': null, 'vitiate': null, 'sycophant': null, 'intermezzo': null, 'dehiscence': null } },
     { level: 'POD', words: { 'exiguous': null, 'malapropos': null, 'ytterbium': null, 'monocotyledon': null, 'leitmotif': null, 'egregious': null, 'legerdemain': null } },
   ];
+
+  export const desdWords = [
+    { level: 'K', words: { 'baby': null, 'one': null, 'boat': null, 'do': null, 'car': null } },
+    { level: '1L', words: { 'was': null, 'daddy': null, 'book': null, 'good': null, 'doll': null } },
+    { level: '1U', words: { 'girl': null, 'apple': null, 'they': null, 'story': null, 'some': null } },
+    { level: '2', words: { 'above': null, 'what': null, 'any': null, 'busy': null, 'night': null } },
+    { level: '3', words: { 'done': null, 'huge': null, 'ocean': null, 'station': null, 'could': null } },
+    { level: '4', words: { 'because': null, 'echo': null, 'couple': null, 'eager': null, 'together': null } },
+    { level: '5', words: { 'bought': null, 'delicious': null, 'neighbor': null, 'achieve': null, 'region': null } },
+    { level: '6', words: { 'malicious': null, 'bureau': null, 'similar': null, 'campaign': null, 'waltz': null } },
+    { level: '7-8', words: { 'prairie': null, 'gadget': null, 'facsimile': null, 'emphasize': null, 'prescription': null } },
+    { level: '9-12', words: { 'zealous': null, 'clique': null, 'atrocious': null, 'catastrophe': null, 'liquidate': null } },
+  ];

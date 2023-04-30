@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 
-const useCountdown = (interval = 1000) => {
+export const useCountdown = (interval = 1000) => {
   const [count, setCount] = useState(null);
+  const [countdownFinished, setCountdownFinished] = useState(false);
 
   useEffect(() => {
     if (count === null) {
+      return;
+    }
+
+    if (count === 0) {
+      setCountdownFinished(true);
       return;
     }
 
@@ -17,9 +23,22 @@ const useCountdown = (interval = 1000) => {
 
   const startCountdown = (initialValue) => {
     setCount(initialValue);
+    setCountdownFinished(false);
   };
 
-  return [count, startCountdown];
-};
+  const countdownPromise = () => {
+    return new Promise((resolve) => {
+      if (countdownFinished) {
+        resolve();
+      }
+      const unsubscribe = setInterval(() => {
+        if (countdownFinished) {
+          resolve();
+          clearInterval(unsubscribe);
+        }
+      }, interval);
+    });
+  };
 
-export default useCountdown;
+  return [count, startCountdown, countdownPromise];
+}
