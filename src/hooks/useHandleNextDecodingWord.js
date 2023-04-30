@@ -33,11 +33,11 @@ export const useHandleNextDecodingWord = ({ startCountdown,
         setRetryMessage('');
 
         try {
-            const speechRecognitionPromise = speechRecognition.recognizeSpeech();
             startCountdown(3);
+            const speechRecognitionPromise = speechRecognition.recognizeSpeech();
             const [speechReturn] = await Promise.all([speechRecognitionPromise, countdownPromise]);
-            speechResult = convertNumberToWords(speechReturn).toLowerCase();
             setSpeechResultReceived(true);
+            speechResult = convertNumberToWords(speechReturn).toLowerCase();
             console.log('Speech result:', speechResult);
         } catch (error) {
             console.error('Speech recognition error:', error);

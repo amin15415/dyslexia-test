@@ -22,6 +22,13 @@ const Decoding = () => {
   }, [requestMicPermission]);
 
   useEffect(() => {
+    if (speechResultReceived) {
+      setButtonActive(true);
+    }
+  }, [speechResultReceived]);
+
+
+  useEffect(() => {
     if (!isStarted || count > 0) return 
       
     if (!speechResultReceived) {
