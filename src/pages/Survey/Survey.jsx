@@ -82,13 +82,6 @@ function Survey() {
   };
 
   const submitAnswers = async () => {
-    console.log('Submitted answers:', answers);
-    console.log(location.state.testWords);
-    console.log('Eidetic Correct: ', location.state.eideticCorrect);
-    console.log('Phonetic Correct: ', location.state.phoneticCorrect);
-    console.log('Eidetic Results: ', location.state.eideticResults);
-    console.log('Phonetic Results: ', location.state.phoneticResults);
-    console.log('Reading Level: ', location.state.readingLevel);
 
     // Prepare the data for submission
     const submissionData = {
@@ -100,7 +93,10 @@ function Survey() {
         "eidetic_correct": location.state.eideticCorrect,
         "phonetic_correct": location.state.phoneticCorrect,
         "reading_level": location.state.readingLevel,
-        "test": location.state.test
+        "test": location.state.test,
+        "test_words": JSON.stringify(location.state.testWords),
+        "eidetic_result": JSON.stringify(location.state.eideticResults),
+        "phonetic_result": JSON.stringify(location.state.phoneticResults)
     };
 
     // Upload data to Supabase

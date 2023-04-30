@@ -118,6 +118,6 @@ function cartesianProduct(...arrays) {
     );
 }
 
-// export default correctPhoneticWords;
+export default correctPhoneticWords;
 
-console.log(correctPhoneticWords('there', 'thayr'));
+// console.log(correctPhoneticWords('there', 'thayr'));
