@@ -2,23 +2,24 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
+import { useSessionStorage } from './useSessionStorage';
 
-export const useHandleNextDecodingWord = ({ startCountdown, 
+export const useHandleDecodingLogic = ({ startCountdown, 
                                             countdownPromise,
                                             setSpeechResultReceived,
                                             setRetryMessage,
-                                            testWords,
                                             isPaused,
                                             setButtonActive  }) => {
     const navigate = useNavigate();
-    const [wordIndex, setWordIndex] = useState(0);
-    const [levelIndex, setLevelIndex] = useState(0);
-    const [correct, setCorrect] = useState(0);
-    const [wrong, setWrong] = useState(0);
-    const [wrongAboveCurrentLevel, setWrongAboveCurrentLevel] = useState(0);
-    const [frozenWrongAboveCurrentLevel, setFrozenWrongAboveCurrentLevel] = useState(false);
-    const [isLastWord, setIsLastWord] = useState(false);
-    const [readingLevel, setReadingLevel] = useState(null);
+    const [testWords, setTestWords] = useSessionStorage('testWords', '');
+    const [wordIndex, setWordIndex] = useSessionStorage('wordIndex', 0);
+    const [levelIndex, setLevelIndex] = useSessionStorage('levelIndex', 0);
+    const [correct, setCorrect] = useSessionStorage('correct', 0);
+    const [wrong, setWrong] = useSessionStorage('wrong', 0);
+    const [wrongAboveCurrentLevel, setWrongAboveCurrentLevel] = useSessionStorage('wrongAboveCurrentLevel', 0);
+    const [frozenWrongAboveCurrentLevel, setFrozenWrongAboveCurrentLevel] = useSessionStorage('frozenWrongAboveCurrentLevel', false);
+    const [isLastWord, setIsLastWord] = useSessionStorage('isLastWord', false);
+    const [readingLevel, setReadingLevel] = useSessionStorage('readingLevel', null);
     const [currentLevel, setCurrentLevel] = useState(testWords[levelIndex].level);
     const [words, setWords] = useState(Object.keys(testWords[levelIndex].words));
     const [currentWord, setCurrentWord] = useState(words[wordIndex]);
@@ -101,15 +102,16 @@ export const useHandleNextDecodingWord = ({ startCountdown,
         }
     
         if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length && wordIndex >= words.length) {
+          setTestWords(testWords);
           setTimeout(() => {
-            navigate('/eidetic', { state: { testWords: testWords, levelIndex: levelIndex, readingLevel: readingLevel, test: 'ADT' } });
+            navigate('/eidetic');
           }, 500);
         }
     
         if (isLastWord) {
-            navigate('/completed', { state: { testWords: testWords } });
+            navigate('/completed');
         }
-      }, [correct, levelIndex, isLastWord, navigate, wrongAboveCurrentLevel, wordIndex, wrong, words, readingLevel, testWords]);
+      }, [correct, levelIndex, isLastWord, navigate, wrongAboveCurrentLevel, wordIndex, wrong, words, testWords, setTestWords, setFrozenWrongAboveCurrentLevel, setReadingLevel, setWrongAboveCurrentLevel]);
     
       useEffect(() => {
         handleLogic();
@@ -126,7 +128,7 @@ export const useHandleNextDecodingWord = ({ startCountdown,
           setWrong(0);
           setWordIndex(0)
         }
-      }, [wordIndex, levelIndex, lastWordIndex, testWords]);
+      }, [wordIndex, levelIndex, lastWordIndex, testWords, setCorrect, setFrozenWrongAboveCurrentLevel, setLevelIndex, setWordIndex, setWrong, setWrongAboveCurrentLevel]);
     
       useEffect(() => {
         console.log(`current word: ${words[wordIndex]} word index: ${wordIndex}, grade index: ${levelIndex}, 

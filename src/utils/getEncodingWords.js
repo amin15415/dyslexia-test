@@ -1,44 +1,63 @@
 export function getEideticWords(gradeIndex, testWords) {
-    const gradeObj = testWords[gradeIndex];
-    const words = gradeObj.words;
-    let eideticWords = Object.keys(words).filter((word) => words[word] === true);
-    const testLevelLength = Object.keys(words).length;
+  let gradeObj = testWords[gradeIndex];
+  let words = gradeObj ? gradeObj.words : undefined;
+  while (!words && gradeIndex > 0) {
+      gradeIndex--;
+      gradeObj = testWords[gradeIndex];
+      words = gradeObj ? gradeObj.words : undefined;
+  }
+  
+  // If after decrementing gradeIndex to 0 and we still don't have valid words, we should return an error or empty words
+  if (!words) return { eideticWords: [], tooFewWordsCorrect: true };
 
-    while (eideticWords.length < testLevelLength && gradeIndex >= 0) {
+  let eideticWords = Object.keys(words).filter((word) => words[word] === true);
+  const testLevelLength = Object.keys(words).length;
+
+  while (eideticWords.length < testLevelLength && gradeIndex >= 0) {
       gradeIndex--;
       const prevGradeObj = testWords[gradeIndex];
-      const prevGradeWords = prevGradeObj.words;
+      const prevGradeWords = prevGradeObj ? prevGradeObj.words : undefined;
+      if (!prevGradeWords) continue;
       const prevTrueWords = Object.keys(prevGradeWords).filter(
-        (word) => prevGradeWords[word] === true
+          (word) => prevGradeWords[word] === true
       );
       eideticWords = [...eideticWords, ...prevTrueWords];
-    }
-  
-    eideticWords = eideticWords.slice(0, testLevelLength);
-    const tooFewWordsCorrect = eideticWords.length < testLevelLength;
-  
-    return { eideticWords, tooFewWordsCorrect };
-  };
+  }
+
+  eideticWords = eideticWords.slice(0, testLevelLength);
+  const tooFewWordsCorrect = eideticWords.length < testLevelLength;
+
+  return { eideticWords, tooFewWordsCorrect };
+}
 
 
 export function getPhoneticWords(gradeIndex, testWords) {
-    const gradeObj = testWords[gradeIndex];
-    const words = gradeObj.words;
-    let phoneticWords = Object.keys(words).filter((word) => words[word] === false);
-    const testLevelLength = Object.keys(words).length;
-
+  let gradeObj = testWords[gradeIndex];
+  let words = gradeObj ? gradeObj.words : undefined;
+  while (!words && gradeIndex > 0) {
+      gradeIndex--;
+      gradeObj = testWords[gradeIndex];
+      words = gradeObj ? gradeObj.words : undefined;
+  }
   
-    while (phoneticWords.length < testLevelLength && gradeIndex > 0) {
+  // If after decrementing gradeIndex to 0 and we still don't have valid words, we should return an error or empty words
+  if (!words) return { phoneticWords: [] };
+
+  let phoneticWords = Object.keys(words).filter((word) => words[word] === false);
+  const testLevelLength = Object.keys(words).length;
+
+  while (phoneticWords.length < testLevelLength && gradeIndex > 0) {
       gradeIndex--;
       const prevGradeObj = testWords[gradeIndex];
-      const prevGradeWords = prevGradeObj.words;
+      const prevGradeWords = prevGradeObj ? prevGradeObj.words : undefined;
+      if (!prevGradeWords) continue;
       const prevFalseWords = Object.keys(prevGradeWords).filter(
-        (word) => prevGradeWords[word] === false
+          (word) => prevGradeWords[word] === false
       );
       phoneticWords = [...phoneticWords, ...prevFalseWords];
-    }
-  
-    phoneticWords = phoneticWords.slice(0, testLevelLength);
-  
-    return { phoneticWords };
-  };
+  }
+
+  phoneticWords = phoneticWords.slice(0, testLevelLength);
+
+  return { phoneticWords };
+}

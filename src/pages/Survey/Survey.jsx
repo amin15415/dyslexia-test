@@ -1,21 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './Survey.css';
 import { createClient } from '@supabase/supabase-js';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
   const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
   const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
-  const location = useLocation();
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  const [eideticCorrect] = useSessionStorage('eideticCorrect', '');
+  const [phoneticCorrect] = useSessionStorage('phoneticCorrect', '');
+  const [readingLevel] = useSessionStorage('readingLevel', '');
+  const [testName] = useSessionStorage('testName', '');
+  const [testWords] = useSessionStorage('testWords', '');
+  const [eideticResults] = useSessionStorage('eideticResults', '');
+  const [phoneticResults] = useSessionStorage('phoneticResults', '');
   const emailInputRef = useRef(null);
 
-  const questions = [
+  const questions = useMemo(() => [
     {
       id: 'q1',
       question: "Hello, what's your name?",
@@ -57,7 +62,7 @@ function Survey() {
       question: "When was your last eye examination?",
       type: 'dateOrNever',
     },
-  ];
+  ], [answers]);
 
   useEffect(() => {
     if (emailInputRef.current && activeQuestion === questions.findIndex(q => q.type === 'email')) {
@@ -82,21 +87,20 @@ function Survey() {
   };
 
   const submitAnswers = async () => {
-
     // Prepare the data for submission
     const submissionData = {
-        "name": answers['q1'],
-        "email": answers['q2'],
-        "education": answers['q3'],
-        "learning_disability": answers['q4'] === 'Yes',
-        "last_eye_exam": answers['q5'] === 'Never' ? null : answers['q5'],
-        "eidetic_correct": location.state.eideticCorrect,
-        "phonetic_correct": location.state.phoneticCorrect,
-        "reading_level": location.state.readingLevel,
-        "test": location.state.test,
-        "test_words": JSON.stringify(location.state.testWords),
-        "eidetic_result": JSON.stringify(location.state.eideticResults),
-        "phonetic_result": JSON.stringify(location.state.phoneticResults)
+      "name": answers['q1'],
+      "email": answers['q2'],
+      "education": answers['q3'],
+      "learning_disability": answers['q4'] === 'Yes',
+      "last_eye_exam": answers['q5'] === 'Never' ? null : answers['q5'],
+      "eidetic_correct": eideticCorrect,
+      "phonetic_correct": phoneticCorrect,
+      "reading_level": readingLevel,
+      "test": testName,
+      "test_words": testWords,
+      "eidetic_result": eideticResults,
+      "phonetic_result": phoneticResults
     };
 
     // Upload data to Supabase

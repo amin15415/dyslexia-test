@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRequestMicPermission } from '../../hooks/useRequestMicPermission';
-import { useHandleNextDecodingWord } from '../../hooks/useHandleNextDecodingWord';
+import { useHandleDecodingLogic } from '../../hooks/useHandleDecodingLogic';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import { useCountdown } from '../../hooks/useCountdown';
 import './Decoding.css';
-import { TestWordsContext } from '../../contexts/TestWordContext';
 
 const Decoding = () => {
-  const { testWords } = useContext(TestWordsContext);
   const [count, startCountdown, countdownPromise] = useCountdown();
   const [hasMicPermission, requestMicPermission] = useRequestMicPermission();
   const [isStarted, setIsStarted] = useState(false);
@@ -15,7 +13,7 @@ const Decoding = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [retryMessage, setRetryMessage] = useState('');
   const [speechResultReceived, setSpeechResultReceived] = useState(false);
-  const [nextDecodingWord, currentWord, isLastWord] = useHandleNextDecodingWord({ startCountdown, countdownPromise, setSpeechResultReceived, setRetryMessage, testWords, isPaused, setButtonActive });
+  const [nextDecodingWord, currentWord, isLastWord] = useHandleDecodingLogic({ startCountdown, countdownPromise, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive });
   
   useEffect(() => {
     requestMicPermission();

@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import { getPhoneticWords } from "../../utils/getEncodingWords";
 import correctPhoneticWords from "../../utils/phoneticCorrect";
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useNavigate } from "react-router-dom";
 import "./Phonetic.css";
 
 const Phonetic = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const testWords = location.state.testWords;
-  const gradeIndex = location.state.gradeIndex;
-  const { phoneticWords } = getPhoneticWords(gradeIndex, testWords);
+  const [testWords] = useSessionStorage('testWords', '');
+  const [, setPhoneticCorrect] = useSessionStorage('phoneticCorrect', 0);
+  const [, setPhoneticResults] = useSessionStorage('phoneticResults', '');
+  const levelIndex = parseInt(useSessionStorage('levelIndex', ''));
+  const { phoneticWords } = getPhoneticWords(levelIndex, testWords);
   const audioPaths = phoneticWords.map((word) =>
     require(`../../assets/audio/${word}.mp3`)
   );
@@ -19,10 +20,6 @@ const Phonetic = () => {
   );
   const [incompleteSubmit, setIncompleteSubmit] = useState(false);
   const [currentItem, setCurrentItem] = useState(0);
-
-  useEffect(() => {
-    console.log(audioPaths);
-  }, []);
 
   const handleSubmit = () => {
     if (userInputs[currentItem] === "") {
@@ -34,8 +31,8 @@ const Phonetic = () => {
       if (currentItem < audioPaths.length - 1) {
         setCurrentItem(currentItem + 1);
       } else {
-        let phoneticCorrect = 0;
         const phoneticResults = {};
+        let correct = 0;
 
         for (let i = 0; i < audioPaths.length; i++) {
           const userInput = userInputs[i].toLowerCase().trim();
@@ -43,25 +40,18 @@ const Phonetic = () => {
             correctPhoneticWords(phoneticWords[i], userInput) ||
             userInput === phoneticWords[i]
           ) {
-            phoneticCorrect++;
-            phoneticResults[userInput] = true;
-          } else {
-            phoneticResults[userInput] = false;
-          }
+            correct++;
+            } 
+          phoneticResults[phoneticWords[i]] = {
+              correct: correctPhoneticWords(phoneticWords[i], userInput) || userInput === phoneticWords[i],
+              userInput: userInput
+            };
         }
 
         setTimeout(() => {
-          navigate("/survey", {
-            state: {
-              testWords: testWords,
-              readingLevel: location.state.readingLevel,
-              eideticCorrect: location.state.eideticCorrect,
-              eideticResults: location.state.eideticResults,
-              phoneticCorrect: phoneticCorrect,
-              phoneticResults: phoneticResults,
-              test: location.state.test,
-            },
-          });
+          setPhoneticCorrect(correct);
+          setPhoneticResults(phoneticResults);
+          navigate("/survey");
         }, 100);
       }
     }

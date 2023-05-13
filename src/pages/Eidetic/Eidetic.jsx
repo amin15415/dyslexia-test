@@ -1,68 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
 import { getEideticWords } from '../../utils/getEncodingWords';
 import { useNavigate } from 'react-router-dom';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
 import "./Eidetic.css";
 
 const Eidetic = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const testWords = location.state.testWords;
-    const gradeIndex = location.state.gradeIndex;
+    const [testWords] = useSessionStorage('testWords', '');
+    const [, setEideticCorrect] = useSessionStorage('eideticCorrect', 0);
+    const [, setEideticResults] = useSessionStorage('eideticResults', '');
+    const levelIndex = parseInt(useSessionStorage('levelIndex', ''));
     const { eideticWords, tooFewCorrect } = getEideticWords(
-    gradeIndex,
-    testWords
-    );
+                                                            levelIndex,
+                                                            testWords
+                                                            );
     const audioPaths = eideticWords.map((word) => require(`../../assets/audio/${word}.mp3`));
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
     const [currentItem, setCurrentItem] = useState(0);
 
-    useEffect(() => {
-        console.log(audioPaths);
-    }, []);
-
     const handleSubmit = () => {
-        if (userInputs[currentItem] === '') {
-            setIncompleteSubmit(true);
-            setTimeout(() => {
-                setIncompleteSubmit(false);
-            }, 3000);
+      if (userInputs[currentItem] === '') {
+        setIncompleteSubmit(true);
+        setTimeout(() => {
+          setIncompleteSubmit(false);
+        }, 3000);
+      } else {
+        if (currentItem < audioPaths.length - 1) {
+          setCurrentItem(currentItem + 1);
         } else {
-            if (currentItem < audioPaths.length - 1) {
-                setCurrentItem(currentItem + 1);
-            } else {
-                let eideticCorrect = 0;
-                const eideticResults = {};
-
-                for (let i = 0; i < audioPaths.length; i++) {
-                    const userInput = userInputs[i].toLowerCase().trim();
-                    if (userInput === eideticWords[i]) {
-                      eideticCorrect++;
-                      eideticResults[userInput] = true;
-                    } else {
-                      eideticResults[userInput] = false;
-                    }
-                }
-
-                setTimeout(() => {
-                    navigate('/phonetic', { state: { 
-                        testWords: testWords, 
-                        gradeIndex: gradeIndex, 
-                        readingLevel: location.state.readingLevel,
-                        eideticCorrect: eideticCorrect,
-                        eideticResults: eideticResults,
-                        test: location.state.test
-                    } });
-                }, 100);
+          const eideticResults = {};
+          let correct = 0;
+    
+          for (let i = 0; i < audioPaths.length; i++) {
+            const userInput = userInputs[i].toLowerCase().trim();
+            if (userInput === eideticWords[i]) {
+              correct++;
             }
+            eideticResults[eideticWords[i]] = {
+              correct: userInput === eideticWords[i],
+              userInput: userInput
+            };
+          }
+          setTimeout(() => {
+            setEideticCorrect(correct);
+            setEideticResults(eideticResults);
+            navigate('/phonetic');
+          }, 100);
         }
+      }
     };
 
     return (
         <div className='encoding-container' key={currentItem}>
           <div>
-            {tooFewCorrect && gradeIndex !== 0 ? (
+            {tooFewCorrect && levelIndex !== 0 ? (
               <div>
                 <p>
                   You did not get enough words correct to proceed with the encoding
@@ -111,6 +103,6 @@ const Eidetic = () => {
         </div>
     );
       
-}
+};
 
 export default Eidetic;

@@ -103,9 +103,9 @@ function correctPhoneticWords(testWord, testAnswer) {
         }
     }
 
-    correctAnswers.forEach((answer) => {
-      console.log(answer);
-    });
+    // correctAnswers.forEach((answer) => {
+    //   console.log(answer);
+    // });
     return correctAnswers.includes(testAnswer);
 }
 

@@ -1,22 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TestWordsContext } from '../../contexts/TestWordContext';
-import { importWords } from '../../utils/importDecodingWords';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { adtWords, desdWords } from '../../data/TestWords';
 import './SelectTest.css';
 
 export default function SelectTest() {
-  const { setTestWords } = useContext(TestWordsContext);
+  const [, setTestWords] = useSessionStorage('testWords', null);
+  const [, setTestName] = useSessionStorage('testName', '');
   const navigate = useNavigate();
 
-  const startDESD = async () => {
-    const testWords = await importWords('DESD');
-    setTestWords(testWords);
-    navigate('/decoding');
-  };
-
-  const startADT = async () => {
-    const testWords = await importWords('ADT');
-    setTestWords(testWords);
+  const startTest = async (name, words) => {
+    sessionStorage.clear();
+    setTestName(name);
+    setTestWords(words);
     navigate('/decoding');
   };
 
@@ -24,12 +20,12 @@ export default function SelectTest() {
     <div className='test-selection-container'>
       <div className="button-container">
         <div>
-          <button onClick={startDESD}>Child</button>
+          <button onClick={() => startTest('DESD', desdWords)}>Child</button>
         </div>
       </div>
       <div className="button-container">
         <div>
-          <button onClick={startADT}>Adult</button>
+          <button onClick={() => startTest('ADT', adtWords)}>Adult</button>
         </div>
       </div>
     </div>
