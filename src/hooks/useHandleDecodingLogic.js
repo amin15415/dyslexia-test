@@ -103,9 +103,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
     
         if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length && wordIndex >= words.length) {
           setTestWords(testWords);
-          setTimeout(() => {
-            navigate('/eidetic');
-          }, 500);
+          navigate('/eidetic');;
         }
     
         if (isLastWord) {
