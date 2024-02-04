@@ -3,6 +3,7 @@ import { useRequestMicPermission } from '../../hooks/useRequestMicPermission';
 import { useHandleDecodingLogic } from '../../hooks/useHandleDecodingLogic';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import { useCountdown } from '../../hooks/useCountdown';
+import ProgressBar from '../../components/ProgressBar';
 import './Decoding.css';
 
 const Decoding = () => {
@@ -13,8 +14,8 @@ const Decoding = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [retryMessage, setRetryMessage] = useState('');
   const [speechResultReceived, setSpeechResultReceived] = useState(false);
-  const [nextDecodingWord, currentWord, isLastWord] = useHandleDecodingLogic({ startCountdown, countdownPromise, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive });
-  
+  const [nextDecodingWord, currentWord, isLastWord, progress] = useHandleDecodingLogic({ startCountdown, countdownPromise, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive });
+
   useEffect(() => {
     requestMicPermission();
   }, [requestMicPermission]);
@@ -57,29 +58,32 @@ const Decoding = () => {
 
   return (
     <div className="centered-content">
-      <div className="decoding-content">
-        {!isPaused && isStarted && !isLastWord && buttonActive ? (
+      <div className='decoding-page'>
+        <div className="decoding-content">
+          {!isPaused && isStarted && !isLastWord && buttonActive ? (
+                  <div className="button-container">
+                    <div>
+                      {retryMessage && <p>{retryMessage}</p>}
+                      <button onClick={nextDecodingWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+                    </div>
+                  </div>
+                ) : null }
+          {!isStarted && (
                 <div className="button-container">
                   <div>
-                    {retryMessage && <p>{retryMessage}</p>}
-                    <button onClick={nextDecodingWord}>{retryMessage ? 'Try Again' : 'Next Word'}</button>
+                  <button onClick={startDecoding}>Start</button>
                   </div>
                 </div>
-              ) : null }
-        {!isStarted && (
-              <div className="button-container">
-                <div>
-                <button onClick={startDecoding}>Start</button>
-                </div>
-              </div>
-            )}
-        {!buttonActive && isStarted && (
-              <>
-                <p className='custom-p'>Say this word: </p>
-                <h2 className='custom-h2'>{currentWord}</h2>
-                <AudioVisualizer isActive={(true)} countdownValue={count} size="300"/>
-              </>
-            )}
+              )}
+          {!buttonActive && isStarted && (
+                <>
+                  <p className='custom-p'>Say this word: </p>
+                  <h2 className='custom-h2'>{currentWord}</h2>
+                  <AudioVisualizer isActive={(true)} countdownValue={count} size="300"/>
+                </>
+              )}
+        </div>
+        <ProgressBar progress={progress} />
       </div>
     </div>
   );

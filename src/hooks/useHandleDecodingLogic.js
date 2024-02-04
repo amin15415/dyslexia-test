@@ -26,6 +26,9 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const lastLevelIndex = testWords.length - 1;
     const lastWordIndex = Object.keys(testWords[lastLevelIndex].words).length - 1;
     const speechRecognition = useSpeechRecognition();
+    const totalWords = testWords.reduce((total, level) => total + Object.keys(level.words).length, 0);
+    const progress = ((levelIndex * words.length) + wordIndex) / totalWords * 100;
+
     let speechResult;
 
     const nextDecodingWord = async () => {
@@ -135,7 +138,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
                     is_paused: ${isPaused}`);
       }, [words, wordIndex, levelIndex, currentLevel, correct, wrong, wrongAboveCurrentLevel, readingLevel, isPaused]);
 
-    return [nextDecodingWord, currentWord, isLastWord];
+    return [nextDecodingWord, currentWord, isLastWord, progress];
 };
 
 
