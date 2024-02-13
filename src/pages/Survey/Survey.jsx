@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import './Survey.css';
 import { createClient } from '@supabase/supabase-js';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { getSkillValue } from "../../utils/scoring";
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
@@ -19,6 +20,8 @@ function Survey() {
   const [eideticResults] = useSessionStorage('eideticResults', '');
   const [phoneticResults] = useSessionStorage('phoneticResults', '');
   const emailInputRef = useRef(null);
+  const [eideticSkillValue, setEideticSkillValue] = useState(null);
+  const [phoneticSkillValue, setPhoneticSkillValue] = useState(null);
 
   const questions = useMemo(() => [
     {
@@ -44,12 +47,12 @@ function Survey() {
         '4th grade',
         '5th grade',
         '6th grade',
-        '7th grade',
-        '8th grade',
+        '7th grade or 8th grade',
         'High School',
         'College',
         'Graduate School',
         'Doctorate',
+        'Post-Doctorate'
       ],
     },
     {
@@ -103,6 +106,9 @@ function Survey() {
       "phonetic_result": phoneticResults
     };
 
+    setEideticSkillValue(getSkillValue(testName, eideticCorrect, readingLevel, answers['q3']));
+    setPhoneticSkillValue(getSkillValue(testName, phoneticCorrect, readingLevel, answers['q3']));
+
     // Upload data to Supabase
     try {
       const { data, error } = await supabase.from('results').insert([submissionData]);
@@ -150,8 +156,11 @@ function Survey() {
   
   return submitted ? (
     <div className="survey">
-      <h1>Thank You!</h1>
-      <p>We will follow up with your results shortly.</p>
+      {/* <h1>Thank You!</h1>
+      <p>We will follow up with your results shortly.</p> */}
+      <p>Sight-Word Analysis Skill: {eideticSkillValue}</p>
+      <p>Phonetic Analysis Skill: {phoneticSkillValue}</p>
+      
     </div>
     ) : (
       <div className="survey">
