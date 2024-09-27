@@ -37,7 +37,7 @@ export const useAudioVisualizer = (canvasRef, countdownValue) => {
       }
     };
   }, [stream]);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const draw = () => {
     console.log('Drawing...');
     if (!canvasRef.current || !analyser) return;
