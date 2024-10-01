@@ -22,7 +22,7 @@ function Survey() {
   const emailInputRef = useRef(null);
   const [eideticSkillValue, setEideticSkillValue] = useState(null);
   const [phoneticSkillValue, setPhoneticSkillValue] = useState(null);
-
+  const [showFinalResults, setShowFinalResults] = useState(false);
   const questions = useMemo(() => [
     {
       id: 'q1',
@@ -108,7 +108,7 @@ function Survey() {
 
     setEideticSkillValue(getSkillValue(testName, eideticCorrect, readingLevel, answers['q3']));
     setPhoneticSkillValue(getSkillValue(testName, phoneticCorrect, readingLevel, answers['q3']));
-
+    setShowFinalResults(false);
     // Upload data to Supabase
     try {
       const { data, error } = await supabase.from('results').insert([submissionData]);
@@ -156,10 +156,17 @@ function Survey() {
   
   return submitted ? (
     <div className="survey">
-      <h1>Thank You!</h1>
-      <p>We will follow up with your results shortly.</p>
-      {/* <p>Sight-Word Analysis Skill: {eideticSkillValue}</p>
-      <p>Phonetic Analysis Skill: {phoneticSkillValue}</p> */}
+      {showFinalResults ? (
+        <>
+        <p>Sight-Word Analysis Skill: {eideticSkillValue}</p>
+        <p>Phonetic Analysis Skill: {phoneticSkillValue}</p>
+        </>
+      ) : (
+        <>
+        <h1>Thank You!</h1>
+        <p>We will follow up with your results shortly.</p>
+        </>
+      )}
       
     </div>
     ) : (
