@@ -126,7 +126,7 @@ function Survey() {
   if (activeQuestion < questions.length - 1) {
       setActiveQuestion(activeQuestion + 1);
   } else {
-      setShowSubmitButton(true); // Add this line
+      setShowSubmitButton(true); 
   }
   };
 
@@ -156,10 +156,10 @@ function Survey() {
   
   return submitted ? (
     <div className="survey">
-      {/* <h1>Thank You!</h1>
-      <p>We will follow up with your results shortly.</p> */}
-      <p>Sight-Word Analysis Skill: {eideticSkillValue}</p>
-      <p>Phonetic Analysis Skill: {phoneticSkillValue}</p>
+      <h1>Thank You!</h1>
+      <p>We will follow up with your results shortly.</p>
+      {/* <p>Sight-Word Analysis Skill: {eideticSkillValue}</p>
+      <p>Phonetic Analysis Skill: {phoneticSkillValue}</p> */}
       
     </div>
     ) : (
