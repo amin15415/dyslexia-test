@@ -12,6 +12,16 @@ button {
   transition: background-color 0.3s ease;
 }
 
+button:disabled {
+  background-color: #707070; /* Grey */
+  cursor: default;
+}
+
+button:disabled:hover {
+  background-color: #707070; /* Grey */
+  cursor: default;
+}
+
 button:hover {
   background-color: #FFD54F; /* Lighter yellow on hover */
 }
