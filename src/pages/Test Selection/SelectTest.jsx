@@ -8,6 +8,8 @@ import './SelectTest.css';
 export default function SelectTest() {
   const [, setTestWords] = useSessionStorage('testWords', null);
   const [, setTestName] = useSessionStorage('testName', '');
+  const [, setUserAge] = useSessionStorage('userAge', null);
+
   const navigate = useNavigate();
 
   const [age, setAge] = React.useState('');
@@ -24,6 +26,7 @@ export default function SelectTest() {
 
   const startTest = async (name, words) => {
     sessionStorage.clear();
+    setUserAge(age);
     setTestName(name);
     setTestWords(words);
     navigate('/decoding');
@@ -33,7 +36,7 @@ export default function SelectTest() {
     if ((event.target.value && /^\d+$/.test(event.target.value) && event.target.value > 0 && event.target.value < 100 ) || !event.target.value)
       setAge(event.target.value);
   };
-console.log(nextStepEnabled)
+
   return (
     <div className='test-selection-container'>
       <Stack spacing={2} justifyContent='center' alignItems='center'>
@@ -50,7 +53,7 @@ console.log(nextStepEnabled)
             }}
             onChange={handleChangeAge}
           />
-          { !isConfirmed && <button onClick={() => {if (age) setConfirmed(!isConfirmed)} }>Confirm</button> }
+          { !isConfirmed && <button disabled={!age} onClick={() => {if (age) setConfirmed(!isConfirmed)} }>Confirm</button> }
         </Stack>
         { isConfirmed && age > 5 &&
         <Box sx={{border: "solid 1px", padding: "12px", borderRadius: "15px", width: "70%"}}>
@@ -72,10 +75,10 @@ console.log(nextStepEnabled)
             <FormControlLabel required control={<Checkbox checked={Boolean(checkboxStatus["terms"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, terms: event.target.checked })} />} label="I agree to the Terms of Service and Privacy Policy." />
           </FormGroup>
         }
-        { isConfirmed && age > 13 &&
+        { isConfirmed && age > 17 &&
           <button disabled={!nextStepEnabled} onClick={() => startTest('ADT', adtWords)}>Adult Test</button>
         }
-        { isConfirmed && age > 5 && age <= 13 &&
+        { isConfirmed && age > 5 && age <= 17 &&
           <button disabled={!nextStepEnabled} onClick={() => startTest('DESD', desdWords)}>Child Test</button>
         }
         { isConfirmed && age <= 5 &&

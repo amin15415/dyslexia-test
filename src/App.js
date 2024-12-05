@@ -41,6 +41,7 @@ function App() {
                 <Route path="/phonetic" element={<Phonetic />} />
                 <Route path="/survey" element={<Survey />} />
                 <Route path="/completed" element={<Completed />} />
+
               </Routes>
             </Suspense>
           </main>

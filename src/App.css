@@ -69,6 +69,12 @@ button:hover {
   width: auto;
 }
 
+.logo-report-text {
+  font-family: "Montserrat";
+  font-weight: 50;
+  font-size: 3em;
+}
+
 nav {
   display: flex;
   gap: 10px;

@@ -3,15 +3,19 @@ import './Survey.css';
 import { createClient } from '@supabase/supabase-js';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { getSkillValue } from "../../utils/scoring";
+import TestResultReports from '../../components/TestResultReports';
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
   const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
+
   const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submissionData, setSubmissionData] = useState(null);
+  const [userAge] = useSessionStorage('userAge', null);
   const [eideticCorrect] = useSessionStorage('eideticCorrect', '');
   const [phoneticCorrect] = useSessionStorage('phoneticCorrect', '');
   const [readingLevel] = useSessionStorage('readingLevel', '');
@@ -91,8 +95,9 @@ function Survey() {
 
   const submitAnswers = async () => {
     // Prepare the data for submission
-    const submissionData = {
+    const newSubmissionData = {
       "name": answers['q1'],
+      "age" : userAge,
       "email": answers['q2'],
       "education": answers['q3'],
       "learning_disability": answers['q4'] === 'Yes',
@@ -105,13 +110,15 @@ function Survey() {
       "eidetic_result": eideticResults,
       "phonetic_result": phoneticResults
     };
+    // update the state of submission data to be used in result forms
+    setSubmissionData(newSubmissionData);
 
     setEideticSkillValue(getSkillValue(testName, eideticCorrect, readingLevel, answers['q3']));
     setPhoneticSkillValue(getSkillValue(testName, phoneticCorrect, readingLevel, answers['q3']));
     setShowFinalResults(false);
     // Upload data to Supabase
     try {
-      const { data, error } = await supabase.from('results').insert([submissionData]);
+      const { data, error } = await supabase.from('results').insert([newSubmissionData]);
       if (error) {
           throw error;
       }
@@ -153,6 +160,8 @@ function Survey() {
   
   return true;
   };
+
+
   
   return submitted ? (
     <div className="survey">
@@ -163,8 +172,9 @@ function Survey() {
         </>
       ) : (
         <>
-        <h1>Thank You!</h1>
-        <p>We will follow up with your results shortly.</p>
+        {/* <h1>Thank You!</h1> */}
+        {/* <p>We will follow up with your results shortly.</p> */}
+        <TestResultReports submissionData={submissionData} />
         </>
       )}
       
