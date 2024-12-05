@@ -125,13 +125,11 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
     const getGradeNumber = (levelName) => {
         if (test_words && test_words.length > 0 ) {
             for (let index in test_words) {
-                console.log(index)
-                console.log(test_words[index].level)
                 if (test_words[index].level == levelName) return (Number(index) + 1);
             }
         }
     }
-console.log(test_words)
+
     return (
         <div ref={contentRef}>
         <Table   sx={{ minWidth: "1000px", border: "solid 1px" }} aria-label="Result Table">
