@@ -196,8 +196,8 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {/* <TableCell colSpan={1}>{`Reading Raw Score: ${reading_level}`}</TableCell> */}
-                <TableCell colSpan={1}>{`DESD Grade Level: ${reading_level}`}</TableCell>
-                <TableCell colSpan={1}>{`DESD Grade Number: ${getGradeNumber(reading_level)}`}</TableCell>
+                <TableCell colSpan={1}>{`DESD Grade Level: ${reading_level ? reading_level : "Not Available"}`}</TableCell>
+                <TableCell colSpan={1}>{`DESD Grade Number: ${getGradeNumber(reading_level) ? getGradeNumber(reading_level) : "Not Recognized"}`}</TableCell>
               </TableRow>
           </TableBody>
         </Table>
