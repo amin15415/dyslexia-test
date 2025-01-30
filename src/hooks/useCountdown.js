@@ -40,5 +40,5 @@ export const useCountdown = (interval = 1000) => {
     });
   };
 
-  return [count, startCountdown, countdownPromise];
+  return [count, startCountdown, countdownPromise, countdownFinished];
 }

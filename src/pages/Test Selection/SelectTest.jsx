@@ -68,11 +68,11 @@ export default function SelectTest() {
           <FormGroup>
             { age <= 13 &&
               <Stack>
-                <FormControlLabel required control={<Checkbox checked={Boolean(checkboxStatus["guardian"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, guardian: event.target.checked })} />} label="I have the permission of a parent or guardian to proceed." />
-                <FormControlLabel required control={<Checkbox checked={Boolean(checkboxStatus["coppa"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, coppa: event.target.checked })} />} label="I have read and understood the COPPA notice." />
+                <FormControlLabel sx={{px: 2, textAlign: 'left'}} required control={<Checkbox checked={Boolean(checkboxStatus["guardian"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, guardian: event.target.checked })} />} label="I have the permission of a parent or guardian to proceed." />
+                <FormControlLabel sx={{px: 2, textAlign: 'left'}} required control={<Checkbox checked={Boolean(checkboxStatus["coppa"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, coppa: event.target.checked })} />} label="I have read and understood the COPPA notice." />
               </Stack>
             }
-            <FormControlLabel required control={<Checkbox checked={Boolean(checkboxStatus["terms"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, terms: event.target.checked })} />} label="I agree to the Terms of Service and Privacy Policy." />
+            <FormControlLabel sx={{px: 2, textAlign: 'left'}} required control={<Checkbox checked={Boolean(checkboxStatus["terms"])} onChange={(event) => setCheckBoxStatus({ ...checkboxStatus, terms: event.target.checked })} />} label="I agree to the Terms of Service and Privacy Policy." />
           </FormGroup>
         }
         { isConfirmed && age > 17 &&

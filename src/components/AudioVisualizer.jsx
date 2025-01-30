@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { useAudioVisualizer } from '../hooks/useAudioVisualizer';
 
-const AudioVisualizer = ({ isActive, countdownValue, size }) => {
+const AudioVisualizer = ({ isActive, countdownValue, size, audioAnalyser }) => {
   const canvasRef = useRef(null);
-  const { startVisualization, stopVisualization } = useAudioVisualizer(canvasRef, countdownValue);
+  const { startVisualization, stopVisualization } = useAudioVisualizer(canvasRef, countdownValue, audioAnalyser);
 
   useEffect(() => {
     if (isActive) {

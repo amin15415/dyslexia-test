@@ -10,6 +10,7 @@ import { Box, Typography, Stack } from '@mui/material';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import logo from '../assets/images/gryfn_logo.png';
 
+
 const sampleData = [
     {
         "level": "K",
@@ -130,6 +131,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
         }
     }
 
+
     return (
         <div ref={contentRef}>
         <Table   sx={{ minWidth: "1000px", border: "solid 1px" }} aria-label="Result Table">
@@ -176,7 +178,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                 { test_words && test_words.length > 0 && test_words.map((wordData, index) => {
                     if (index >= 3 && index <= 6)
                     return (
-                        <TableCell>
+                        <TableCell key={index}>
                             <ReadTestTable wordsData={wordData} level={index + 1} />
                         </TableCell>
                     )
@@ -186,7 +188,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                 { test_words && test_words.length > 0 && test_words.map((wordData, index) => {
                     if (index >= 7 && index <= 10)
                     return (
-                        <TableCell>
+                        <TableCell key={index}>
                             <ReadTestTable wordsData={wordData} level={index + 1} />
                         </TableCell>
                     )
@@ -220,13 +222,14 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
             </TableHead>
             <TableBody>
                 { words && Object.keys(words).length > 0 && Object.keys(words).map((key, index) => (
-                    <TableRow>
+                    <TableRow key={index}>
                         <TableCell sx={{border: "solid 1px", py: "5px"}}>{`${index + 1}. ${key}`}</TableCell>
-                        <TableCell sx={{border: "solid 1px", py: "5px"}} width="20px">{words[key] ? "-" : ""}</TableCell>
-                        <TableCell sx={{border: "solid 1px", py: "5px"}} width="20px">{words[key] ? "" : "-"}</TableCell>   
+                        <TableCell sx={{border: "solid 1px", py: "5px"}} width="20px">{words[key] === null ? "" : words[key] ? "x" : ""}</TableCell>
+                        <TableCell sx={{border: "solid 1px", py: "5px"}} width="20px">{words[key] === null ? "" : words[key] ? "" : "x"}</TableCell>   
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
     )
   }
+
