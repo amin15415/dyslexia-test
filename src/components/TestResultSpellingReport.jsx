@@ -125,8 +125,14 @@ export default function TestResultSpellingReport({contentRef, submissionData}) {
             </TableHead>
             <TableBody>
                 { wordsData && Object.keys(wordsData).length > 0 && Object.keys(wordsData).map((key, index) => (
-                    <TableRow>
-                        <TableCell sx={{border: "solid 1px", py: "5px"}}>{`${index + 1}. ${key} - ${wordsData[key].userInput}`}</TableCell>
+                    <TableRow key={index}>
+                        <TableCell sx={{border: "solid 1px", py: "5px"}}>
+                          <Stack direction="row" sx={{width: "100%"}} justifyContent="space-between">
+                            <Typography>{`${index + 1}. ${key} - ${wordsData[key].userInput}`}</Typography>
+                            <Typography>{wordsData[key].correct ? "🗸" : "x" }</Typography>
+                          </Stack>
+                          
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>

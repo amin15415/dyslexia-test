@@ -11,7 +11,7 @@ import html2pdf from 'html2pdf.js';
       filename: `${name} - Gryfn AI Dyslexia ${reportName} - ${new Date().toLocaleDateString('en-US')}.pdf`,
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2, dpi: 300, letterRendering: true },
-      jsPDF: { unit: 'mm', format: size , orientation: 'landscape' },
+      jsPDF: { unit: 'mm', format: size , orientation: 'portrait' },
     };
 
     // Convert the content of the element to PDF

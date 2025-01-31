@@ -19,19 +19,23 @@ export default function TestResultReports({submissionData}) {
     const readingTestRef = React.useRef();
     const spellingTestRef = React.useRef();
 
+    const testResultRef = React.useRef();
 
 
     return (
         <Stack sx={{width: "100%"}} justifyContent="center" alignItems="center">
             <Typography variant='h3'>Thank You!</Typography>
-            <Typography variant='body1'>You can download the results by clicking on the related button:</Typography>
+            <Typography variant='body1'>You can download the results by clicking on the following button:</Typography>
             <Stack direction="row" >
-                <button  onClick={() => convertAndDownloadPDF(readingTestRef, 'Reading Test', "Amin Omidvar", [297,300])}>Reading Result</button>
-                <button  onClick={() => convertAndDownloadPDF(spellingTestRef, 'Spelling Test', "Amin Omidvar", [297,180])}>Spelling Result</button>
+                {/* <button  onClick={() => convertAndDownloadPDF(readingTestRef, 'Reading Test', "Amin Omidvar", [297,300])}>Reading Result</button>
+                <button  onClick={() => convertAndDownloadPDF(spellingTestRef, 'Spelling Test', "Amin Omidvar", [297,180])}>Spelling Result</button> */}
+                <button onClick={() => convertAndDownloadPDF(testResultRef, 'Spelling Test', "Amin Omidvar", [297,550])}>Test Result</button>
             </Stack>
-            <Stack sx={{overflow: 'auto', maxHeight: "300px", maxWidth: "90%", mt: "24px", p: "12px"}} spacing={4}>
-                <TestResultReadingReport contentRef={readingTestRef} submissionData={submissionData} />
-                <TestResultSpellingReport contentRef={spellingTestRef} submissionData={submissionData} />
+            <Stack sx={{overflow: 'auto', maxHeight: "300px", maxWidth: "90%", mt: "24px", p: "12px"}} >
+                <Stack spacing={4} ref={testResultRef}>
+                    <TestResultReadingReport contentRef={readingTestRef} submissionData={submissionData} />
+                    <TestResultSpellingReport contentRef={spellingTestRef} submissionData={submissionData} />
+                </Stack>
             </Stack>
         </Stack>
     );

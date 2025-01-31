@@ -1,49 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 
-export const useAudioVisualizer = (canvasRef, countdownValue) => {
-  const [analyser, setAnalyser] = useState(null);
+export const useAudioVisualizer = (canvasRef, countdownValue, audioAnalyser) => {
+  // const [analyser, setAnalyser] = useState(null);
   const animationFrameRef = useRef(null);
-  const [stream, setStream] = useState(null);
 
-  useEffect(() => {
-    const getAudioContext = async () => {
-      console.log('Getting audio context...');
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const newAnalyser = audioContext.createAnalyser();
-      setAnalyser(newAnalyser);
-
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        console.log('Got audio stream:', stream);
-        setStream(stream);
-        const source = audioContext.createMediaStreamSource(stream);
-        source.connect(newAnalyser);
-      } catch (error) {
-        console.error('Error getting audio stream:', error);
-      }
-    };
-
-    if (!analyser) {
-      getAudioContext();
-    }
-  }, [analyser]);
-
-  useEffect(() => {
-    return () => {
-      console.log('Cleaning up audio stream...');
-      if (stream) {
-        const audioTracks = stream.getAudioTracks();
-        audioTracks.forEach((track) => track.stop());
-      }
-    };
-  }, [stream]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const draw = () => {
-    console.log('Drawing...');
-    if (!canvasRef.current || !analyser) return;
+    // console.log('Drawing...');
+    if (!canvasRef.current || !audioAnalyser.current) return;
     const canvasContext = canvasRef.current.getContext('2d');
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(dataArray);
+    const dataArray = new Uint8Array(audioAnalyser.current.frequencyBinCount);
+    audioAnalyser.current.getByteFrequencyData(dataArray);
   
     canvasContext.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   

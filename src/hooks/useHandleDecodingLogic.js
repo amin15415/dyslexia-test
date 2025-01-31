@@ -3,13 +3,19 @@ import { useSpeechRecognition } from './useSpeechRecognition';
 import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from './useSessionStorage';
+import { wordHomophones } from '../data/TestWords';
 
 export const useHandleDecodingLogic = ({ startCountdown, 
                                             countdownPromise,
+                                            countdownFinished,
                                             setSpeechResultReceived,
                                             setRetryMessage,
                                             isPaused,
-                                            setButtonActive  }) => {
+                                            setButtonActive, 
+                                            setError, 
+                                            setIsTranscribing,
+                                            setIsStarted,
+                                            audioStream  }) => {
     const navigate = useNavigate();
     const [testWords, setTestWords] = useSessionStorage('testWords', '');
     const [wordIndex, setWordIndex] = useSessionStorage('wordIndex', 0);
@@ -25,67 +31,118 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const [currentWord, setCurrentWord] = useState(words[wordIndex]);
     const lastLevelIndex = testWords.length - 1;
     const lastWordIndex = Object.keys(testWords[lastLevelIndex].words).length - 1;
-    const speechRecognition = useSpeechRecognition();
+    const {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording} = useSpeechRecognition(audioStream);
     const totalWords = testWords.reduce((total, level) => total + Object.keys(level.words).length, 0);
     const progress = ((levelIndex * words.length) + wordIndex) / totalWords * 100;
 
     let speechResult;
 
+    useEffect(() => {
+        return () => {
+            if (audioStream.current) {
+                const audioTracks = audioStream.current.getTracks();
+                audioTracks.forEach((track) => track.stop());
+            }
+        }
+    },[])
+
+    // check if the recording is started so as to start count down
+    useEffect(() => {
+
+        if (isRecording) {
+            setButtonActive(false);
+            setIsStarted(true)
+            startCountdown(3);
+        }
+    } , [isRecording])
+
+    // check if the countdown is finished
+    useEffect(() => {
+        if (countdownFinished) {
+            stopRecordingAndTranscribe();
+            setIsTranscribing(true);
+        }
+    } , [countdownFinished])
+
+    // check if transcription is received
+    useEffect(() => {
+        if (transcription) {
+            setIsTranscribing(false);
+            checkTranscription();
+        }
+    } , [transcription])
+
+    // check for transcription error
+    useEffect(() => {
+        if (transcriptionError) {
+            setIsTranscribing(false);
+            setButtonActive(true);
+            setError(transcriptionError);
+            console.error('Speech recognition error:', transcriptionError);
+        }
+    } , [transcriptionError])
+
+
+    const checkTranscription = async () => {
+        
+        if (transcription && transcription !== '') {
+
+            setSpeechResultReceived(true);
+            speechResult = transcription.toLowerCase();
+            console.log('Speech result:', speechResult);
+
+
+            let isCorrect;
+            isCorrect = speechResult.includes(currentWord) || wordHomophones[currentWord] && wordHomophones[currentWord].includes(speechResult); 
+            console.log('is correct: ' + isCorrect)
+            // if (currentWord === 'clique') {
+            //     isCorrect = speechResult === 'click' || speechResult === 'clique'
+            // } else if (currentWord === 'know') {
+            //     isCorrect = speechResult === 'no' || speechResult === 'know'
+            // } else if (currentWord === 'could') {
+            //     isCorrect = speechResult === 'could' || speechResult === "couldn't"
+            // } else if (currentWord === 'meadow') {
+            //     isCorrect = speechResult === 'metal' || speechResult === 'meadow'
+            // } else if (currentWord === 'glisten') {
+            //     isCorrect = speechResult === 'listen' || speechResult === 'glisten'
+            // } else if (currentWord === 'toughen') {
+            //     isCorrect = speechResult === 'toughen' || speechResult === 'puffin'
+            // } else if (currentWord === 'islet') {
+            //     isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
+            // } else if (currentWord === 'leitmotif') {
+            //     isCorrect = speechResult === 'leitmotiv' || speechResult === 'leitmotif'
+            // } else {
+            //     isCorrect = speechResult === currentWord;
+            // }
+            const updatedCorrect = isCorrect ? correct + 1 : correct;
+            const updatedWrong = !isCorrect ? wrong + 1 : wrong;
+            const lastWordReached = levelIndex === lastLevelIndex && wordIndex === lastWordIndex;
+
+            setIsLastWord(lastWordReached);
+            setCorrect(updatedCorrect);
+            setWrong(updatedWrong);
+            setWrongAboveCurrentLevel((prevWrongAboveCurrentLevel) => {
+                if (!frozenWrongAboveCurrentLevel && !isCorrect) {
+                return prevWrongAboveCurrentLevel + 1;
+                } else {
+                return prevWrongAboveCurrentLevel;
+                }
+            });
+            setWordIndex((prevState) => prevState + 1);
+            testWords[levelIndex].words[currentWord] = isCorrect;
+        }
+    }
+
     const nextDecodingWord = async () => {
-        speechRecognition.stopSpeechRecognition();
-        setButtonActive(false);
+
+        setError(null);
         setSpeechResultReceived(false);
         setRetryMessage('');
 
-        try {
-            startCountdown(3);
-            const speechRecognitionPromise = speechRecognition.recognizeSpeech();
-            const [speechReturn] = await Promise.all([speechRecognitionPromise, countdownPromise]);
-            setSpeechResultReceived(true);
-            speechResult = convertNumberToWords(speechReturn).toLowerCase();
-            console.log('Speech result:', speechResult);
-        } catch (error) {
-            console.error('Speech recognition error:', error);
-            return;
-        }
+        startRecording();
 
-        let isCorrect;
-        if (currentWord === 'clique') {
-            isCorrect = speechResult === 'click' || speechResult === 'clique'
-        } else if (currentWord === 'know') {
-            isCorrect = speechResult === 'no' || speechResult === 'know'
-        } else if (currentWord === 'could') {
-            isCorrect = speechResult === 'could' || speechResult === "couldn't"
-        } else if (currentWord === 'meadow') {
-            isCorrect = speechResult === 'metal' || speechResult === 'meadow'
-        } else if (currentWord === 'glisten') {
-            isCorrect = speechResult === 'listen' || speechResult === 'glisten'
-        } else if (currentWord === 'toughen') {
-            isCorrect = speechResult === 'toughen' || speechResult === 'puffin'
-        } else if (currentWord === 'islet') {
-            isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
-        } else if (currentWord === 'leitmotif') {
-            isCorrect = speechResult === 'leitmotiv' || speechResult === 'leitmotif'
-        } else {
-            isCorrect = speechResult === currentWord;
-        }
-        const updatedCorrect = isCorrect ? correct + 1 : correct;
-        const updatedWrong = !isCorrect ? wrong + 1 : wrong;
-        const lastWordReached = levelIndex === lastLevelIndex && wordIndex === lastWordIndex;
-
-        setIsLastWord(lastWordReached);
-        setCorrect(updatedCorrect);
-        setWrong(updatedWrong);
-        setWrongAboveCurrentLevel((prevWrongAboveCurrentLevel) => {
-            if (!frozenWrongAboveCurrentLevel && !isCorrect) {
-            return prevWrongAboveCurrentLevel + 1;
-            } else {
-            return prevWrongAboveCurrentLevel;
-            }
-        });
-        setWordIndex((prevState) => prevState + 1);
-        testWords[levelIndex].words[currentWord] = isCorrect;
     };
+
   
     useEffect(() => {
         setCurrentLevel(testWords[levelIndex].level);
@@ -108,7 +165,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
           setTestWords(testWords);
           navigate('/eidetic');;
         }
-    
+
         if (isLastWord) {
             navigate('/completed');
         }
