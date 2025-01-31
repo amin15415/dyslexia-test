@@ -30,16 +30,7 @@ export default function Welcome() {
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
   
-  // var diagnostic = document.querySelector('.output');
-  // var bg = document.querySelector('html');
-  // var hints = document.querySelector('.hints');
-  
-  // var colorHTML= '';
-  // colors.forEach(function(v, i, a){
-  //   console.log(v, i);
-  //   colorHTML += '<span style="background-color:' + v + ';"> ' + v + ' </span>';
-  // });
-  // hints.innerHTML = 'Tap/click then say a color to change the background color of the app. Try ' + colorHTML + '.';
+ 
   let speechResult;
 
   const handleClick = async function() {
