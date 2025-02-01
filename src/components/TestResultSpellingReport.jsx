@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper';
 import { Box, Typography, Stack } from '@mui/material';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import logo from '../assets/images/gryfn_logo.png';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 
 // const eideticResults = {
@@ -129,7 +131,7 @@ export default function TestResultSpellingReport({contentRef, submissionData}) {
                         <TableCell sx={{border: "solid 1px", py: "5px"}}>
                           <Stack direction="row" sx={{width: "100%"}} justifyContent="space-between">
                             <Typography>{`${index + 1}. ${key} - ${wordsData[key].userInput}`}</Typography>
-                            <Typography>{wordsData[key].correct ? "🗸" : "x" }</Typography>
+                            {wordsData[key].correct ?<CheckCircleOutlineIcon /> : <HighlightOffIcon />}
                           </Stack>
                           
                         </TableCell>
