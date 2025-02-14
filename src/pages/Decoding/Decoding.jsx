@@ -11,18 +11,19 @@ const Decoding = () => {
 
   const audioStream = useRef(null);
   const audioAnalyser = useRef(null);
+  const [userHasSpoken, setUserHasSpoken] = useState(false);
 
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcribingError, setTranscribingError] = useState(null);
 
-  const [count, startCountdown, countdownPromise, countdownFinished] = useCountdown();
+  const [count, startCountdown, stopCountdown, countdownPromise, countdownFinished] = useCountdown();
   const [hasMicPermission, requestMicPermission] = useRequestMicPermission(audioStream);
   const [isStarted, setIsStarted] = useState(false);
   const [buttonActive, setButtonActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [retryMessage, setRetryMessage] = useState('');
   const [speechResultReceived, setSpeechResultReceived] = useState(false);
-  const [nextDecodingWord, currentWord, isLastWord, progress] = useHandleDecodingLogic({ startCountdown, countdownPromise, countdownFinished, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive, setError: setTranscribingError, setIsTranscribing, setIsStarted, audioStream });
+  const [nextDecodingWord, currentWord, isLastWord, progress] = useHandleDecodingLogic({ startCountdown, stopCountdown, countdownPromise, countdownFinished, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive, setError: setTranscribingError, setIsTranscribing, setIsStarted, audioStream, setUserHasSpoken, userHasSpoken });
   const [buttonDisable, setButtonDisable] = useState(false);
 
 
@@ -117,13 +118,13 @@ const Decoding = () => {
                   {transcribingError == errorMessages.EPMTY_TRANSCRIPTION ? 
                     (
                       <div>
-                        <p>{transcribingError}</p>
+                        <p className='custom-p-error'>{transcribingError}</p>
                         <button onClick={nextDecodingWord}>Try Again</button>
                       </div>
                       )
                     : (
                       <div>
-                        <p>It seems your connection to the server has a problem. You can try to recoonect.</p>
+                        <p className='custom-p-error'>It seems your connection to the server has a problem. You can try to recoonect.</p>
                         <button  onClick={nextDecodingWord}>Retry Connection</button>
                       </div>
                       )
@@ -142,7 +143,7 @@ const Decoding = () => {
                 <>
                   <p className='custom-p'>Say this word: </p>
                   <h2 className='custom-h2'>{currentWord}</h2>
-                  <AudioVisualizer isActive={(true)} audioAnalyser={audioAnalyser} countdownValue={count} size="300"/>
+                  <AudioVisualizer isActive={(true)} setUserHasSpoken={setUserHasSpoken} userHasSpoken={userHasSpoken} audioAnalyser={audioAnalyser} countdownValue={count} size="300"/>
                 </>
               )}
         </div>

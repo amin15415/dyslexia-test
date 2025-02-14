@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
@@ -6,16 +6,22 @@ import { useSessionStorage } from './useSessionStorage';
 import { wordHomophones } from '../data/TestWords';
 
 export const useHandleDecodingLogic = ({ startCountdown, 
-                                            countdownPromise,
-                                            countdownFinished,
-                                            setSpeechResultReceived,
-                                            setRetryMessage,
-                                            isPaused,
-                                            setButtonActive, 
-                                            setError, 
-                                            setIsTranscribing,
-                                            setIsStarted,
-                                            audioStream  }) => {
+                                        stopCountdown,
+                                        countdownPromise,
+                                        countdownFinished,
+                                        setSpeechResultReceived,
+                                        setRetryMessage,
+                                        isPaused,
+                                        setButtonActive, 
+                                        setError, 
+                                        setIsTranscribing,
+                                        setIsStarted,
+                                        audioStream,
+                                        setUserHasSpoken,
+                                        userHasSpoken  }) => {
+
+    const isProcessedPreCountdown = useRef(false);
+
     const navigate = useNavigate();
     const [testWords, setTestWords] = useSessionStorage('testWords', '');
     const [wordIndex, setWordIndex] = useSessionStorage('wordIndex', 0);
@@ -58,16 +64,28 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
     // check if the countdown is finished
     useEffect(() => {
-        if (countdownFinished) {
+        if (countdownFinished && !isProcessedPreCountdown.current) {
             stopRecordingAndTranscribe();
             setIsTranscribing(true);
         }
     } , [countdownFinished])
 
+    // check if the user has spoken
+    useEffect(() => {
+        if (!countdownFinished && userHasSpoken) {
+            isProcessedPreCountdown.current = true;
+            stopRecordingAndTranscribe();
+            setIsTranscribing(true);
+            setUserHasSpoken(false);
+            stopCountdown();
+        }
+    } , [userHasSpoken])
+
     // check if transcription is received
     useEffect(() => {
         if (transcription) {
             setIsTranscribing(false);
+            isProcessedPreCountdown.current = false;
             checkTranscription();
         }
     } , [transcription])
@@ -76,6 +94,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
     useEffect(() => {
         if (transcriptionError) {
             setIsTranscribing(false);
+            isProcessedPreCountdown.current = false;
             setButtonActive(true);
             setError(transcriptionError);
             console.error('Speech recognition error:', transcriptionError);
@@ -134,6 +153,8 @@ export const useHandleDecodingLogic = ({ startCountdown,
     }
 
     const nextDecodingWord = async () => {
+        isProcessedPreCountdown.current = false;
+        setUserHasSpoken(false);
 
         setError(null);
         setSpeechResultReceived(false);

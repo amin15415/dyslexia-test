@@ -24,10 +24,16 @@
 
 .custom-h2 {
   margin: 3vh;
-  font-size: 10vh;
+  font-size: clamp(24px, 10vw, 75px);
 }
 
 .custom-p {
   margin: 2vh;
-  font-size: 5vh;
+  /* font-size: 5vh; */
+  font-size: clamp(20px, 5vw, 65px);
+}
+
+.custom-p-error {
+  margin: 2vh;
+  font-size: 3vw;
 }

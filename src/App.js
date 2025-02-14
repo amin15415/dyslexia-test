@@ -11,6 +11,8 @@ const Phonetic = lazy(() => import('./pages/Phonetic/Phonetic'));
 const Survey = lazy(() => import('./pages/Survey/Survey'));
 const Completed = lazy(() => import('./pages/Completed/Completed'));
 
+const Test = lazy(() => import('./components/TestResultInterpretiveReport'));
+
 function App() {
   const location = useLocation();
   const [isHome, setIsHome] = useState(location.pathname === '/');
@@ -41,6 +43,9 @@ function App() {
                 <Route path="/phonetic" element={<Phonetic />} />
                 <Route path="/survey" element={<Survey />} />
                 <Route path="/completed" element={<Completed />} />
+
+                <Route path="/test" element={<Test />} />
+                
 
               </Routes>
             </Suspense>

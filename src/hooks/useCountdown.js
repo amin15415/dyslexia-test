@@ -26,6 +26,12 @@ export const useCountdown = (interval = 1000) => {
     setCountdownFinished(false);
   };
 
+  
+  const stopCountdown = () => {
+    setCount(null);
+    setCountdownFinished(true);
+  };
+
   const countdownPromise = () => {
     return new Promise((resolve) => {
       if (countdownFinished) {
@@ -40,5 +46,5 @@ export const useCountdown = (interval = 1000) => {
     });
   };
 
-  return [count, startCountdown, countdownPromise, countdownFinished];
+  return [count, startCountdown, stopCountdown, countdownPromise, countdownFinished];
 }

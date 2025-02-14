@@ -114,3 +114,8 @@ main {
   align-items: center;
   min-height: 100vh;
 }
+
+.custom-p-error {
+  margin: 2vh;
+  font-size: 2vw;
+}

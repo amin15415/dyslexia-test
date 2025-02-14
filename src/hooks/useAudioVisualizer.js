@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 
-export const useAudioVisualizer = (canvasRef, countdownValue, audioAnalyser) => {
+export const useAudioVisualizer = (canvasRef, countdownValue, audioAnalyser, setUserHasSpoken, userHasSpoken) => {
   // const [analyser, setAnalyser] = useState(null);
   const animationFrameRef = useRef(null);
+  const hasSpoken = useRef(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const draw = () => {
@@ -12,6 +13,16 @@ export const useAudioVisualizer = (canvasRef, countdownValue, audioAnalyser) => 
     const dataArray = new Uint8Array(audioAnalyser.current.frequencyBinCount);
     audioAnalyser.current.getByteFrequencyData(dataArray);
   
+    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+    if (average > 25) hasSpoken.current = true;
+    if (average < 8 && hasSpoken.current && countdownValue < 3) {
+      console.log("Silence detected after user has spoken");
+      setTimeout(()=> {setUserHasSpoken(true);}, 200)
+      
+      hasSpoken.current = false;
+    }
+    
+
     canvasContext.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   
     const radius = Math.min(canvasRef.current.width, canvasRef.current.height) / 2;

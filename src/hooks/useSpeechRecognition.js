@@ -26,7 +26,8 @@ export const useSpeechRecognition = (stream) => {
           numberOfAudioChannels: 1,
           desiredSampRate: 16000,
           bufferSize: 16384,
-          disableLogs: true // Disable logging
+          disableLogs: true, // Disable logging
+          timeSlice: 1000,
         });
   
         recorder.current.startRecording();

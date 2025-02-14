@@ -56,6 +56,8 @@
   margin: 20px;
 }
 button:disabled {
-  display: none;
+  /* display: none; */
+  background-color: #707070; /* Grey */
+  cursor: default;
   margin: 0px;
 }

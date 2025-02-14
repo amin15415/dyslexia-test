@@ -8,7 +8,7 @@ import html2pdf from 'html2pdf.js';
     // Options for html2pdf.js
     const options = {
       margin: 10, 
-      filename: `${name} - Gryfn AI Dyslexia ${reportName} - ${new Date().toLocaleDateString('en-US')}.pdf`,
+      filename: `${name} -  ${reportName} - ${new Date().toLocaleDateString('en-US')}.pdf`,
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2, dpi: 300, letterRendering: true },
       jsPDF: { unit: 'mm', format: size , orientation: 'portrait' },

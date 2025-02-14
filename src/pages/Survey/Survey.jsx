@@ -4,12 +4,17 @@ import { createClient } from '@supabase/supabase-js';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { getSkillValue } from "../../utils/scoring";
 import TestResultReports from '../../components/TestResultReports';
+import { Typography, Stack } from '@mui/material';
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
   const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+  
+  const [isSubmitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+
   const [activeQuestion, setActiveQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showSubmitButton, setShowSubmitButton] = useState(false);
@@ -23,6 +28,7 @@ function Survey() {
   const [testWords] = useSessionStorage('testWords', '');
   const [eideticResults] = useSessionStorage('eideticResults', '');
   const [phoneticResults] = useSessionStorage('phoneticResults', '');
+
   const emailInputRef = useRef(null);
   const [eideticSkillValue, setEideticSkillValue] = useState(null);
   const [phoneticSkillValue, setPhoneticSkillValue] = useState(null);
@@ -94,6 +100,8 @@ function Survey() {
   };
 
   const submitAnswers = async () => {
+    setSubmitError(null);
+    setSubmitting(true);
     // Prepare the data for submission
     const newSubmissionData = {
       "name": answers['q1'],
@@ -119,14 +127,17 @@ function Survey() {
     // Upload data to Supabase
     try {
       const { data, error } = await supabase.from('results').insert([newSubmissionData]);
-      if (error) {
-          throw error;
-      }
+      if (error) throw error;
+      
+      setSubmitting(false);
       console.log('Data uploaded successfully:', data);
+      setSubmitted(true);
     } catch (error) {
+        setSubmitting(false);
+        setSubmitError("Sending data has failed, please try again");
         console.error('Error uploading data:', error);
     }
-      setSubmitted(true);
+      
   };
 
   const goForward = () => {
@@ -183,7 +194,17 @@ function Survey() {
       <div className="survey">
         {showSubmitButton ? (
           <div className="submit-button-container">
-            <button onClick={submitAnswers}>Submit</button>
+            { !submitError &&
+              <button disabled={isSubmitting} onClick={submitAnswers}>{isSubmitting ? "Sending data..." : "Submit"}</button>
+            }
+            { submitError &&
+              <>
+                <div className='custom-p-error'>{submitError}</div>
+                <button onClick={submitAnswers}>Submit Again</button>
+              </>
+              
+            }
+            
           </div>
         ) : (
           questions.map((q, index) => (
