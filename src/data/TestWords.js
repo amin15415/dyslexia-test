@@ -27,6 +27,27 @@ export const adtWords = [
     { level: '9-12', words: { 'zealous': null, 'clique': null, 'atrocious': null, 'catastrophe': null, 'liquidate': null } },
   ];
 
+  export const testWordsGradeNumber = {
+    'K': 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7-8': 7,
+    '9-12': 9,
+    'JRH': 7,
+    'HIS': 9,
+    '1L': 1,
+    '1U': 1,
+    'LOD': 10,
+    'UPD': 10,
+    'MAS': 11,
+    'DOC': 12,
+    'POD': 13
+  };
+
   export const wordHomophones = {
     "father": [],
     "could": ["couldn't"],
@@ -168,4 +189,4 @@ export const adtWords = [
     "atrocious": [],
     "catastrophe": [],
     "liquidate": []
-  }
+  };

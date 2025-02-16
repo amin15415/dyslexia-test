@@ -12,7 +12,7 @@ import logo from '../assets/images/gryfn_logo.png';
 import LessEqualSign from '../assets/images/less-equal-sign';
 import GreatEqualSign from '../assets/images/greater-equal-sign';
 import {readingScorePercentileList} from '../data/readingScorePercentileList';
-
+import { testWordsGradeNumber } from '../data/TestWords';
 
 
 const percentiles = [
@@ -69,14 +69,11 @@ function getDiffTextAndColor(diff, pivotPoint) {
 
 export default function TestResultInterpretiveReport({submissionData}) {
 
-    const {name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } = submissionData;
+    const {name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } =sampleSubmissionData //submissionData;
 
     const getGradeNumber = (levelName) => {
-        if (test_words && test_words.length > 0 ) {
-            for (let index in test_words) {
-                if (test_words[index].level == levelName) return (Number(index) + 1);
-            }
-        }
+        if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
+        else return -1;
     }
 
     const getChildAnalysisOutcomeWord = (gradeDifference, sightWordPercentile, phoneticPercentile) => {
@@ -152,7 +149,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
         return theScore;
     }
 
-    const getEducationNumber = (education) => {
+    const getEducationNumber = (education, isForCalculation) => {
         const educationLevels = {
             'Kindergarten': 0 ,
             '1st grade': 1,
@@ -161,12 +158,13 @@ export default function TestResultInterpretiveReport({submissionData}) {
             '4th grade': 4,
             '5th grade': 5,
             '6th grade': 6,
-            '7th grade or 8th grade': 7,
-            'High School': 8,
-            'College': 9,
-            'Graduate School' : 10,
-            'Doctorate' : 11,
-            'Post-Doctorate': 12
+            '7th grade': 7,
+            '8th grade' : isForCalculation ? 8 : 7,
+            'High School': 9,
+            'College': 10,
+            'Graduate School' : 11,
+            'Doctorate' : 12,
+            'Post-Doctorate': 13
         };
         
         if (educationLevels[education]) return educationLevels[education];
@@ -181,11 +179,12 @@ export default function TestResultInterpretiveReport({submissionData}) {
         return 0;
     }
 
-    const getReadingScorePercentile = (rawScore, gradeNumber) => {
+    const getReadingScorePercentile = (rawScore, educationGrade) => {
+        const gradeNumber = getEducationNumber(educationGrade, true);
         const rawScoreText = rawScore.toString();
         const gradeNumberText = gradeNumber.toString();
         let result = -1;
-        if (gradeNumber <= 8 && readingScorePercentileList[gradeNumberText] && readingScorePercentileList[gradeNumberText][rawScoreText])
+        if (gradeNumber <= 8 && gradeNumber > -1 && readingScorePercentileList[gradeNumberText] && readingScorePercentileList[gradeNumberText][rawScoreText])
             result = readingScorePercentileList[gradeNumberText][rawScoreText].percentile;
 
         return result;
@@ -197,7 +196,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
     const sightWordPercentile = getResultRate(eidetic_result, eidetic_correct);
     const phoneticPercentile = getResultRate(phonetic_result, phonetic_correct);
     const gradeDifference = gradeNumber - educationNumber;
-    const readingScorePercentile = getReadingScorePercentile(reading_score, educationNumber);
+    const readingScorePercentile = getReadingScorePercentile(reading_score, education);
     const {sightWordAnalysis, phoneticAnalysis} = 
         test == "ADT" 
             ? getAdultAnalysisOutcomeWord(gradeDifference, sightWordPercentile, phoneticPercentile)
@@ -258,7 +257,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
                             <TableRow>
                                 <TableCell sx={{bgcolor: "#909090"}}>
                                     <Stack>
-                                        <Typography>{`DESD Grade Number: ${gradeNumber}`}</Typography>
+                                        <Typography>{`DESD Grade Number: ${gradeNumber > -1 ? gradeNumber : "Not Recognized"}`}</Typography>
                                         <Typography>{`Actual Grade Placement: ${educationNumber}`}</Typography>
                                         <Typography>{`Difference (D): ${gradeDifference}`}</Typography>
                                         <Typography>(D = DESD Grade Number - Actual Grade Placement)</Typography>
@@ -425,12 +424,16 @@ export default function TestResultInterpretiveReport({submissionData}) {
                     { rankOfSeverities.map((severityTitle, index) => { 
                         let hasPhonetic = false;
                         let hasSight = false;
+                        let hasBoth = false;
                         if (severityTitle == sightWordAnalysis) hasSight = true;
                         if (severityTitle == phoneticAnalysis) hasPhonetic = true;
+                        if (hasSight && hasPhonetic) hasBoth = true;
 
                         return (
                             <TableRow key={index}>
-                                <TableCell sx={{border: hasPhonetic ? "solid 2px #002cf1" : hasSight ? "solid 2px #04f100" : "solid 1px", py: "5px"}}>{severityTitle}</TableCell>
+                                { !hasBoth && <TableCell sx={{border: hasPhonetic ? "solid 2px #002cf1" : hasSight ? "solid 2px #04f100" : "solid 1px", py: "5px"}}>{severityTitle}</TableCell> }
+                                { hasBoth && <TableCell sx={{ border: "solid 2px #002cf1", p: 0}}><Stack sx={{border: "solid 2px #04f100", p: "5px" }}>{severityTitle}</Stack></TableCell> }
+
                                 { differenceEstimatedRanges.map((rangeArray, index2) => { 
                                     let theText = "---";
                                     if (rangeArray[index] !== null) theText = rangeArray[index] + "%";

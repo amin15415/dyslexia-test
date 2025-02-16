@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import { Box, Typography, Stack } from '@mui/material';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import logo from '../assets/images/gryfn_logo.png';
-
+import { testWordsGradeNumber } from '../data/TestWords';
 
 const sampleData = [
     {
@@ -124,11 +124,8 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
     // const testWords = sampleData;
 
     const getGradeNumber = (levelName) => {
-        if (test_words && test_words.length > 0 ) {
-            for (let index in test_words) {
-                if (test_words[index].level == levelName) return (Number(index) + 1);
-            }
-        }
+        if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
+        else return -1;
     }
 
 
@@ -199,7 +196,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
               >
                 {/* <TableCell colSpan={1}>{`Reading Raw Score: ${reading_level}`}</TableCell> */}
                 <TableCell colSpan={1}>{`DESD Grade Level: ${reading_level ? reading_level : "Not Available"}`}</TableCell>
-                <TableCell colSpan={1}>{`DESD Grade Number: ${getGradeNumber(reading_level) ? getGradeNumber(reading_level) : "Not Recognized"}`}</TableCell>
+                <TableCell colSpan={1}>{`DESD Grade Number: ${getGradeNumber(reading_level) > -1 ? getGradeNumber(reading_level) : "Not Recognized"}`}</TableCell>
               </TableRow>
           </TableBody>
         </Table>
