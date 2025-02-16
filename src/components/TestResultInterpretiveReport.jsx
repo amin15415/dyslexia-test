@@ -69,7 +69,7 @@ function getDiffTextAndColor(diff, pivotPoint) {
 
 export default function TestResultInterpretiveReport({submissionData}) {
 
-    const {name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } =sampleSubmissionData //submissionData;
+    const {name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } = submissionData;
 
     const getGradeNumber = (levelName) => {
         if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
