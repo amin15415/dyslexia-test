@@ -24,6 +24,8 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
     const navigate = useNavigate();
     const [testWords, setTestWords] = useSessionStorage('testWords', '');
+    const [speechWords, setSpeechWords] = useSessionStorage('speechWords', {});
+
     const [wordIndex, setWordIndex] = useSessionStorage('wordIndex', 0);
     const [levelIndex, setLevelIndex] = useSessionStorage('levelIndex', 0);
     const [correct, setCorrect] = useSessionStorage('correct', 0);
@@ -113,7 +115,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
             let isCorrect;
             isCorrect = speechResult.includes(currentWord) || wordHomophones[currentWord] && wordHomophones[currentWord].includes(speechResult); 
-            console.log('is correct: ' + isCorrect)
+            console.log('is correct: ' + isCorrect);
             // if (currentWord === 'clique') {
             //     isCorrect = speechResult === 'click' || speechResult === 'clique'
             // } else if (currentWord === 'know') {
@@ -149,6 +151,11 @@ export const useHandleDecodingLogic = ({ startCountdown,
             });
             setWordIndex((prevState) => prevState + 1);
             testWords[levelIndex].words[currentWord] = isCorrect;
+            // set the speech recognized word in a parallel data
+            if (!speechWords[levelIndex]) speechWords[levelIndex] = {};
+            if (!speechWords[levelIndex].words) speechWords[levelIndex].words = {};
+            if (!speechWords[levelIndex].words[currentWord]) speechWords[levelIndex].words[currentWord] = {};
+            speechWords[levelIndex].words[currentWord] = {isCorrect: isCorrect , speech: speechResult };
         }
     }
 
@@ -184,13 +191,14 @@ export const useHandleDecodingLogic = ({ startCountdown,
     
         if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length && wordIndex >= words.length) {
           setTestWords(testWords);
-          navigate('/eidetic');;
+          setSpeechWords(speechWords);
+          navigate('/eidetic');
         }
 
         if (isLastWord) {
             navigate('/completed');
         }
-      }, [correct, levelIndex, isLastWord, navigate, wrongAboveCurrentLevel, wordIndex, wrong, words, testWords, setTestWords, setFrozenWrongAboveCurrentLevel, setReadingLevel, setWrongAboveCurrentLevel]);
+      }, [correct, levelIndex, isLastWord, navigate, wrongAboveCurrentLevel, wordIndex, wrong, words, testWords, speechWords, setTestWords, setFrozenWrongAboveCurrentLevel, setReadingLevel, setWrongAboveCurrentLevel]);
     
       useEffect(() => {
         handleLogic();

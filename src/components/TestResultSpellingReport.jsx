@@ -48,7 +48,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 export default function TestResultSpellingReport({contentRef, submissionData}) {
 
 
-    const {name, age, education, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result } = submissionData;
+    const {first_name, last_name, age, education, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result } = submissionData;
 
     // const [eideticResults] = useSessionStorage('eideticResults', null);
     // const [phoneticResults] = useSessionStorage('phoneticResults', null);
@@ -66,7 +66,7 @@ export default function TestResultSpellingReport({contentRef, submissionData}) {
 
 
     return (
-        <div ref={contentRef}>
+        <div ref={contentRef} className="page">
 
         <Table sx={{ minWidth: "1000px", border: "solid 1px" }} aria-label="Result Table">
           <TableHead>
@@ -82,7 +82,7 @@ export default function TestResultSpellingReport({contentRef, submissionData}) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={2} align='left'>Test Taker's Name: {name}</TableCell>
+              <TableCell colSpan={2} align='left'>Test Taker's Name: {first_name + ' ' + last_name}</TableCell>
               <TableCell colSpan={2} align='left'>Age: {age}</TableCell>
             </TableRow>
             <TableRow>

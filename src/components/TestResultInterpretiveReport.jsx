@@ -67,9 +67,9 @@ function getDiffTextAndColor(diff, pivotPoint) {
     return {text: theText, color: backColor};
 }
 
-export default function TestResultInterpretiveReport({submissionData}) {
+export default function TestResultInterpretiveReport({submissionData, contentRef}) {
 
-    const {name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } = submissionData;
+    const {first_name, last_name, age, education, test_words, reading_level, eidetic_result, phonetic_correct, eidetic_correct, phonetic_result, test } = submissionData;
 
     const getGradeNumber = (levelName) => {
         if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
@@ -203,7 +203,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
             : getChildAnalysisOutcomeWord(gradeDifference, sightWordPercentile, phoneticPercentile);
 
     return (
-        <div>
+        <div ref={contentRef}>
         <Table   sx={{ minWidth: "1000px", border: "solid 1px" }} aria-label="Result Interpretive Table">
           <TableHead>
             <TableRow>
@@ -219,7 +219,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={2} align='left'>Test Taker's Name: {name}</TableCell>
+              <TableCell colSpan={2} align='left'>Test Taker's Name: {first_name + ' ' + last_name}</TableCell>
               <TableCell colSpan={2} align='left'>Age: {age}</TableCell>
             </TableRow>
             <TableRow>
@@ -393,7 +393,7 @@ export default function TestResultInterpretiveReport({submissionData}) {
   const AdultTestTable = ({ sightWordAnalysis, phoneticAnalysis }) => {
 
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} >
             <Typography>Screening Chart</Typography>
             <Table>
                 <TableHead>
@@ -457,235 +457,3 @@ export default function TestResultInterpretiveReport({submissionData}) {
   };
 
 
-  const sampleSubmissionData = 
-    {
-        "name": "ami omi",
-        "age": "33",
-        "email": "adf@book.com",
-        "education": "7th grade or 8th grade",
-        "learning_disability": false,
-        "last_eye_exam": null,
-        "eidetic_correct": 2,
-        "phonetic_correct": 4,
-        "reading_level": "1",
-        "reading_score": 0,
-        "test": "ADT",
-        "test_words": [
-            {
-                "level": "1",
-                "words": {
-                    "father": true,
-                    "could": true,
-                    "know": true,
-                    "money": true,
-                    "call": true,
-                    "funny": true,
-                    "there": true
-                }
-            },
-            {
-                "level": "2",
-                "words": {
-                    "does": false,
-                    "listen": false,
-                    "city": false,
-                    "animal": false,
-                    "light": false,
-                    "uncle": false,
-                    "rolled": true
-                }
-            },
-            {
-                "level": "3",
-                "words": {
-                    "calf": false,
-                    "enough": false,
-                    "meadow": false,
-                    "heavy": false,
-                    "business": false,
-                    "believe": false,
-                    "laugh": false
-                }
-            },
-            {
-                "level": "4",
-                "words": {
-                    "delight": null,
-                    "familiar": null,
-                    "rough": null,
-                    "glisten": null,
-                    "league": null,
-                    "spectacles": null,
-                    "decorate": null
-                }
-            },
-            {
-                "level": "5",
-                "words": {
-                    "cautious": null,
-                    "ancient": null,
-                    "toughen": null,
-                    "height": null,
-                    "doubt": null,
-                    "position": null,
-                    "contagious": null
-                }
-            },
-            {
-                "level": "6",
-                "words": {
-                    "conceited": null,
-                    "foreign": null,
-                    "knapsack": null,
-                    "decisions": null,
-                    "allegiance": null,
-                    "leisure": null,
-                    "deny": null
-                }
-            },
-            {
-                "level": "JRH",
-                "words": {
-                    "dominion": null,
-                    "intrigue": null,
-                    "aeronautic": null,
-                    "trudge": null,
-                    "tomorrow": null,
-                    "graciously": null,
-                    "bridge": null
-                }
-            },
-            {
-                "level": "HIS",
-                "words": {
-                    "pollute": null,
-                    "exonerate": null,
-                    "risible": null,
-                    "regime": null,
-                    "endeavor": null,
-                    "islet": null,
-                    "heinous": null
-                }
-            },
-            {
-                "level": "LOD",
-                "words": {
-                    "parliament": null,
-                    "gnostic": null,
-                    "mannequin": null,
-                    "homologous": null,
-                    "prerequisite": null,
-                    "rhapsody": null,
-                    "euphony": null
-                }
-            },
-            {
-                "level": "UPD",
-                "words": {
-                    "litigious": null,
-                    "tincture": null,
-                    "oligarchy": null,
-                    "inefficacious": null,
-                    "demagogue": null,
-                    "parturition": null,
-                    "mimicry": null
-                }
-            },
-            {
-                "level": "MAS",
-                "words": {
-                    "homeopathy": null,
-                    "evanesce": null,
-                    "geodesy": null,
-                    "coulomb": null,
-                    "zoophyte": null,
-                    "execrable": null,
-                    "triptych": null
-                }
-            },
-            {
-                "level": "DOC",
-                "words": {
-                    "sobriquet": null,
-                    "deliquesce": null,
-                    "colloquy": null,
-                    "vitiate": null,
-                    "sycophant": null,
-                    "intermezzo": null,
-                    "dehiscence": null
-                }
-            },
-            {
-                "level": "POD",
-                "words": {
-                    "exiguous": null,
-                    "malapropos": null,
-                    "ytterbium": null,
-                    "monocotyledon": null,
-                    "leitmotif": null,
-                    "egregious": null,
-                    "legerdemain": null
-                }
-            }
-        ],
-        "eidetic_result": {
-            "rolled": {
-                "correct": false,
-                "userInput": "road"
-            },
-            "father": {
-                "correct": true,
-                "userInput": "father"
-            },
-            "could": {
-                "correct": false,
-                "userInput": "dfioj"
-            },
-            "know": {
-                "correct": false,
-                "userInput": "now"
-            },
-            "money": {
-                "correct": false,
-                "userInput": "moni"
-            },
-            "call": {
-                "correct": true,
-                "userInput": "call"
-            },
-            "funny": {
-                "correct": false,
-                "userInput": "fie"
-            }
-        },
-        "phonetic_result": {
-            "calf": {
-                "correct": true,
-                "userInput": "caf"
-            },
-            "enough": {
-                "correct": true,
-                "userInput": "enaf"
-            },
-            "meadow": {
-                "correct": false,
-                "userInput": "med"
-            },
-            "heavy": {
-                "correct": false,
-                "userInput": "haa"
-            },
-            "business": {
-                "correct": false,
-                "userInput": "visl"
-            },
-            "believe": {
-                "correct": true,
-                "userInput": "biliv"
-            },
-            "laugh": {
-                "correct": true,
-                "userInput": "laf"
-            }
-        }
-    }

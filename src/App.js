@@ -11,7 +11,7 @@ const Phonetic = lazy(() => import('./pages/Phonetic/Phonetic'));
 const Survey = lazy(() => import('./pages/Survey/Survey'));
 const Completed = lazy(() => import('./pages/Completed/Completed'));
 
-const Test = lazy(() => import('./components/TestResultInterpretiveReport'));
+const Test = lazy(() => import('./components/TestResultReports'));
 
 function App() {
   const location = useLocation();

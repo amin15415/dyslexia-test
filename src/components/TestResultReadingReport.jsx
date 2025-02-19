@@ -117,7 +117,7 @@ const sampleData = [
 
 export default function TestResultReadingReport({contentRef, submissionData}) {
 
-    const {name, age, education, test_words, reading_level } = submissionData;
+    const {first_name, last_name, age, education, test_words, reading_level } = submissionData;
     // const [testWords] = useSessionStorage('testWords', '');
     // const [readingLevel] = useSessionStorage('readingLevel', null);
 
@@ -130,7 +130,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
 
 
     return (
-        <div ref={contentRef}>
+        <div ref={contentRef} >
         <Table   sx={{ minWidth: "1000px", border: "solid 1px" }} aria-label="Result Table">
           <TableHead>
             <TableRow>
@@ -146,7 +146,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={2} align='left'>Test Taker's Name: {name}</TableCell>
+              <TableCell colSpan={2} align='left'>Test Taker's Name: {first_name + ' ' + last_name}</TableCell>
               <TableCell colSpan={2} align='left'>Age: {age}</TableCell>
             </TableRow>
             <TableRow>
@@ -165,7 +165,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                 { test_words && test_words.length > 0 && test_words.map((wordData, index) => {
                     if (index < 3)
                     return (
-                        <TableCell>
+                        <TableCell key={index}>
                             <ReadTestTable wordsData={wordData} level={index + 1} />
                         </TableCell>
                     )

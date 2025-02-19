@@ -86,8 +86,11 @@ const Phonetic = () => {
               placeholder="Enter spelling"
               value={userInputs[currentItem]}
               spellCheck={false}
-              autoFocus
+              autoCapitalize="none"
+              autoComplete="off"
               autoCorrect="off"
+              inputMode="none"
+              autoFocus
               onChange={(e) => {
                 const newInputs = [...userInputs];
                 newInputs[currentItem] = e.target.value;

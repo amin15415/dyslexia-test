@@ -26,6 +26,8 @@ function Survey() {
   const [readingLevel] = useSessionStorage('readingLevel', '');
   const [testName] = useSessionStorage('testName', '');
   const [testWords] = useSessionStorage('testWords', '');
+  const [speechWords] = useSessionStorage('speechWords', '');
+
   const [eideticResults] = useSessionStorage('eideticResults', '');
   const [phoneticResults] = useSessionStorage('phoneticResults', '');
 
@@ -37,11 +39,11 @@ function Survey() {
     {
       id: 'q1',
       question: "Hello, what's your name?",
-      type: 'text',
+      type: 'fullName',
     },
     {
       id: 'q2',
-      question: () => `Nice to meet you, ${answers['q1'] || ''}, where can we send your results/get in touch?`,
+      question: () => `Nice to meet you, ${answers['q11'] || ''}, where can we send your results/get in touch?`,
       type: 'email',
     },
     {
@@ -105,7 +107,8 @@ function Survey() {
     setSubmitting(true);
     // Prepare the data for submission
     const newSubmissionData = {
-      "name": answers['q1'],
+      "first_name": answers['q11'],
+      "last_name": answers['q12'],
       "age" : userAge,
       "email": answers['q2'],
       "education": answers['q3'],
@@ -116,6 +119,7 @@ function Survey() {
       "reading_level": readingLevel,
       "test": testName,
       "test_words": testWords,
+      "speech_words": speechWords,
       "eidetic_result": eideticResults,
       "phonetic_result": phoneticResults
     };
@@ -156,7 +160,7 @@ function Survey() {
   };
 
   const isValidInput = (questionId) => {
-  const answer = answers[questionId];
+  const answer = answers[questionId] || (answers[questionId + '1'] && answers[questionId + '2']);
   
   if (!answer) {
       return false;
@@ -282,6 +286,30 @@ function Survey() {
                     key={`${q.id}-input`}
                     placeholder='Name'
                   />
+                )}
+                {['fullName'].includes(q.type) && (
+                  <Stack direction="row" spacing={2}>
+                    <input
+                      className="input"
+                      type={q.type}
+                      value={answers[q.id + '1'] || ''}
+                      autoFocus
+                      onKeyDown={handleKeyDown}
+                      onChange={(e) => handleChange(e, q.id + '1')}
+                      key={`${q.id}-input-last`}
+                      placeholder='First Name'
+                    />
+                    <input
+                      className="input"
+                      type={q.type}
+                      value={answers[q.id + '2'] || ''}
+                      onKeyDown={handleKeyDown}
+                      onChange={(e) => handleChange(e, q.id + '2')}
+                      key={`${q.id}-input-first`}
+                      placeholder='Last Name'
+                    />
+                  </Stack>
+
                 )}
                 {['email'].includes(q.type) && (
                   <input
