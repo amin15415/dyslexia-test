@@ -107,7 +107,7 @@ const Phonetic = () => {
   return (
     <div className="encoding-container" key={currentItem}>
       { isTutorial &&
-        <Stack justifyContent="center" alignItems="center" spacing={2}>
+        <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
           <Typography variant='h4'>Phonetic Test Tutorial</Typography>
           { animationPhase == 0 &&
             <button onClick={() => setAnimationPhase(1)}>
@@ -174,7 +174,7 @@ const Phonetic = () => {
               autoCorrect="off"
               autoComplete="off"
               autoCapitalize="none"
-              inputMode="none"
+              // inputMode="none"
               autoFocus
               onChange={(e) => setSampleInputValue(e.target.value)}
             />
@@ -219,7 +219,7 @@ const Phonetic = () => {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
-                inputMode="none"
+                // inputMode="none"
                 autoFocus
                 onChange={(e) => {
                   const newInputs = [...userInputs];

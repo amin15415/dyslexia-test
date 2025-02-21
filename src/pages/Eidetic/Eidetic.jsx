@@ -114,7 +114,7 @@ const Eidetic = () => {
             ) : (
               <>
                 { isTutorial &&
-                <Stack justifyContent="center" alignItems="center" spacing={2}>
+                <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
                   <Typography variant='h4'>Spelling Test Tutorial</Typography>
 
                   { (!isReadyToStart || animationPhase == 0) &&
@@ -201,7 +201,7 @@ const Eidetic = () => {
                       autoCorrect="off"
                       autoComplete="off"
                       autoCapitalize="none"
-                      inputMode="none"
+                      // inputMode="none"
                       autoFocus
                       onChange={(e) => setSampleInputValue(e.target.value)}
                     />
@@ -236,7 +236,7 @@ const Eidetic = () => {
                         autoCorrect="off"
                         autoComplete="off"
                         autoCapitalize="none"
-                        inputMode="none"
+                        // inputMode="none"
                         autoFocus
                         onChange={(e) => {
                           const newInputs = [...userInputs];
