@@ -101,6 +101,23 @@ const Eidetic = () => {
       }
     };
 
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+          event.preventDefault();
+          event.stopPropagation();
+          if (isTutorial && animationPhase > 4) setIsTutorial(false);
+      }
+    }
+
+    function neutralizeSuggestion() {
+      const element1 = document.getElementById('tutorialInput');
+      const element2 = document.getElementById('testInput');
+      if (element1)
+        element1.setAttribute('type', 'text');
+      if (element2)
+        element2.setAttribute('type', 'text');
+    }
+
     return (
         <div className='encoding-container' key={currentItem}>
           <div>
@@ -194,15 +211,18 @@ const Eidetic = () => {
                     onComplete={() => setIsAnimating(false)}
                   >
                     <input
-                      type="text"
+                      type={isAnimating ? "text" : "password"}
+                      id="tutorialInput"
                       placeholder="Enter Spelling"
                       value={sampleInputValue}
-                      spellCheck={false}
+                      spellCheck="false"
                       autoCorrect="off"
                       autoComplete="off"
                       autoCapitalize="none"
+                      onInput={neutralizeSuggestion}
+                      onKeyDown={handleKeyDown}
                       // inputMode="none"
-                      autoFocus
+                      // autoFocus
                       onChange={(e) => setSampleInputValue(e.target.value)}
                     />
                   </ReactTyped>
@@ -229,13 +249,15 @@ const Eidetic = () => {
                     <audio src={audioPaths[currentItem]} controls autoPlay={currentItem !== 0} />
                     <div>
                       <input
-                        type="text"
+                        type="password"
+                        id="testInput"
                         placeholder="Enter spelling"
                         value={userInputs[currentItem]}
-                        spellCheck={false}
+                        spellCheck="false"
                         autoCorrect="off"
                         autoComplete="off"
                         autoCapitalize="none"
+                        onInput={neutralizeSuggestion}
                         // inputMode="none"
                         autoFocus
                         onChange={(e) => {

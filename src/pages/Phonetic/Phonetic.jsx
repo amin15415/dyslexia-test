@@ -5,7 +5,7 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import "./Phonetic.css";
-import { Stack, Typography } from "@mui/material";
+import { Input, Stack, Typography } from "@mui/material";
 
 const Phonetic = () => {
   const navigate = useNavigate();
@@ -44,6 +44,9 @@ const Phonetic = () => {
   const instructionAudioRef2 = useRef();
   const playButtonRef = useRef();
 
+  const scrollRef = useRef();
+
+
   useEffect(() => {
     // if first phase is in place the audio for first instruction should be started
     if (animationPhase == 1) { instructionAudioRef1.current.play(); }
@@ -54,9 +57,12 @@ const Phonetic = () => {
     }
     if (animationPhase == 3) {
       instructionAudioRef2.current.play();
+      instructionAudioRef2.current.scrollIntoView();
       // instruction2Typed.start(); 
     }
-    if (animationPhase == 4)  inputTyped.start()
+    if (animationPhase == 4) inputTyped.start();
+
+    if (animationPhase == 5) scrollRef.current.scrollIntoView()
   }, [animationPhase]);
 
   useEffect(() => {
@@ -104,8 +110,26 @@ const Phonetic = () => {
     }
   };
 
+  function neutralizeSuggestion() {
+    const element1 = document.getElementById('tutorialInput');
+    const element2 = document.getElementById('testInput');
+    if (element1)
+      element1.setAttribute('type', 'text');
+    if (element2)
+      element2.setAttribute('type', 'text');
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+        if (isTutorial && animationPhase > 4) setIsTutorial(false);
+    }
+  }
+ 
   return (
     <div className="encoding-container" key={currentItem}>
+
       { isTutorial &&
         <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
           <Typography variant='h4'>Phonetic Test Tutorial</Typography>
@@ -145,6 +169,7 @@ const Phonetic = () => {
           }
           <ReactTyped
                 typedRef={setInstruction2Typed}
+                preStringTyped={() => scrollRef.current.scrollIntoView()}
                 strings={['You can replay this word by pressing the play button.<br> Next you should write this word exactly the way it sounds. You do not need to worry about the correct spelling. <br> For example, the word "laugh" can be spelled "laf". <br> Please spell the word "laugh" as demonstrated']}
                 typeSpeed={30}
                 className='tutorial-text'
@@ -153,6 +178,7 @@ const Phonetic = () => {
                 onStart={() => setIsAnimating(true)}
                 onComplete={() => setIsAnimating(false)}
           />
+          <div ref={scrollRef} />
           <audio ref={instructionAudioRef2} src={instruction2Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
           
           { animationPhase > 2 &&
@@ -167,17 +193,21 @@ const Phonetic = () => {
             onComplete={() => setIsAnimating(false)}
           >
             <input
-              type="text"
+              type={isAnimating ? "text" : "password"}
+              id="tutorialInput"
               placeholder="Enter Spelling"
               value={sampleInputValue}
-              spellCheck={false}
+              spellCheck="false"
               autoCorrect="off"
               autoComplete="off"
               autoCapitalize="none"
+              onInput={neutralizeSuggestion}
+              onKeyDown={handleKeyDown}
               // inputMode="none"
-              autoFocus
+              // autoFocus
               onChange={(e) => setSampleInputValue(e.target.value)}
             />
+
           </ReactTyped>
           }
           { animationPhase > 4 &&
@@ -212,13 +242,15 @@ const Phonetic = () => {
             />
             <div>
               <input
-                type="text"
+                type="password"
+                id="testInput"
                 placeholder="Enter spelling"
                 value={userInputs[currentItem]}
-                spellCheck={false}
+                spellCheck="false"
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect="off"
+                onInput={neutralizeSuggestion}
                 // inputMode="none"
                 autoFocus
                 onChange={(e) => {

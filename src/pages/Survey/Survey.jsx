@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { getSkillValue } from "../../utils/scoring";
 import TestResultReports from '../../components/TestResultReports';
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Grid, Grid2 } from '@mui/material';
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
@@ -288,27 +288,32 @@ function Survey() {
                   />
                 )}
                 {['fullName'].includes(q.type) && (
-                  <Stack direction="row" spacing={2}>
-                    <input
-                      className="input"
-                      type={q.type}
-                      value={answers[q.id + '1'] || ''}
-                      autoFocus
-                      onKeyDown={handleKeyDown}
-                      onChange={(e) => handleChange(e, q.id + '1')}
-                      key={`${q.id}-input-last`}
-                      placeholder='First Name'
-                    />
-                    <input
-                      className="input"
-                      type={q.type}
-                      value={answers[q.id + '2'] || ''}
-                      onKeyDown={handleKeyDown}
-                      onChange={(e) => handleChange(e, q.id + '2')}
-                      key={`${q.id}-input-first`}
-                      placeholder='Last Name'
-                    />
-                  </Stack>
+                  <Grid2 container direction="row" justifyContent="center" sx={{px: "10px"}} spacing={2}>
+                    <Grid2>
+                      <input
+                        className="input"
+                        type={q.type}
+                        value={answers[q.id + '1'] || ''}
+                        autoFocus
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => handleChange(e, q.id + '1')}
+                        key={`${q.id}-input-last`}
+                        placeholder='First Name'
+                      />
+                    </Grid2>
+                    <Grid2>
+                      <input
+                        className="input"
+                        type={q.type}
+                        value={answers[q.id + '2'] || ''}
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => handleChange(e, q.id + '2')}
+                        key={`${q.id}-input-first`}
+                        placeholder='Last Name'
+                      />
+                    </Grid2>
+
+                  </Grid2>
 
                 )}
                 {['email'].includes(q.type) && (
