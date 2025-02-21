@@ -14,9 +14,9 @@ import TestResultSpellingReport from './TestResultSpellingReport';
 import TestResultInterpretiveReport from './TestResultInterpretiveReport';
 
 
-export default function TestResultReports({}) {
+export default function TestResultReports({submissionData}) {
 
-    const submissionData = sampleSubmissionData;
+    // const submissionData = sampleSubmissionData; // for test purpose
     const {first_name, last_name} = submissionData;
 
     // refs for creating the PDF from each report
@@ -30,7 +30,7 @@ export default function TestResultReports({}) {
             <Typography variant='h3'>Thank You!</Typography>
             <Typography variant='body1'>You can download the results by clicking on the following button:</Typography>
             <Stack direction="row" >
-                <button onClick={() => convertAndDownloadPDF([readingTestRef, spellingTestRef, interpretiveTestRef], 'Dyslexia Screening Results', first_name + ' ' + last_name , [297,860])}>Download</button>
+                <button onClick={() => convertAndDownloadPDF([readingTestRef, spellingTestRef, interpretiveTestRef], 'Dyslexia Screening Results', first_name + ' ' + last_name , 1060, 1400)}>Download</button>
             </Stack>
             <Stack sx={{overflow: 'auto', maxHeight: "300px", maxWidth: "90%", mt: "24px", p: "12px"}} >
                 <Stack spacing={4}>

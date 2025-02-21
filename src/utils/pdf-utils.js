@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
   // Function to handle HTML to PDF conversion
- export async function convertAndDownloadPDF (contentRefs, reportName, name, size) {
+ export async function convertAndDownloadPDF (contentRefs, reportName, name, width, height) {
 
     
     const pdfPages = [];
@@ -13,7 +13,7 @@ import jsPDF from 'jspdf';
       margin: 10, 
       filename: `${name} -  ${reportName} - ${new Date().toLocaleDateString('en-US')}.pdf`,
       image: { type: 'jpeg', quality: 1 },
-      html2canvas: { scale: 2, dpi: 300, letterRendering: true, width: 1050, height: 1400 },
+      html2canvas: { scale: 2, dpi: 300, letterRendering: true, width: width, height: height },
       jsPDF: { unit: 'mm', format: "a4" , orientation: 'portrait' },
     };
 
