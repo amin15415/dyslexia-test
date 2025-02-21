@@ -3,9 +3,9 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
   // Function to handle HTML to PDF conversion
- export async function convertAndDownloadPDF (contentRefs, reportName, name, width, height) {
+ export async function convertAndDownloadPDF (contentRefs, reportName, name, width, height, setDownloading) {
 
-    
+    setDownloading(true);
     const pdfPages = [];
 
     // Options for html2pdf.js
@@ -47,7 +47,8 @@ import jsPDF from 'jspdf';
 
       doc.addImage(page.imgData, "JPEG", 10, 10, pdfWidth, pdfHeight);
     });
-
+    
+    setDownloading(false);
     doc.save(options.filename);
 
     // Convert the content of the element to PDF

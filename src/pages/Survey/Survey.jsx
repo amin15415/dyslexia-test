@@ -257,22 +257,28 @@ function Survey() {
             
                 {q.type === 'dateOrNever' && (
                   <div className='buttons-container' key={`${q.id}-buttons`}>
-                    <div className='button-container' key={`${q.id}-date-input`}>
-                      <input
-                        className="input"
-                        type="date"
-                        value={answers[q.id] || ''}
-                        autoFocus={index === activeQuestion}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => handleChange(e, q.id)}
-                      />
-                    </div>
-                    <div className='button-container' key={`${q.id}-never-button`}>
-                      <button onClick={() => { 
-                        handleChange({ target: { value: 'Never' } }, q.id);
-                        goForward();
-                      }}>Never</button>
-                    </div>
+                    <Grid2 container direction="row" justifyContent="center" alignItems="center" sx={{px: "10px"}} spacing={0}>
+                      <Grid2>  
+                        <div className='button-container' key={`${q.id}-date-input`}>
+                            <input
+                              className="input"
+                              type="date"
+                              value={answers[q.id] || ''}
+                              autoFocus={index === activeQuestion}
+                              onKeyDown={handleKeyDown}
+                              onChange={(e) => handleChange(e, q.id)}
+                            />
+                        </div>
+                      </Grid2>
+                      <Grid2>
+                        <div className='button-container' key={`${q.id}-never-button`}>
+                          <button onClick={() => { 
+                            handleChange({ target: { value: 'Never' } }, q.id);
+                            goForward();
+                          }}>Never</button>
+                        </div>
+                      </Grid2>
+                    </Grid2>
                   </div>
                 )}
                 {['text'].includes(q.type) && (
