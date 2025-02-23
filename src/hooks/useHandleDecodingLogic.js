@@ -114,27 +114,8 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
 
             let isCorrect;
-            isCorrect = speechResult.includes(currentWord) || wordHomophones[currentWord] && wordHomophones[currentWord].includes(speechResult); 
+            isCorrect = speechResult.trim().split(' ')[0] == currentWord || wordHomophones[currentWord] && wordHomophones[currentWord].includes(speechResult); 
             console.log('is correct: ' + isCorrect);
-            // if (currentWord === 'clique') {
-            //     isCorrect = speechResult === 'click' || speechResult === 'clique'
-            // } else if (currentWord === 'know') {
-            //     isCorrect = speechResult === 'no' || speechResult === 'know'
-            // } else if (currentWord === 'could') {
-            //     isCorrect = speechResult === 'could' || speechResult === "couldn't"
-            // } else if (currentWord === 'meadow') {
-            //     isCorrect = speechResult === 'metal' || speechResult === 'meadow'
-            // } else if (currentWord === 'glisten') {
-            //     isCorrect = speechResult === 'listen' || speechResult === 'glisten'
-            // } else if (currentWord === 'toughen') {
-            //     isCorrect = speechResult === 'toughen' || speechResult === 'puffin'
-            // } else if (currentWord === 'islet') {
-            //     isCorrect = speechResult === 'eyelet' || speechResult === 'islet'
-            // } else if (currentWord === 'leitmotif') {
-            //     isCorrect = speechResult === 'leitmotiv' || speechResult === 'leitmotif'
-            // } else {
-            //     isCorrect = speechResult === currentWord;
-            // }
             const updatedCorrect = isCorrect ? correct + 1 : correct;
             const updatedWrong = !isCorrect ? wrong + 1 : wrong;
             const lastWordReached = levelIndex === lastLevelIndex && wordIndex === lastWordIndex;
