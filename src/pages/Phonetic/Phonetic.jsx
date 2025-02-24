@@ -47,7 +47,6 @@ const Phonetic = () => {
 
   const scrollRef = useRef();
 
-
   useEffect(() => {
     // if first phase is in place the audio for first instruction should be started
     if (animationPhase == 1) { instructionAudioRef1.current.play(); }
@@ -58,12 +57,15 @@ const Phonetic = () => {
     }
     if (animationPhase == 3) {
       instructionAudioRef2.current.play();
-      instructionAudioRef2.current.scrollIntoView();
+      instructionAudioRef2.current.scrollIntoView({ behavior: "smooth" });
       // instruction2Typed.start(); 
     }
-    if (animationPhase == 4) inputTyped.start(); 
+    if (animationPhase == 4) { 
+      inputTyped.start(); 
+      scrollRef.current.scrollIntoView({ behavior: "smooth" } );
+    }
 
-    if (animationPhase == 5) scrollRef.current.scrollIntoView()
+    if (animationPhase == 5) scrollRef.current.scrollIntoView({ behavior: "smooth" } )
   }, [animationPhase]);
 
   useEffect(() => {
@@ -74,6 +76,14 @@ const Phonetic = () => {
     }
   }, [isPlaying, isAnimating]);
 
+  useEffect(() => {
+    if (!isTutorial)
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth', // Use 'auto' for instant scrolling without animation
+      });
+
+  }, [isTutorial]);
 
   const handleSubmit = () => {
     if (userInputs[currentItem] === "") {

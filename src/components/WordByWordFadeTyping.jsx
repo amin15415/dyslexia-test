@@ -19,7 +19,7 @@ const WordByWordFadeTyping = ({ text, speed, indexPauses, onStart, onComplete, s
       const timeout = setTimeout(() => {
         setCurrentText((prevText) => [...prevText, words[currentIndex]]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
-        if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView();
+        if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView({ behavior: "smooth" } );
       }, timeoutAmount);
       return () => clearTimeout(timeout);
     } else if (currentIndex == words.length) {

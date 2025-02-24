@@ -45,7 +45,7 @@ const Eidetic = () => {
     const instructionAudioRef2 = useRef();
     const playButtonRef = useRef();
     const voiceTestButton = useRef();
-
+    
     useEffect(() => {
       // if first phase is in place the audio for first instruction should be started
       if (animationPhase == 1) { instructionAudioRef1.current.play(); }
@@ -69,6 +69,14 @@ const Eidetic = () => {
       }
     }, [isPlaying, isAnimating]);
 
+    useEffect(() => {
+      if (!isTutorial)
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth', // Use 'auto' for instant scrolling without animation
+        });
+
+    }, [isTutorial]);
     
     const handleSubmit = () => {
       if (userInputs[currentItem] === '') {
@@ -121,6 +129,7 @@ const Eidetic = () => {
 
     return (
         <div className='encoding-container' key={currentItem}>
+
           <div>
             {tooFewCorrect && levelIndex !== 0 ? (
               <div>
