@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './WordByWordFadeTyping.css'; // Import the CSS file for animations
 
-const WordByWordFadeTyping = ({ text, speed, indexPauses, onStart, onComplete, startAnimation }) => {
+const WordByWordFadeTyping = ({ text, speed, indexPauses, onStart, onComplete, startAnimation, scrollRef }) => {
   const [currentText, setCurrentText] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -19,6 +19,7 @@ const WordByWordFadeTyping = ({ text, speed, indexPauses, onStart, onComplete, s
       const timeout = setTimeout(() => {
         setCurrentText((prevText) => [...prevText, words[currentIndex]]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
+        if (scrollRef && scrollRef.current) scrollRef.current.scrollIntoView();
       }, timeoutAmount);
       return () => clearTimeout(timeout);
     } else if (currentIndex == words.length) {

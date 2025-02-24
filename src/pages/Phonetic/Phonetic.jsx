@@ -61,7 +61,7 @@ const Phonetic = () => {
       instructionAudioRef2.current.scrollIntoView();
       // instruction2Typed.start(); 
     }
-    if (animationPhase == 4) inputTyped.start();
+    if (animationPhase == 4) inputTyped.start(); 
 
     if (animationPhase == 5) scrollRef.current.scrollIntoView()
   }, [animationPhase]);
@@ -196,6 +196,7 @@ const Phonetic = () => {
             startAnimation={instruction2Typed}
             onStart={() => setIsAnimating(true)}
             onComplete={() => setIsAnimating(false)}
+            scrollRef={scrollRef}
           />
           <div ref={scrollRef} />
           <audio ref={instructionAudioRef2} src={instruction2Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
