@@ -7,6 +7,7 @@ import { IconButton, Stack, Typography } from '@mui/material';
 import { ReactTyped } from "react-typed";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import WordByWordTyping from '../../components/WordByWordFadeTyping';
 
 const Eidetic = () => {
     const navigate = useNavigate();
@@ -61,8 +62,8 @@ const Eidetic = () => {
     }, [animationPhase]);
 
     useEffect(() => {
-      if (isPlaying && !isAnimating && animationPhase == 1)  instruction1Typed.start();
-      if (isPlaying && !isAnimating && animationPhase == 3)  instruction2Typed.start();
+      if (isPlaying && !isAnimating && animationPhase == 1)  setInstruction1Typed(true);
+      if (isPlaying && !isAnimating && animationPhase == 3)  setInstruction2Typed(true);
       if (!isPlaying && !isAnimating && animationPhase > 0 && animationPhase < 5) {
         setAnimationPhase(animationPhase + 1);
       }
@@ -159,7 +160,7 @@ const Eidetic = () => {
                     </button>
                   }
 
-                  <ReactTyped
+                  {/* <ReactTyped
                         typedRef={setInstruction1Typed}
                         strings={["First you will hear a word."]}
                         typeSpeed={30}
@@ -168,6 +169,15 @@ const Eidetic = () => {
                         showCursor={false}
                         onStart={() => setIsAnimating(true)}
                         onComplete={() => setIsAnimating(false)}
+                  /> */}
+
+                  <WordByWordTyping 
+                    text="First you will hear a word." 
+                    speed={150}
+                    // indexPauses={{11 : 1100}}
+                    startAnimation={instruction1Typed}
+                    onStart={() => setIsAnimating(true)}
+                    onComplete={() => setIsAnimating(false)}
                   />
 
                   <audio ref={instructionAudioRef1} src={instruction1Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
@@ -187,7 +197,7 @@ const Eidetic = () => {
                     ></div>
                   </div>
                   }
-                  <ReactTyped
+                  {/* <ReactTyped
                         typedRef={setInstruction2Typed}
                         strings={['You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.']}
                         typeSpeed={30}
@@ -196,7 +206,17 @@ const Eidetic = () => {
                         showCursor={false}
                         onStart={() => setIsAnimating(true)}
                         onComplete={() => setIsAnimating(false)}
+                  /> */}
+
+                  <WordByWordTyping 
+                    text='You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.'
+                    speed={150}
+                    indexPauses={{11 : 1500, 12: 300, 28: 1700}}
+                    startAnimation={instruction2Typed}
+                    onStart={() => setIsAnimating(true)}
+                    onComplete={() => setIsAnimating(false)}
                   />
+
                   <audio ref={instructionAudioRef2} src={instruction2Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
                   
                   { animationPhase > 2 &&
@@ -242,11 +262,16 @@ const Eidetic = () => {
                 </div>
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                   <div>
-                  {currentItem === 0 && (
+                  {/* currentItem === 0 && (
                     <div>
                       <h3>Press Play</h3>
-                    </div> )}
-                    <audio src={audioPaths[currentItem]} controls autoPlay={currentItem !== 0} />
+                    </div> ) */}
+                    <audio 
+                      src={audioPaths[currentItem]} 
+                      controls
+                      autoPlay
+                      // autoPlay={currentItem !== 0} 
+                    />
                     <div>
                       <input
                         type="password"

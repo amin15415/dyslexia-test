@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import "./Phonetic.css";
 import { Input, Stack, Typography } from "@mui/material";
+import WordByWordTyping from "../../components/WordByWordFadeTyping";
 
 const Phonetic = () => {
   const navigate = useNavigate();
@@ -32,8 +33,8 @@ const Phonetic = () => {
   const [isTutorial, setIsTutorial] = useState(true);
   const [animationPhase, setAnimationPhase] = useState(0);
   const [inputTyped,setInputTyped] = useState();
-  const [instruction1Typed,setInstruction1Typed] = useState();
-  const [instruction2Typed,setInstruction2Typed] = useState();
+  const [instruction1Typed,setInstruction1Typed] = useState(false);
+  const [instruction2Typed,setInstruction2Typed] = useState(false);
 
   const [sampleInputValue,setSampleInputValue] = useState('');
   const [isPlaying,setIsPlaying] = useState(false);
@@ -66,8 +67,8 @@ const Phonetic = () => {
   }, [animationPhase]);
 
   useEffect(() => {
-    if (isPlaying && !isAnimating && animationPhase == 1)  instruction1Typed.start();
-    if (isPlaying && !isAnimating && animationPhase == 3)  instruction2Typed.start();
+    if (isPlaying && !isAnimating && animationPhase == 1)  setInstruction1Typed(true);
+    if (isPlaying && !isAnimating && animationPhase == 3)  setInstruction2Typed(true);
     if (!isPlaying && !isAnimating && animationPhase > 0 && animationPhase < 5) {
       setAnimationPhase(animationPhase + 1);
     }
@@ -139,7 +140,7 @@ const Phonetic = () => {
             </button>
           }
 
-          <ReactTyped
+          {/* <ReactTyped
                 typedRef={setInstruction1Typed}
                 strings={["This part of the test uses a different kind of spelling. First you will hear a word."]}
                 typeSpeed={30}
@@ -148,6 +149,15 @@ const Phonetic = () => {
                 showCursor={false}
                 onStart={() => setIsAnimating(true)}
                 onComplete={() => setIsAnimating(false)}
+          /> */}
+
+          <WordByWordTyping 
+            text="This part of the test uses a different kind of spelling. First you will hear a word." 
+            speed={150}
+            indexPauses={{11 : 1100}}
+            startAnimation={instruction1Typed}
+            onStart={() => setIsAnimating(true)}
+            onComplete={() => setIsAnimating(false)}
           />
 
           <audio ref={instructionAudioRef1} src={instruction1Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
@@ -167,7 +177,7 @@ const Phonetic = () => {
             ></div>
           </div>
           }
-          <ReactTyped
+          {/* <ReactTyped
                 typedRef={setInstruction2Typed}
                 preStringTyped={() => scrollRef.current.scrollIntoView()}
                 strings={['You can replay this word by pressing the play button.<br> Next you should write this word exactly the way it sounds. You do not need to worry about the correct spelling. <br> For example, the word "laugh" can be spelled "laf". <br> Please spell the word "laugh" as demonstrated']}
@@ -177,6 +187,15 @@ const Phonetic = () => {
                 showCursor={false}
                 onStart={() => setIsAnimating(true)}
                 onComplete={() => setIsAnimating(false)}
+          /> */}
+          <WordByWordTyping 
+            text='You can replay this word by pressing the play button. <br> Next you should write this word exactly the way it sounds. You do not need to worry about the correct spelling. <br> For example, the word "laugh" can be spelled "laf". <br> Please spell the word "laugh" as demonstrated' 
+            speed={150}
+            // 11 - Next | 12 - you sho... | 22 - you do.. | 33 - for ex... | 35: the word... | 38: "laf"... | 43: please ...
+            indexPauses={{11 : 1500, 12: 200, 22: 1500, 33: 1000, 35: 300, 38: 800, 42:2000, 43: 1700}}
+            startAnimation={instruction2Typed}
+            onStart={() => setIsAnimating(true)}
+            onComplete={() => setIsAnimating(false)}
           />
           <div ref={scrollRef} />
           <audio ref={instructionAudioRef2} src={instruction2Path} onPlay={()=> setIsPlaying(true)} onEnded={()=> setIsPlaying(false)} />
@@ -230,15 +249,16 @@ const Phonetic = () => {
           }}
         >
           <div>
-            {currentItem === 0 && (
+            {/* currentItem === 0 && (
               <div>
                 <h3>Press Play</h3>
               </div>
-            )}
+            */}
             <audio
               src={audioPaths[currentItem]}
               controls
-              autoPlay={currentItem !== 0}
+              autoPlay
+              // autoPlay={currentItem !== 0}
             />
             <div>
               <input
