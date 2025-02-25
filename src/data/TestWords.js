@@ -48,6 +48,36 @@ export const adtWords = [
     'POD': 13
   };
 
+  // export const testWordsGradeNumberAdl = {
+  //   '1': 1,
+  //   '2': 2,
+  //   '3': 3,
+  //   '4': 4,
+  //   '5': 5,
+  //   '6': 6,
+  //   'JRH': 7,
+  //   'HIS': 9,
+  //   'LOD': 10,
+  //   'UPD': 10,
+  //   'MAS': 11,
+  //   'DOC': 12,
+  //   'POD': 13
+  // };
+  
+  // export const testWordsGradeNumberChd = {
+  //   'K': 0,
+  //   '1L': 1,
+  //   '1U': 1,
+  //   '1': 1,
+  //   '2': 2,
+  //   '3': 3,
+  //   '4': 4,
+  //   '5': 5,
+  //   '6': 6,
+  //   '7-8': 7,
+  //   '9-12': 9,
+  // };
+
   export const wordHomophones = {
     "above": [],
     "achieve": [],

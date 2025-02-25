@@ -114,7 +114,8 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
 
             let isCorrect;
-            isCorrect = speechResult.trim().split(' ')[0] == currentWord || wordHomophones[currentWord] && wordHomophones[currentWord].includes(speechResult); 
+            let firstSpeechWord = speechResult.trim().split(' ')[0];
+            isCorrect = firstSpeechWord == currentWord || ( wordHomophones[currentWord] && wordHomophones[currentWord].includes(firstSpeechWord) ); 
             console.log('is correct: ' + isCorrect);
             const updatedCorrect = isCorrect ? correct + 1 : correct;
             const updatedWrong = !isCorrect ? wrong + 1 : wrong;
@@ -170,7 +171,14 @@ export const useHandleDecodingLogic = ({ startCountdown,
           setFrozenWrongAboveCurrentLevel(true);
         }
     
-        if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length && wordIndex >= words.length) {
+        // The first condition is to make sure that in the current test level more than half of the words are wrong.
+        // So if the first level is true, the second condition makes sure that the wrong words after the last successful-
+        // -level are more than words length. Meaning wrongs more than a half of words in two consequential levels.
+        // The last condition is removed in this version. it was to make sure that the words of the level are all tested to get more correct words for 
+        // tests afterwards
+        // if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length && wordIndex >= words.length) {
+
+        if (wrong >= words.length / 2 && wrongAboveCurrentLevel >= words.length) {
           setTestWords(testWords);
           setSpeechWords(speechWords);
           navigate('/eidetic');
@@ -189,8 +197,15 @@ export const useHandleDecodingLogic = ({ startCountdown,
         if (wordIndex >= lastWordIndex + 1) {
           if (levelIndex < testWords.length - 1) {
             setLevelIndex((prevState) => (prevState + 1 ));
+            
+            // wrong above current level should be zero just if the current
+            // level is recognized as user reading test level and recently frozen
+            if (frozenWrongAboveCurrentLevel)
+                setWrongAboveCurrentLevel(0);
+
+            // now the frozen wrong should be reset
             setFrozenWrongAboveCurrentLevel(false);
-            setWrongAboveCurrentLevel(0);
+
           }
           setCorrect(0)
           setWrong(0);

@@ -114,6 +114,10 @@ const sampleData = [
     }
 ]
 
+const getGradeNumber = (levelName) => {
+    if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
+    else return -1;
+}
 
 export default function TestResultReadingReport({contentRef, submissionData}) {
 
@@ -122,11 +126,6 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
     // const [readingLevel] = useSessionStorage('readingLevel', null);
 
     // const testWords = sampleData;
-
-    const getGradeNumber = (levelName) => {
-        if (testWordsGradeNumber[levelName] > -1) return testWordsGradeNumber[levelName];
-        else return -1;
-    }
 
 
     return (
@@ -166,7 +165,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                     if (index < 3)
                     return (
                         <TableCell key={index}>
-                            <ReadTestTable wordsData={wordData} level={index + 1} />
+                            <ReadTestTable wordsData={wordData}  />
                         </TableCell>
                     )
                 })}
@@ -176,7 +175,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                     if (index >= 3 && index <= 6)
                     return (
                         <TableCell key={index}>
-                            <ReadTestTable wordsData={wordData} level={index + 1} />
+                            <ReadTestTable wordsData={wordData} />
                         </TableCell>
                     )
                 })}
@@ -186,7 +185,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                     if (index >= 7 && index <= 10)
                     return (
                         <TableCell key={index}>
-                            <ReadTestTable wordsData={wordData} level={index + 1} />
+                            <ReadTestTable wordsData={wordData} />
                         </TableCell>
                     )
                 })}
@@ -204,9 +203,10 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
     );
   }
 
-  const ReadTestTable = ({wordsData, level}) => {
+  const ReadTestTable = ({wordsData}) => {
     const words = wordsData.words;
     const grade  = wordsData.level;
+    const level = getGradeNumber(grade) > -1 ? getGradeNumber(grade) : ""
 
     return (
         <Table>
