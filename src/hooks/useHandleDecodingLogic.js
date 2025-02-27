@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSpeechRecognition } from './useSpeechRecognition';
+import { useSpeechRecognition11 } from './useSpeechRecognition11';
 import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from './useSessionStorage';
@@ -39,7 +39,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const [currentWord, setCurrentWord] = useState(words[wordIndex]);
     const lastLevelIndex = testWords.length - 1;
     const lastWordIndex = Object.keys(testWords[lastLevelIndex].words).length - 1;
-    const {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording} = useSpeechRecognition(audioStream);
+    const {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording} = useSpeechRecognition11(audioStream);
     const totalWords = testWords.reduce((total, level) => total + Object.keys(level.words).length, 0);
     const progress = ((levelIndex * words.length) + wordIndex) / totalWords * 100;
 
@@ -110,11 +110,10 @@ export const useHandleDecodingLogic = ({ startCountdown,
 
             setSpeechResultReceived(true);
             speechResult = transcription.toLowerCase();
-            console.log('Speech result:', speechResult);
-
 
             let isCorrect;
-            let firstSpeechWord = speechResult.trim().split(' ')[0];
+            let firstSpeechWord = speechResult.replace(/\./g, "").trim().split(' ')[0];
+            console.log('Speech result:', firstSpeechWord);
             isCorrect = firstSpeechWord == currentWord || ( wordHomophones[currentWord] && wordHomophones[currentWord].includes(firstSpeechWord) ); 
             console.log('is correct: ' + isCorrect);
             const updatedCorrect = isCorrect ? correct + 1 : correct;
