@@ -9,6 +9,7 @@ export default function SelectTest() {
   const [, setTestWords] = useSessionStorage('testWords', null);
   const [, setTestName] = useSessionStorage('testName', '');
   const [, setUserAge] = useSessionStorage('userAge', null);
+  const [, setTestStarted] = useSessionStorage('testStarted', false);
 
   const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ export default function SelectTest() {
     setUserAge(age);
     setTestName(name);
     setTestWords(words);
+    setTestStarted(true);
     navigate('/decoding');
   };
 

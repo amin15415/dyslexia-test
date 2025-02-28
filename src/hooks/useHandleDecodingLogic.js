@@ -112,7 +112,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
             speechResult = transcription.toLowerCase();
 
             let isCorrect;
-            let firstSpeechWord = speechResult.replace(/\./g, "").trim().split(' ')[0];
+            let firstSpeechWord = speechResult.replace(/[^\w\s]|_/g, "").trim().split(/\s+/)[0];
             console.log('Speech result:', firstSpeechWord);
             isCorrect = firstSpeechWord == currentWord || ( wordHomophones[currentWord] && wordHomophones[currentWord].includes(firstSpeechWord) ); 
             console.log('is correct: ' + isCorrect);

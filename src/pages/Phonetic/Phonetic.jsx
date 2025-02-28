@@ -7,6 +7,7 @@ import { ReactTyped } from "react-typed";
 import "./Phonetic.css";
 import { Input, Stack, Typography } from "@mui/material";
 import WordByWordTyping from "../../components/WordByWordFadeTyping";
+import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 const Phonetic = () => {
   const navigate = useNavigate();
@@ -46,6 +47,8 @@ const Phonetic = () => {
   const playButtonRef = useRef();
 
   const scrollRef = useRef();
+
+  useNavigationProtection();
 
   useEffect(() => {
     // if first phase is in place the audio for first instruction should be started

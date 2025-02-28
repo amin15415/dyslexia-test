@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
+import { useSessionStorage } from './hooks/useSessionStorage';
 
 const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
 const SelectTest = lazy(() => import('./pages/Test Selection/SelectTest'));
@@ -16,6 +17,7 @@ const Test = lazy(() => import('./components/TestResultReports'));
 function App() {
   const location = useLocation();
   const [isHome, setIsHome] = useState(location.pathname === '/');
+  const [, setTestStarted] = useSessionStorage('testStarted', false);
   
   useEffect(() => {
     setIsHome(location.pathname === '/');

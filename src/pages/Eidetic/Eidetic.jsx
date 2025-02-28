@@ -3,11 +3,10 @@ import { getEideticWords } from '../../utils/getEncodingWords';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import "./Eidetic.css";
-import { IconButton, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { ReactTyped } from "react-typed";
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import WordByWordTyping from '../../components/WordByWordFadeTyping';
+import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 const Eidetic = () => {
     const navigate = useNavigate();
@@ -23,29 +22,28 @@ const Eidetic = () => {
     const samplePath = require(`../../assets/audio/laugh.mp3`);
     const instruction1Path = require(`../../assets/audio/eidetic-instruction-1.mp3`);
     const instruction2Path = require(`../../assets/audio/eidetic-instruction-2.mp3`);
-    const voiceTestPath = require(`../../assets/audio/eidetic-voice-test.mp3`);
 
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
     const [currentItem, setCurrentItem] = useState(0);
 
     const [isTutorial, setIsTutorial] = useState(true);
-    const [isReadyToStart, setIsReadyToStart] = useState(false);
-    const [animationPhase, setAnimationPhase] = useState(0);
-    const [inputTyped,setInputTyped] = useState();
-    const [instruction1Typed,setInstruction1Typed] = useState();
-    const [instruction2Typed,setInstruction2Typed] = useState();
+    const [animationPhase, setAnimationPhase] = useState(1); // Start at phase 1 since we skip audio check
+    const [inputTyped, setInputTyped] = useState();
+    const [instruction1Typed, setInstruction1Typed] = useState();
+    const [instruction2Typed, setInstruction2Typed] = useState();
 
-    const [sampleInputValue,setSampleInputValue] = useState('');
-    const [isPlaying,setIsPlaying] = useState(false);
-    const [isAnimating,setIsAnimating] = useState(false);
+    const [sampleInputValue, setSampleInputValue] = useState('');
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     const sampleAudioRef = useRef();
     const instructionAudioRef1 = useRef();
     const instructionAudioRef2 = useRef();
     const playButtonRef = useRef();
-    const voiceTestButton = useRef();
     
+    useNavigationProtection();
+
     useEffect(() => {
       // if first phase is in place the audio for first instruction should be started
       if (animationPhase == 1) { instructionAudioRef1.current.play(); }
@@ -56,14 +54,13 @@ const Eidetic = () => {
       }
       if (animationPhase == 3) {
         instructionAudioRef2.current.play();
-        // instruction2Typed.start(); 
       }
-      if (animationPhase == 4)  inputTyped.start()
+      if (animationPhase == 4) inputTyped.start()
     }, [animationPhase]);
 
     useEffect(() => {
-      if (isPlaying && !isAnimating && animationPhase == 1)  setInstruction1Typed(true);
-      if (isPlaying && !isAnimating && animationPhase == 3)  setInstruction2Typed(true);
+      if (isPlaying && !isAnimating && animationPhase == 1) setInstruction1Typed(true);
+      if (isPlaying && !isAnimating && animationPhase == 3) setInstruction2Typed(true);
       if (!isPlaying && !isAnimating && animationPhase > 0 && animationPhase < 5) {
         setAnimationPhase(animationPhase + 1);
       }
@@ -73,9 +70,8 @@ const Eidetic = () => {
       if (!isTutorial)
         window.scrollTo({
           top: 0,
-          behavior: 'smooth', // Use 'auto' for instant scrolling without animation
+          behavior: 'smooth',
         });
-
     }, [isTutorial]);
     
     const handleSubmit = () => {
@@ -129,7 +125,6 @@ const Eidetic = () => {
 
     return (
         <div className='encoding-container' key={currentItem}>
-
           <div>
             {tooFewCorrect && levelIndex !== 0 ? (
               <div>
@@ -144,46 +139,9 @@ const Eidetic = () => {
                 <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
                   <Typography variant='h4'>Spelling Test Tutorial</Typography>
 
-                  { (!isReadyToStart || animationPhase == 0) &&
-                    <Stack justifyContent="center" alignItems="center" spacing={1}>
-                      <Typography variant='h6'>Please ensure your audio is functioning and that your device is not muted.</Typography>
-                      { !isPlaying &&
-                      <IconButton onClick={() => voiceTestButton.current.play()}>
-                        <PlayCircleOutlineIcon sx={{width: "100px", height: "100px", color: "#FFC107"}} />
-                      </IconButton>
-                      }
-                      { isPlaying &&
-                      <IconButton onClick={() => voiceTestButton.current.pause()}>
-                        <PauseCircleOutlineIcon sx={{width: "100px", height: "100px", color: "#FFC107"}} />
-                      </IconButton>
-                      }
-                      <Typography variant='h6'>Click on the play button and continue if you heard the voice clearly.</Typography>
-                      
-                      <audio ref={voiceTestButton} src={voiceTestPath} onPlay={()=> setIsPlaying(true)} onPause={()=> setIsPlaying(false)} onEnded={()=> {setIsReadyToStart(true); setIsPlaying(false);}} />
-                    </Stack>
-                  }
- 
-                  { isReadyToStart && animationPhase == 0 &&
-                    <button onClick={() => setAnimationPhase(1)}>
-                      I Heard The Voice
-                    </button>
-                  }
-
-                  {/* <ReactTyped
-                        typedRef={setInstruction1Typed}
-                        strings={["First you will hear a word."]}
-                        typeSpeed={30}
-                        className='tutorial-text'
-                        stopped
-                        showCursor={false}
-                        onStart={() => setIsAnimating(true)}
-                        onComplete={() => setIsAnimating(false)}
-                  /> */}
-
                   <WordByWordTyping 
                     text="First you will hear a word." 
                     speed={150}
-                    // indexPauses={{11 : 1100}}
                     startAnimation={instruction1Typed}
                     onStart={() => setIsAnimating(true)}
                     onComplete={() => setIsAnimating(false)}
@@ -206,16 +164,6 @@ const Eidetic = () => {
                     ></div>
                   </div>
                   }
-                  {/* <ReactTyped
-                        typedRef={setInstruction2Typed}
-                        strings={['You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.']}
-                        typeSpeed={30}
-                        className='tutorial-text'
-                        stopped
-                        showCursor={false}
-                        onStart={() => setIsAnimating(true)}
-                        onComplete={() => setIsAnimating(false)}
-                  /> */}
 
                   <WordByWordTyping 
                     text='You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.'
@@ -250,8 +198,6 @@ const Eidetic = () => {
                       autoCapitalize="none"
                       onInput={neutralizeSuggestion}
                       onKeyDown={handleKeyDown}
-                      // inputMode="none"
-                      // autoFocus
                       onChange={(e) => setSampleInputValue(e.target.value)}
                     />
                   </ReactTyped>
@@ -267,19 +213,13 @@ const Eidetic = () => {
                   <>
                 <div>
                   <h1>Spell these words correctly, like on a spelling test.</h1>
-                  {/* <p>For instance, laugh should be spelled 'laugh'.</p> */}
                 </div>
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                   <div>
-                  {/* currentItem === 0 && (
-                    <div>
-                      <h3>Press Play</h3>
-                    </div> ) */}
                     <audio 
                       src={audioPaths[currentItem]} 
                       controls
                       autoPlay
-                      // autoPlay={currentItem !== 0} 
                     />
                     <div>
                       <input
@@ -292,7 +232,6 @@ const Eidetic = () => {
                         autoComplete="off"
                         autoCapitalize="none"
                         onInput={neutralizeSuggestion}
-                        // inputMode="none"
                         autoFocus
                         onChange={(e) => {
                           const newInputs = [...userInputs];
@@ -316,7 +255,6 @@ const Eidetic = () => {
           </div>
         </div>
     );
-      
 };
 
 export default Eidetic;

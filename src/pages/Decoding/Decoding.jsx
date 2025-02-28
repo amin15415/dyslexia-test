@@ -7,8 +7,11 @@ import ProgressBar from '../../components/ProgressBar';
 import './Decoding.css';
 import { errorMessages } from '../../utils/constants';
 import DecodingTutorial from './DecodingTutorial';
+import AudioCheck from '../../components/AudioCheck';
+import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 const Decoding = () => {
+  useNavigationProtection();
 
   const audioStream = useRef(null);
   const audioAnalyser = useRef(null);
@@ -27,10 +30,9 @@ const Decoding = () => {
   const [nextDecodingWord, currentWord, isLastWord, progress] = useHandleDecodingLogic({ startCountdown, stopCountdown, countdownPromise, countdownFinished, setSpeechResultReceived, setRetryMessage, isPaused, setButtonActive, setError: setTranscribingError, setIsTranscribing, setIsStarted, audioStream, setUserHasSpoken, userHasSpoken });
   const [buttonDisable, setButtonDisable] = useState(false);
   const [isTutorial, setIsTutorial] = useState(true);
-
+  const [audioCheckComplete, setAudioCheckComplete] = useState(false);
 
   useEffect(() => {
-
     if (audioStream.current) {
       setButtonDisable(false);
       getAudioContext();
@@ -51,19 +53,7 @@ const Decoding = () => {
       setButtonActive(true);
       setRetryMessage(''); 
     }
-    // deleted so that the errors are handled by setError in the logic
-    // else {
-    //   setRetryMessage("We didn't quite catch that. Please try again.");
-    //   setButtonActive(true);
-    // } 
   }, [isStarted, speechResultReceived, count]);
-
-  // reduntant with the previous useEffect
-  // useEffect(() => {
-  //   if (speechResultReceived) {
-  //     setButtonActive(true);   
-  //   }
-  // }, [speechResultReceived]);
 
   const getAudioContext = async () => {
     console.log('Getting audio context analyzer...');
@@ -82,7 +72,6 @@ const Decoding = () => {
     }
   };
 
-
   const startDecoding = async () => {
     if (!hasMicPermission || !audioStream.current) {
       setButtonDisable(true);
@@ -94,10 +83,11 @@ const Decoding = () => {
     }
   };
 
-
   return (
     <div className="centered-content">
-      {isTutorial ? (
+      {!audioCheckComplete ? (
+        <AudioCheck onComplete={() => setAudioCheckComplete(true)} />
+      ) : isTutorial ? (
         <DecodingTutorial setIsTutorial={setIsTutorial} />
       ) : (
         <div className='decoding-page'>
