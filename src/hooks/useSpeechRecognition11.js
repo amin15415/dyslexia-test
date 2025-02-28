@@ -85,6 +85,11 @@ export const useSpeechRecognition11 = (stream) => {
 
       console.log('ElevenLabs response:', response.data);
       
+      // Check for empty text response
+      if (response.data.text === '') {
+        throw errorMessages.EMPTY_TRANSCRIPTION;
+      }
+      
       // Extract the text from the response
       const speechResult = response.data.text || '';
 
