@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { getEideticWords } from '../../utils/getEncodingWords';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useBeforeUnload } from 'react-router-dom';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import "./Eidetic.css";
-import { Stack, Typography } from '@mui/material';
+import { IconButton, Stack, Typography } from '@mui/material';
 import { ReactTyped } from "react-typed";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import WordByWordTyping from '../../components/WordByWordFadeTyping';
-import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 const Eidetic = () => {
     const navigate = useNavigate();
@@ -28,22 +29,20 @@ const Eidetic = () => {
     const [currentItem, setCurrentItem] = useState(0);
 
     const [isTutorial, setIsTutorial] = useState(true);
-    const [animationPhase, setAnimationPhase] = useState(1); // Start at phase 1 since we skip audio check
-    const [inputTyped, setInputTyped] = useState();
-    const [instruction1Typed, setInstruction1Typed] = useState();
-    const [instruction2Typed, setInstruction2Typed] = useState();
+    const [animationPhase, setAnimationPhase] = useState(0);
+    const [inputTyped,setInputTyped] = useState();
+    const [instruction1Typed,setInstruction1Typed] = useState();
+    const [instruction2Typed,setInstruction2Typed] = useState();
 
-    const [sampleInputValue, setSampleInputValue] = useState('');
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false);
+    const [sampleInputValue,setSampleInputValue] = useState('');
+    const [isPlaying,setIsPlaying] = useState(false);
+    const [isAnimating,setIsAnimating] = useState(false);
 
     const sampleAudioRef = useRef();
     const instructionAudioRef1 = useRef();
     const instructionAudioRef2 = useRef();
     const playButtonRef = useRef();
     
-    useNavigationProtection();
-
     useEffect(() => {
       // if first phase is in place the audio for first instruction should be started
       if (animationPhase == 1) { instructionAudioRef1.current.play(); }
@@ -54,13 +53,14 @@ const Eidetic = () => {
       }
       if (animationPhase == 3) {
         instructionAudioRef2.current.play();
+        // instruction2Typed.start(); 
       }
-      if (animationPhase == 4) inputTyped.start()
+      if (animationPhase == 4)  inputTyped.start()
     }, [animationPhase]);
 
     useEffect(() => {
-      if (isPlaying && !isAnimating && animationPhase == 1) setInstruction1Typed(true);
-      if (isPlaying && !isAnimating && animationPhase == 3) setInstruction2Typed(true);
+      if (isPlaying && !isAnimating && animationPhase == 1)  setInstruction1Typed(true);
+      if (isPlaying && !isAnimating && animationPhase == 3)  setInstruction2Typed(true);
       if (!isPlaying && !isAnimating && animationPhase > 0 && animationPhase < 5) {
         setAnimationPhase(animationPhase + 1);
       }
@@ -70,9 +70,38 @@ const Eidetic = () => {
       if (!isTutorial)
         window.scrollTo({
           top: 0,
-          behavior: 'smooth',
+          behavior: 'smooth', // Use 'auto' for instant scrolling without animation
         });
+
     }, [isTutorial]);
+    
+    // Add this useEffect for basic navigation protection
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            const message = "Are you sure you want to leave? Your progress will be lost.";
+            e.returnValue = message;
+            return message;
+        };
+        
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    
+    // If you're using React Router's useBeforeUnload hook
+    useBeforeUnload(
+        useCallback((event) => {
+            if (!isTutorial || currentItem > 0) {
+                event.preventDefault();
+                return "Are you sure you want to leave? Your progress will be lost.";
+            }
+        }, [isTutorial, currentItem])
+    );
+    
+    // Alternatively, if you have a custom hook:
+    // useNavigationProtection(isTutorial || currentItem > 0);
     
     const handleSubmit = () => {
       if (userInputs[currentItem] === '') {
@@ -125,6 +154,7 @@ const Eidetic = () => {
 
     return (
         <div className='encoding-container' key={currentItem}>
+
           <div>
             {tooFewCorrect && levelIndex !== 0 ? (
               <div>
@@ -138,6 +168,12 @@ const Eidetic = () => {
                 { isTutorial &&
                 <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
                   <Typography variant='h4'>Spelling Test Tutorial</Typography>
+
+                  { animationPhase == 0 &&
+                    <button onClick={() => setAnimationPhase(1)}>
+                      Start Tutorial
+                    </button>
+                  }
 
                   <WordByWordTyping 
                     text="First you will hear a word." 
@@ -198,6 +234,8 @@ const Eidetic = () => {
                       autoCapitalize="none"
                       onInput={neutralizeSuggestion}
                       onKeyDown={handleKeyDown}
+                      // inputMode="none"
+                      // autoFocus
                       onChange={(e) => setSampleInputValue(e.target.value)}
                     />
                   </ReactTyped>
@@ -213,13 +251,19 @@ const Eidetic = () => {
                   <>
                 <div>
                   <h1>Spell these words correctly, like on a spelling test.</h1>
+                  {/* <p>For instance, laugh should be spelled 'laugh'.</p> */}
                 </div>
                 <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                   <div>
+                  {/* currentItem === 0 && (
+                    <div>
+                      <h3>Press Play</h3>
+                    </div> ) */}
                     <audio 
                       src={audioPaths[currentItem]} 
                       controls
                       autoPlay
+                      // autoPlay={currentItem !== 0} 
                     />
                     <div>
                       <input
@@ -232,6 +276,7 @@ const Eidetic = () => {
                         autoComplete="off"
                         autoCapitalize="none"
                         onInput={neutralizeSuggestion}
+                        // inputMode="none"
                         autoFocus
                         onChange={(e) => {
                           const newInputs = [...userInputs];
@@ -255,6 +300,7 @@ const Eidetic = () => {
           </div>
         </div>
     );
+      
 };
 
 export default Eidetic;
