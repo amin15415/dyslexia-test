@@ -1,7 +1,11 @@
 import React from 'react'
 import './Completed.css'
+import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 const Completed = () => {
+  // Add navigation protection
+  useNavigationProtection();
+  
   return (
     <div className='centered-content'>
         <div className='completed-text-container'>

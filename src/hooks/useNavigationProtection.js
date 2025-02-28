@@ -54,9 +54,9 @@ export const useNavigationProtection = (isProtected = true, redirectPath = '/') 
         // Determine where to redirect based on test progress
         let redirectTo = '/decoding';
         
-        if (testWords && !levelIndex) {
-          redirectTo = '/decoding';
-        } else if (testWords && levelIndex !== null && !eideticResults) {
+        if (!testWords) {
+          redirectTo = '/';
+        } else if (testWords && !eideticResults) {
           redirectTo = '/decoding';
         } else if (testWords && eideticResults && !phoneticResults) {
           redirectTo = '/eidetic';
@@ -64,6 +64,7 @@ export const useNavigationProtection = (isProtected = true, redirectPath = '/') 
           redirectTo = '/phonetic';
         }
         
+        console.log(`Redirecting from ${location.pathname} to ${redirectTo} due to missing required data`);
         navigate(redirectTo, { replace: true });
         return;
       }

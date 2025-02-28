@@ -5,12 +5,16 @@ import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { getSkillValue } from "../../utils/scoring";
 import TestResultReports from '../../components/TestResultReports';
 import { Typography, Stack, Grid, Grid2 } from '@mui/material';
+import { useNavigationProtection } from '../../hooks/useNavigationProtection';
 
 function Survey() {
   const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
   const SUPABASE_API_KEY = process.env.REACT_APP_SUPABASE_API_KEY;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_API_KEY);
+  
+  // Add navigation protection
+  useNavigationProtection();
   
   const [isSubmitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
