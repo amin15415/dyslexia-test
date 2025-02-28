@@ -149,7 +149,7 @@ const Phonetic = () => {
           <Typography variant='h4'>Phonetic Test Tutorial</Typography>
           { animationPhase == 0 &&
             <button onClick={() => setAnimationPhase(1)}>
-              Start Test
+              Start Tutorial
             </button>
           }
 
