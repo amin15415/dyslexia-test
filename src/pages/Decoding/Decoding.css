@@ -37,3 +37,9 @@
   margin: 2vh;
   font-size: 3vw;
 }
+
+.word-by-word-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}

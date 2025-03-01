@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { getEideticWords } from '../../utils/getEncodingWords';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useBeforeUnload } from 'react-router-dom';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import "./Eidetic.css";
 import { IconButton, Stack, Typography } from '@mui/material';
@@ -23,14 +23,12 @@ const Eidetic = () => {
     const samplePath = require(`../../assets/audio/laugh.mp3`);
     const instruction1Path = require(`../../assets/audio/eidetic-instruction-1.mp3`);
     const instruction2Path = require(`../../assets/audio/eidetic-instruction-2.mp3`);
-    const voiceTestPath = require(`../../assets/audio/eidetic-voice-test.mp3`);
 
     const [userInputs, setUserInputs] = useState(Array(audioPaths.length).fill(''));
     const [incompleteSubmit, setIncompleteSubmit] = useState(false);
     const [currentItem, setCurrentItem] = useState(0);
 
     const [isTutorial, setIsTutorial] = useState(true);
-    const [isReadyToStart, setIsReadyToStart] = useState(false);
     const [animationPhase, setAnimationPhase] = useState(0);
     const [inputTyped,setInputTyped] = useState();
     const [instruction1Typed,setInstruction1Typed] = useState();
@@ -44,7 +42,6 @@ const Eidetic = () => {
     const instructionAudioRef1 = useRef();
     const instructionAudioRef2 = useRef();
     const playButtonRef = useRef();
-    const voiceTestButton = useRef();
     
     useEffect(() => {
       // if first phase is in place the audio for first instruction should be started
@@ -77,6 +74,34 @@ const Eidetic = () => {
         });
 
     }, [isTutorial]);
+    
+    // Add this useEffect for basic navigation protection
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            const message = "Are you sure you want to leave? Your progress will be lost.";
+            e.returnValue = message;
+            return message;
+        };
+        
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    
+    // If you're using React Router's useBeforeUnload hook
+    useBeforeUnload(
+        useCallback((event) => {
+            if (!isTutorial || currentItem > 0) {
+                event.preventDefault();
+                return "Are you sure you want to leave? Your progress will be lost.";
+            }
+        }, [isTutorial, currentItem])
+    );
+    
+    // Alternatively, if you have a custom hook:
+    // useNavigationProtection(isTutorial || currentItem > 0);
     
     const handleSubmit = () => {
       if (userInputs[currentItem] === '') {
@@ -144,46 +169,15 @@ const Eidetic = () => {
                 <Stack sx={{px: "10px"}} justifyContent="center" alignItems="center" spacing={2}>
                   <Typography variant='h4'>Spelling Test Tutorial</Typography>
 
-                  { (!isReadyToStart || animationPhase == 0) &&
-                    <Stack justifyContent="center" alignItems="center" spacing={1}>
-                      <Typography variant='h6'>Please ensure your audio is functioning and that your device is not muted.</Typography>
-                      { !isPlaying &&
-                      <IconButton onClick={() => voiceTestButton.current.play()}>
-                        <PlayCircleOutlineIcon sx={{width: "100px", height: "100px", color: "#FFC107"}} />
-                      </IconButton>
-                      }
-                      { isPlaying &&
-                      <IconButton onClick={() => voiceTestButton.current.pause()}>
-                        <PauseCircleOutlineIcon sx={{width: "100px", height: "100px", color: "#FFC107"}} />
-                      </IconButton>
-                      }
-                      <Typography variant='h6'>Click on the play button and continue if you heard the voice clearly.</Typography>
-                      
-                      <audio ref={voiceTestButton} src={voiceTestPath} onPlay={()=> setIsPlaying(true)} onPause={()=> setIsPlaying(false)} onEnded={()=> {setIsReadyToStart(true); setIsPlaying(false);}} />
-                    </Stack>
-                  }
- 
-                  { isReadyToStart && animationPhase == 0 &&
+                  { animationPhase == 0 &&
                     <button onClick={() => setAnimationPhase(1)}>
-                      I Heard The Voice
+                      Start Tutorial
                     </button>
                   }
-
-                  {/* <ReactTyped
-                        typedRef={setInstruction1Typed}
-                        strings={["First you will hear a word."]}
-                        typeSpeed={30}
-                        className='tutorial-text'
-                        stopped
-                        showCursor={false}
-                        onStart={() => setIsAnimating(true)}
-                        onComplete={() => setIsAnimating(false)}
-                  /> */}
 
                   <WordByWordTyping 
                     text="First you will hear a word." 
                     speed={150}
-                    // indexPauses={{11 : 1100}}
                     startAnimation={instruction1Typed}
                     onStart={() => setIsAnimating(true)}
                     onComplete={() => setIsAnimating(false)}
@@ -206,16 +200,6 @@ const Eidetic = () => {
                     ></div>
                   </div>
                   }
-                  {/* <ReactTyped
-                        typedRef={setInstruction2Typed}
-                        strings={['You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.']}
-                        typeSpeed={30}
-                        className='tutorial-text'
-                        stopped
-                        showCursor={false}
-                        onStart={() => setIsAnimating(true)}
-                        onComplete={() => setIsAnimating(false)}
-                  /> */}
 
                   <WordByWordTyping 
                     text='You can replay this word by pressing the play button. <br> Next you should spell this word exactly how you would spell it on a spelling test. <br> Please spell the word "laugh" exactly as demonstrated.'

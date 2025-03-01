@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { adtWords, desdWords } from '../../data/TestWords';
@@ -9,6 +9,7 @@ export default function SelectTest() {
   const [, setTestWords] = useSessionStorage('testWords', null);
   const [, setTestName] = useSessionStorage('testName', '');
   const [, setUserAge] = useSessionStorage('userAge', null);
+  const [, setTestStarted] = useSessionStorage('testStarted', false);
 
   const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ export default function SelectTest() {
     setUserAge(age);
     setTestName(name);
     setTestWords(words);
+    setTestStarted(true);
     navigate('/decoding');
   };
 
@@ -36,6 +38,25 @@ export default function SelectTest() {
     if ((event.target.value && /^\d+$/.test(event.target.value) && event.target.value > 0 && event.target.value < 100 ) || !event.target.value)
       setAge(event.target.value);
   };
+
+  const handleConfirm = () => {
+    setConfirmed(true);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !isConfirmed && age) {
+      event.preventDefault();
+      handleConfirm();
+    }
+  };
+
+  // Add event listener for Enter key
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [age, isConfirmed]);
 
   return (
     <div className='test-selection-container'>
@@ -52,15 +73,16 @@ export default function SelectTest() {
               formHelperText: { formHelperTextProps : {style : {fontSize: "40px"} } }
             }}
             onChange={handleChangeAge}
+            onKeyDown={handleKeyDown}
           />
-          { !isConfirmed && <button disabled={!age} onClick={() => {if (age) setConfirmed(!isConfirmed)} }>Confirm</button> }
+          { !isConfirmed && <button disabled={!age} onClick={handleConfirm}>Confirm</button> }
         </Stack>
         { isConfirmed && age > 5 &&
         <Box sx={{border: "solid 1px", padding: "12px", borderRadius: "15px", width: "70%"}}>
           <Typography sx={{maxHeight: "30vh", overflowY: "auto"}}>
             This online dyslexia test is a preliminary screening tool designed for informational and educational purposes only. It is not intended to provide a medical diagnosis or to replace a professional evaluation by a licensed healthcare provider, such as a doctor, psychologist, or educational specialist.
             While the test may indicate signs consistent with dyslexia, only a qualified professional can make a definitive diagnosis and recommend an appropriate course of action. Results from this test should not be used as the sole basis for decisions regarding medical, educational, or therapeutic interventions.
-            If you have concerns about dyslexia or other learning differences, we strongly encourage you to consult a qualified healthcare or educational professional for a comprehensive evaluation. By taking this test, you acknowledge and agree that it is provided "as is" without any guarantees, and we assume no liability for its use or interpretation of results.
+            If you have concerns about dyslexia or other learning differences, we strongly encourage you to consult a qualified healthcare or educational professional for a comprehensive evaluation. By taking this test, you acknowledge and agree that it is provided "as is" without any guarantees, and we assume no liability for its use or interpretation of results.
           </Typography>
         </Box>
         }
