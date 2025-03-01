@@ -20,6 +20,8 @@
 .env.production.local
 .env
 .cursorignore
+/word_audio
+generate_word_audio.js
 
 npm-debug.log*
 yarn-debug.log*
