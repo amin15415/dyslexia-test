@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useSpeechRecognition11 } from './useSpeechRecognition11';
+import { useSpeechRecognition } from './useSpeechRecognition';
 import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from './useSessionStorage';
@@ -39,7 +39,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const [currentWord, setCurrentWord] = useState(words[wordIndex]);
     const lastLevelIndex = testWords.length - 1;
     const lastWordIndex = Object.keys(testWords[lastLevelIndex].words).length - 1;
-    const {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording} = useSpeechRecognition11(audioStream);
+    const {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording} = useSpeechRecognition(audioStream);
     const totalWords = testWords.reduce((total, level) => total + Object.keys(level.words).length, 0);
     const progress = ((levelIndex * words.length) + wordIndex) / totalWords * 100;
 

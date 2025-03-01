@@ -4,7 +4,7 @@ import WordByWordTyping from '../../components/WordByWordFadeTyping';
 import AudioVisualizer from '../../components/AudioVisualizer';
 import { useRequestMicPermission } from '../../hooks/useRequestMicPermission';
 import { useCountdown } from '../../hooks/useCountdown';
-import { useSpeechRecognition11 } from '../../hooks/useSpeechRecognition11';
+import { useSpeechRecognition } from '../../hooks/useSpeechRecognition';
 import './Decoding.css';
 
 const DecodingTutorial = ({ setIsTutorial }) => {
@@ -36,7 +36,7 @@ const DecodingTutorial = ({ setIsTutorial }) => {
   
   const [count, startCountdown, stopCountdown, countdownPromise, countdownFinished] = useCountdown();
   const [hasMicPermission, requestMicPermission] = useRequestMicPermission(audioStream);
-  const { startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording } = useSpeechRecognition11(audioStream);
+  const { startRecording, stopRecordingAndTranscribe, transcription, transcriptionError, isRecording, stopRecording } = useSpeechRecognition(audioStream);
 
   const startTutorial = () => {
     setAnimationPhase(1);
