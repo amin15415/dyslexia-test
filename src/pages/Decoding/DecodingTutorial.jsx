@@ -164,6 +164,7 @@ const DecodingTutorial = ({ setIsTutorial }) => {
   // Clean up audio analyzer on unmount
   useEffect(() => {
     return () => {
+      stopRecording();
       if (audioAnalyser.current) {
         try {
           audioAnalyser.current.disconnect();
