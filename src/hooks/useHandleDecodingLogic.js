@@ -4,6 +4,7 @@ import convertNumberToWords from '../utils/numToWord';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from './useSessionStorage';
 import { wordHomophones } from '../data/TestWords';
+import { errorMessages } from '../utils/constants';
 
 export const useHandleDecodingLogic = ({ startCountdown, 
                                         stopCountdown,
@@ -25,6 +26,8 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const navigate = useNavigate();
     const [testWords, setTestWords] = useSessionStorage('testWords', '');
     const [speechWords, setSpeechWords] = useSessionStorage('speechWords', {});
+
+    const [transFailCount, setTransFailCount] = useSessionStorage('transFailCount', 0);
 
     const [wordIndex, setWordIndex] = useSessionStorage('wordIndex', 0);
     const [levelIndex, setLevelIndex] = useSessionStorage('levelIndex', 0);
@@ -92,29 +95,55 @@ export const useHandleDecodingLogic = ({ startCountdown,
         }
     } , [transcription])
 
+    // check if transcription fail number more than once, 
+    // check transcription again to pass the empty string
+    useEffect(() => {
+        if (transFailCount > 1)
+            checkTranscription(true);
+    } , [transFailCount])
+    
     // check for transcription error
     useEffect(() => {
         if (transcriptionError) {
+
             setIsTranscribing(false);
             isProcessedPreCountdown.current = false;
             setButtonActive(true);
-            setError(transcriptionError);
+
+            // if there is a transcription error it should change the count of failure
+            if ( transcriptionError === errorMessages.EMPTY_TRANSCRIPTION )
+                setTransFailCount(transFailCount + 1); 
+            
+            // if transfailcount is 0 set the error
+            if (transFailCount < 1)
+                setError(transcriptionError);
+                
             console.error('Speech recognition error:', transcriptionError);
         }
     } , [transcriptionError])
 
-    const checkTranscription = async () => {
+    const checkTranscription = async (isFailed) => {
         
-        if (transcription && transcription !== '') {
-
-            setSpeechResultReceived(true);
-            speechResult = transcription.toLowerCase();
+        if ((transcription && transcription !== '') || isFailed) {
+            setTransFailCount(0);
 
             let isCorrect;
-            let firstSpeechWord = speechResult.replace(/[^\w\s]|_/g, "").trim().split(/\s+/)[0];
+            let firstSpeechWord = '';
+            setSpeechResultReceived(true);
+
+            if (isFailed) {
+                speechResult = '';
+                firstSpeechWord = '';
+                isCorrect = false;
+            } else {
+                speechResult = transcription.toLowerCase();
+                firstSpeechWord = speechResult.replace(/[^\w\s]|_/g, "").trim().split(/\s+/)[0];
+                isCorrect = firstSpeechWord == currentWord || ( wordHomophones[currentWord] && wordHomophones[currentWord].includes(firstSpeechWord) ); 
+            }
+
             console.log('Speech result:', firstSpeechWord);
-            isCorrect = firstSpeechWord == currentWord || ( wordHomophones[currentWord] && wordHomophones[currentWord].includes(firstSpeechWord) ); 
             console.log('is correct: ' + isCorrect);
+
             const updatedCorrect = isCorrect ? correct + 1 : correct;
             const updatedWrong = !isCorrect ? wrong + 1 : wrong;
             const lastWordReached = levelIndex === lastLevelIndex && wordIndex === lastWordIndex;
@@ -150,6 +179,7 @@ export const useHandleDecodingLogic = ({ startCountdown,
         startRecording();
 
     };
+    
 
   
     useEffect(() => {

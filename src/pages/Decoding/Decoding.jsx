@@ -110,7 +110,7 @@ const Decoding = () => {
             {transcribingError && (
                   <div className="button-container">
                     
-                    {transcribingError == errorMessages.EPMTY_TRANSCRIPTION ? 
+                    {transcribingError == errorMessages.EMPTY_TRANSCRIPTION ? 
                       (
                         <div>
                           <p className='custom-p-error'>{transcribingError}</p>
@@ -119,7 +119,7 @@ const Decoding = () => {
                         )
                       : (
                         <div>
-                          <p className='custom-p-error'>It seems your connection to the server has a problem. You can try to recoonect.</p>
+                          <p className='custom-p-error'>It seems your connection to the server has a problem. You can try to reconnect.</p>
                           <button  onClick={nextDecodingWord}>Retry Connection</button>
                         </div>
                         )
