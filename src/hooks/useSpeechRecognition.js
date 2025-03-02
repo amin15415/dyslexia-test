@@ -96,22 +96,24 @@ export const useSpeechRecognition = (stream) => {
         });
 
         
-          const data = await response.data;
+          const data = response?.data;
+          let speechResult = '';
 
-          const speechResult = data.results?.channels[0]?.alternatives[0]?.transcript || '';
+          if (data)
+            speechResult = data.results?.channels[0]?.alternatives[0]?.transcript || '';
 
-          if (speechResult === '') throw errorMessages.EPMTY_TRANSCRIPTION;
+          if (speechResult === '') throw errorMessages.EMPTY_TRANSCRIPTION;
 
           return speechResult
           
         } catch (err) {
           // Handle the error - this will catch both HTTP errors and network errors
           let theError = null;
-          if (err.response) {
+          if (err && err.response) {
               // Request was made and server responded with a status outside the 2xx range
               console.error('Server error', err.response.status);
               theError = errorMessages.SERVER_ERROR;
-          } else if (err.request) {
+          } else if (err && err.request) {
               // Request was made but no response was received
               console.error('No response from server');
               theError = errorMessages.NETWORK_ERROR;
@@ -133,6 +135,7 @@ export const useSpeechRecognition = (stream) => {
       setTranscription(null);
       setError(null);
     };
+
 
   return {startRecording, stopRecordingAndTranscribe, transcription, transcriptionError: error, isRecording, stopRecording};
 };

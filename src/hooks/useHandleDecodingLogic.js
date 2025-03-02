@@ -103,7 +103,6 @@ export const useHandleDecodingLogic = ({ startCountdown,
         }
     } , [transcriptionError])
 
-
     const checkTranscription = async () => {
         
         if (transcription && transcription !== '') {
