@@ -3,6 +3,10 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import './App.css';
 import logo from './assets/images/gryfn_logo.png';
 import { useSessionStorage } from './hooks/useSessionStorage';
+import Analytics from './components/Analytics';
+
+import ReactGA from "react-ga4"; // For GA4
+ReactGA.initialize("G-5XF9WTZ3NW");
 
 const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
 const SelectTest = lazy(() => import('./pages/Test Selection/SelectTest'));
@@ -36,6 +40,7 @@ function App() {
             {isHome && <nav><a href="/">About</a></nav>}
           </header>
           <main style={{background: isHome ? '#3d3d3d' : 'white'}}>
+            <Analytics />
             <Suspense fallback={<div>Loading...</div>}>
               <Routes>
                 <Route path="/" element={<Welcome />} />
