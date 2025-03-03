@@ -125,7 +125,6 @@ export const useHandleDecodingLogic = ({ startCountdown,
     const checkTranscription = async (isFailed) => {
         
         if ((transcription && transcription !== '') || isFailed) {
-            setTransFailCount(0);
 
             let isCorrect;
             let firstSpeechWord = '';
