@@ -334,12 +334,18 @@ const DecodingTutorial = ({ setIsTutorial }) => {
               Please try again
             </Typography>
           )}
-          {error && (
+          {/* {error && (
             <Typography color="error">
               {error}
             </Typography>
-          )}
+          )} */}
         </div>
+      )}
+
+      {error && (
+        <Typography color="error">
+          {error}
+        </Typography>
       )}
 
       {showSuccessMessage && (
