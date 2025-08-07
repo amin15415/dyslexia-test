@@ -34,7 +34,7 @@ function App() {
             <div className="gryfn">
               <div className="logo-text-container">
                 <img src={logo} alt="Logo" className="logo"/>
-                <p>gryfn</p>
+                <p>Dyslexia Test</p>
               </div>
             </div>
             {isHome && <nav><a href="/">About</a></nav>}

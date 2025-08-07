@@ -137,7 +137,7 @@ export default function TestResultReadingReport({contentRef, submissionData}) {
                 <Stack justifyContent="center" alignItems="center">
                     <div className="logo-text-container">
                         <img src={logo} alt="Logo" className="logo"/>
-                        <p className='logo-report-text'>gryfn</p>
+                        <p className='logo-report-text'>Dyslexia Test</p>
                     </div>
                     <Typography variant='h4'>DESD Record Sheet</Typography>
                 </Stack>
