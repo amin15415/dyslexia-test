@@ -6,7 +6,7 @@ import { useSessionStorage } from './hooks/useSessionStorage';
 import Analytics from './components/Analytics';
 
 import ReactGA from "react-ga4"; // For GA4
-ReactGA.initialize("G-5XF9WTZ3NW");
+ReactGA.initialize("G-4KE6BFRQMH");
 
 const Welcome = lazy(() => import('./pages/Welcome/Welcome'));
 const SelectTest = lazy(() => import('./pages/Test Selection/SelectTest'));
